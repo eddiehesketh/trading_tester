@@ -13,27 +13,29 @@ using namespace std;
 class ReadData{
 
     protected:
-        vector<int> open_prices = {};
-        int index;
+
+        vector<string> date;
+        vector<string> stock_open;
+        vector<string> stock_close;
+        vector<string> stock_high;
+        vector<string> stock_low;
+        vector<string> volume;  
 
 
     public:
 
-    ReadData();
-    ReadData(int _index);
+        ReadData();
 
-    void addElement(int price);
+        string clean_value();
 
-    void readOpenPrices(string filename);
+        
+
+
+
+
+
 
     
-
-
-
-
-
-
-
 };
 
 
