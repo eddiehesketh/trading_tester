@@ -21,6 +21,24 @@ string clean_value(string value) {
     return value;
 }
 
+
+string clean_money(string value){
+
+        value.erase(value.begin());
+
+        // cout << value << endl;
+
+    return value;
+}
+
+string clear_commas(string value){
+    value.erase(remove(value.begin(), value.end(), ','), value.end());
+
+    return value;
+}
+
+
+
 int main() {
     // Open the CSV file
     ifstream stock_data("test_csvfile.csv");
@@ -32,11 +50,11 @@ int main() {
 
     // Vectors to store the data
     vector<string> date;
-    vector<string> stock_open;
-    vector<string> stock_close;
-    vector<string> stock_high;
-    vector<string> stock_low;
-    vector<string> volume;
+    vector<float> stock_open;
+    vector<float> stock_close;
+    vector<float> stock_high;
+    vector<float> stock_low;
+    vector<long long> volume;
     string line, titles;
 
     // Read the first line (column titles)
@@ -56,22 +74,28 @@ int main() {
         getline(ss, running_close, ',');
         getline(ss, running_high, ',');
         getline(ss, running_low, ',');
-        getline(ss, running_volume, ',');
+        getline(ss, running_volume, '\n');
 
         // Clean the values (remove quotes and extra spaces)
         date.push_back(clean_value(running_date));
-        stock_open.push_back(clean_value(running_open));
-        stock_close.push_back(clean_value(running_close));
-        stock_high.push_back(clean_value(running_high));
-        stock_low.push_back(clean_value(running_low));
-        volume.push_back(clean_value(running_volume));
+        stock_open.push_back(stof(clean_money((clean_value(running_open)))));
+        cout << running_open << endl;
+        stock_close.push_back(stof(clean_money((clean_value(running_close)))));
+        stock_high.push_back(stof(clean_money((clean_value(running_high)))));
+        stock_low.push_back(stof(clean_money((clean_value(running_low)))));
+        cout << running_volume << endl;
+        volume.push_back(stoll(clean_money(clear_commas((clean_value(running_volume))))));
     }
 
     stock_data.close();
 
+    // stock_open = clean_money(stock_open);
+
+
+
     // Print the open prices to verify the data is correctly extracted
     for (size_t i = 0; i < stock_open.size(); i++) {
-        cout << "Date: " << date[i] << ", Open: " << stock_open[i] << endl;
+        cout << "Date: " << date[i] << ", Open: " << stock_open[i] <<", Volume: " << volume[i] << endl;
     }
 
     return 0;
