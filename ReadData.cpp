@@ -134,6 +134,10 @@ void ReadData::set_stock_volume(stringstream& ss){
     volume.push_back(stoll(clean_money(clear_commas((clean_value(running_volume))))));
 }
 
+vector<string>& ReadData::get_dates(){
+    return this->date;
+}
+
 
 
 

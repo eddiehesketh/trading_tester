@@ -9,7 +9,7 @@ using namespace std;
 
 int main(){
 
-    ReadData stock1("test_csvfile.csv");
+    ReadData* stock1 = new ReadData("test_csvfile.csv");
 
     return 0;
 }

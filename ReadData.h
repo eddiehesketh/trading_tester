@@ -1,6 +1,5 @@
 #ifndef READDATA_H
 #define READDATA_H
-// using namespace std;
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -22,10 +21,11 @@ class ReadData{
         std::vector<long long> volume;  
         std::ifstream stock_data;
 
-
+    
     public:
 
         ReadData(std::string stock_info);
+        ReadData();
 
         std::string clean_value(std::string value);
 
@@ -47,6 +47,11 @@ class ReadData{
         void set_stock_high(std::stringstream& ss);
         void set_stock_low(std::stringstream& ss);
         void set_stock_volume(std::stringstream& ss);
+
+        std::vector<std::string>& get_dates();
+    
+
+        virtual void invest_strat(){};
 
         // ~ReadData();
 
