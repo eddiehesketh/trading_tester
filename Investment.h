@@ -3,7 +3,7 @@
 #include "ReadData.h"
 
 
-class Investment {
+class Investment{
 
     protected:
         float capital;
@@ -14,7 +14,7 @@ class Investment {
 
         Investment();
 
-        virtual void investment_stratergy(std::vector<float> open_prices, std::vector<float> close_prices, int start_index) = 0;
+        virtual void investment_stratergy(std::vector<float> open_prices, std::vector<float> close_prices) = 0;
 
 
 
