@@ -49,6 +49,7 @@ class ReadData{
         void set_stock_volume(std::stringstream& ss);
 
         std::vector<std::string>& get_dates();
+        std::vector<float>& get_open_prices();
     
 
         virtual void invest_strat(){};

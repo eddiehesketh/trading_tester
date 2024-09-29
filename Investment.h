@@ -14,7 +14,7 @@ class Investment{
 
         Investment();
 
-        virtual void investment_stratergy(std::vector<float> open_prices, std::vector<float> close_prices) = 0;
+        virtual void investment_stratergy() = 0;
 
 
 
