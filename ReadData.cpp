@@ -139,9 +139,9 @@ vector<string>& ReadData::get_dates(){
 }
 
 
-vector<float>& ReadData::get_open_prices(){
-    return this->stock_open;
-}
+//vector<float>& ReadData::get_open_prices(){
+//    return this->stock_open;
+//}
 
 
 
