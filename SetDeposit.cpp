@@ -7,9 +7,11 @@ using namespace std;
 
 SetDeposit::SetDeposit(string _start_date, string stock_info, int capital): ReadData(stock_info), Investment(capital){
 
-    if (!start_date(_start_date)){
-        return;
+    if (start_date(_start_date)){
+        investment_stratergy();
     } 
+
+
 
 }
 

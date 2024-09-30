@@ -20,7 +20,6 @@ ReadData::ReadData(string stock_info){
 
             // Using stringstream to seperate the line extracted from getline function into into individual sets of numbers.
             stringstream ss(line);
-
             // Passing stringstream into subsequent data set functions.
             set_dates(ss); // Setting dates.
             set_stock_open(ss); // Setting open prices.
@@ -139,9 +138,9 @@ vector<string>& ReadData::get_dates(){
 }
 
 
-//vector<float>& ReadData::get_open_prices(){
-//    return this->stock_open;
-//}
+vector<float>& ReadData::get_open_prices(){
+   return this->stock_open;
+}
 
 vector<float>& ReadData::get_close_prices(){
     return this->stock_close;
