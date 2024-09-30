@@ -31,9 +31,9 @@ ReadData::ReadData(string stock_info){
 
     }
 
-    for (size_t i = 0; i < stock_open.size(); i++) {
-        cout << "Date: " << date[i] << ", Open: " << stock_open[i] <<", Volume: " << volume[i] << endl;
-    }
+    // for (size_t i = 0; i < stock_open.size(); i++) {
+    //     cout << "Date: " << date[i] << ", Open: " << stock_open[i] <<", Volume: " << volume[i] << endl;
+    // }
 
         stock_data.close();
 
@@ -142,6 +142,25 @@ vector<string>& ReadData::get_dates(){
 vector<float>& ReadData::get_open_prices(){
     return this->stock_open;
 }
+
+vector<float>& ReadData::get_close_prices(){
+    return this->stock_close;
+}
+
+vector<float>& ReadData::get_stock_high(){
+    return this->stock_high;
+}
+
+vector<float>& ReadData::get_stock_low(){
+    return this->stock_low;
+}
+
+vector<long long>& ReadData::get_volume(){
+    return this->volume;
+}
+
+
+
 
 
 

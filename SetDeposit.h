@@ -24,9 +24,13 @@ class SetDeposit: public ReadData, Investment{
 
         void set_index(int _index);
 
+        void set_final_capital(int _capital);
+
+        void set_profits(float _profits);
+
         
 
-        void invest_strat() override;
+        // void invest_strat() override;
 
         int get_index();
 
