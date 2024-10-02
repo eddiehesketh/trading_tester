@@ -7,6 +7,9 @@ using namespace std;
 
 SetDeposit::SetDeposit(string _start_date, string stock_info, int capital): Investment(capital, stock_info){
 
+    set_pay_freq("Once off");
+    set_reivest_status(false);
+
     if (valid_start_date(_start_date)){
         investment_stratergy();
     }
@@ -35,6 +38,17 @@ void SetDeposit::investment_stratergy(){
     set_profits(profit);
 
 }
+
+ bool SetDeposit::valid_pay_freq(string freq){
+
+    if (freq == "Once off"){
+        return true;
+    }
+
+    return false;
+ }
+
+
 
 
 
