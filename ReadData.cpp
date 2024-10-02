@@ -1,5 +1,6 @@
 #include "ReadData.h"
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -20,7 +21,6 @@ ReadData::ReadData(string stock_info){
 
             // Using stringstream to seperate the line extracted from getline function into into individual sets of numbers.
             stringstream ss(line);
-
             // Passing stringstream into subsequent data set functions.
             set_dates(ss); // Setting dates.
             set_stock_open(ss); // Setting open prices.
@@ -31,9 +31,9 @@ ReadData::ReadData(string stock_info){
 
     }
 
-    for (size_t i = 0; i < stock_open.size(); i++) {
-        cout << "Date: " << date[i] << ", Open: " << stock_open[i] <<", Volume: " << volume[i] << endl;
-    }
+    // for (size_t i = 0; i < stock_open.size(); i++) {
+    //     cout << "Date: " << date[i] << ", Open: " << stock_open[i] <<", Volume: " << volume[i] << endl;
+    // }
 
         stock_data.close();
 
@@ -131,7 +131,7 @@ void ReadData::set_stock_low(stringstream& ss){
 void ReadData::set_stock_volume(stringstream& ss){
     string running_volume;
     getline(ss, running_volume, '\n');
-    volume.push_back(stoll(clean_money(clear_commas((clean_value(running_volume))))));
+    volume.push_back(stoll(clean_money(clear_commas((running_volume)))));
 }
 
 vector<string>& ReadData::get_dates(){
@@ -139,9 +139,28 @@ vector<string>& ReadData::get_dates(){
 }
 
 
-//vector<float>& ReadData::get_open_prices(){
-//    return this->stock_open;
-//}
+vector<float>& ReadData::get_open_prices(){
+   return this->stock_open;
+}
+
+vector<float>& ReadData::get_close_prices(){
+    return this->stock_close;
+}
+
+vector<float>& ReadData::get_stock_high(){
+    return this->stock_high;
+}
+
+vector<float>& ReadData::get_stock_low(){
+    return this->stock_low;
+}
+
+vector<long long>& ReadData::get_volume(){
+    return this->volume;
+}
+
+
+
 
 
 

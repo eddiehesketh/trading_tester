@@ -15,7 +15,5 @@ int main(){
     //     cout << "Date: " << stock1->get_dates()[i] << ", Open: " << stock1->get_open_prices()[i] << endl;
     // }
 
-
-
     return 0;
 }

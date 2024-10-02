@@ -4,38 +4,17 @@
 #include "Investment.h"
 
 
-class SetDeposit: public ReadData, Investment{
-
-    protected:
-        float invest_return;
-        float deposit_amount;
-        int index;
-        float final_capital;
-        float profits;
-        std::string start_date;
-        
+class SetDeposit: public Investment{
 
     public:
         SetDeposit(std::string _start_date, std::string stock_info, int capital);
 
         void investment_stratergy() override;
 
-        bool start_date(std::string _start_date);
-
-        void set_index(int _index);
-
-        
-
-        void invest_strat() override;
-
-        int get_index();
-
+        bool valid_pay_freq(std::string freq) override;
 
 
 };
-
-
-
 
 
 

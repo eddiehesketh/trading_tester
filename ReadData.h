@@ -6,9 +6,6 @@
 #include <sstream>
 #include <string>
 
-
-
-
 class ReadData{
 
     protected:
@@ -50,6 +47,10 @@ class ReadData{
 
         std::vector<std::string>& get_dates();
         std::vector<float>& get_open_prices();
+        std::vector<float>& get_close_prices();
+        std::vector<float>& get_stock_high();
+        std::vector<float>& get_stock_low();
+        std::vector<long long>& get_volume();
     
 
         virtual void invest_strat(){};
