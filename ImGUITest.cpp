@@ -6,14 +6,26 @@
 #include <stdio.h>
 #include <iostream>
 
+
+
+
+
 // Global font variables
-ImFont* walletFont;  // Custom font for "Wallet"
+ImFont* titleFont;  // Custom font for "Wallet"
+ImFont* largeRomanFont;
+ImFont* smallRomanFont;
 ImFont* defaultFont; // Default font
 
 // Function prototypes
 void setupImGui(GLFWwindow* window);
 void cleanupImGui();
 void drawGrid(ImDrawList* drawList, ImVec2 windowSize, int gridHeight, int gridsPerRow, int startY);
+
+const char *stockNames[20] = {"Microsoft", "Apple","Google", "Nvidia","Tesla", "Amazon", "Berkshire Hathaway", "Adobe","Costco","Mastercard",
+                              "Coca-Cola", "Netflix", "Toyota", "Pepsico", "Mcdonald", "Shell", "Caterpillar", "Walt Disney", "Uber", "BHP Group"};
+
+const char *stockCodes[20] = {"MSFT", "AAPL","GOOG", "NVDA","TSLA", "AMZA", "BRK-B", "ADBE","COST","MA",
+                              "KO", "NFLX", "TM", "PEP", "MCD", "SHEL", "CAT", "DIS", "UBER", "BHP"};
 
 
 // Variable to track the current screen (0 for the default, 1 for a second screen, etc.)
@@ -70,8 +82,7 @@ if (!glfwInit()) {
         ImGui::SetWindowSize(ImVec2(800, 600)); // Set size to window size
 
         // Get the current draw list to draw the grid
-        ImDrawList* drawList = ImGui::GetForegroundDrawList();
-        drawGrid(drawList, windowSize, 16, 3, 100); // Call drawGrid with grid height of 16 pixels, 3 grids per row, and starting at y = 100
+         // Call drawGrid with grid height of 16 pixels, 3 grids per row, and starting at y = 100
 
         ImGui::SameLine();
         ImGui::SetCursorPos(ImVec2(50, 50));
@@ -82,19 +93,53 @@ if (!glfwInit()) {
         // Display content based on the current screen
         if (currentScreen == 0) {
             // Use the custom font for "Wallet"
-            ImGui::PushFont(walletFont); // Set the custom font
-            ImGui::SetCursorPos(ImVec2(350, 80));
+            ImGui::PushFont(titleFont); // Set the custom font
+            ImGui::SetCursorPos(ImVec2(350, 50));
             ImGui::Text("Wallet"); // This text uses the custom font
             ImGui::PopFont(); // Revert to the default font
+            
+            ImDrawList* drawList = ImGui::GetForegroundDrawList();
+            drawGrid(drawList, windowSize, 50, 2, 100);
+            for (int j=0; j<2; j++){
+                for (int i=0; i<10; i++) {
+                    ImGui::SetCursorPos(ImVec2((10 + 400*j),(105 + 50*i)));
+                    ImGui::PushFont(largeRomanFont);
+                    ImGui::Text("%s", stockNames[i + 10*j]);
+                    ImGui::PopFont();
+                    ImGui::SetCursorPos(ImVec2((10 + 400*j),(125 + 50*i)));
+                    ImGui::PushFont(smallRomanFont);
+                    ImGui::Text("%s", stockCodes[i + 10*j]);
+                    ImGui::SetCursorPos(ImVec2((280 + 400*j),(110+ 50*i)));
+                    ImGui::PopFont();
 
-            if (ImGui::Button("Screen 2")) {
-                currentScreen = 1; // Switch to screen 2
+                    std::string buttonLabel = "View ##" + std::to_string(j) + "_" + std::to_string(i);
+                    if (ImGui::Button(buttonLabel.c_str(), ImVec2(100, 30))) {
+                    currentScreen = 1; // Switch to screen 2
+                    }                    
+                    ImGui::SetCursorPos(ImVec2((700),(30)));
+
+                }
+            }
+            if (ImGui::Button("Porfolio", ImVec2(100, 30))) {
+                currentScreen = 2; // Switch to screen 2
             }
         } else if (currentScreen == 1) {
             // Screen 2: New content
+            ImGui::PushFont(titleFont); // Set the custom font
+            ImGui::SetCursorPos(ImVec2(330, 50));
+            ImGui::Text("Invest"); // This text uses the custom font
+            ImGui::PopFont(); // Revert to the default font
+
             ImGui::Text("This is a different screen.");
-            ImGui::Text("You can add more content here.");
-            if (ImGui::Button("Screen 1")) {
+            if (ImGui::Button("goback")) {
+                currentScreen = 0; // Switch to screen 1 (original content)
+            }
+        } else if (currentScreen == 2) {
+            ImGui::PushFont(titleFont); // Set the custom font
+            ImGui::SetCursorPos(ImVec2(330, 50));
+            ImGui::Text("Portfolio"); // This text uses the custom font
+            ImGui::PopFont(); // Revert to the default font
+            if (ImGui::Button("goback")) {
                 currentScreen = 0; // Switch to screen 1 (original content)
             }
         }
@@ -148,8 +193,10 @@ void setupImGui(GLFWwindow* window) {
     defaultFont = io.Fonts->AddFontDefault(); // This sets the default font
 
     // Load the custom font
-    walletFont = io.Fonts->AddFontFromFileTTF("Vogue.ttf", 24.0f);
-    if (walletFont == nullptr) {
+    titleFont = io.Fonts->AddFontFromFileTTF("Fonts/Vogue.ttf", 24.0f);
+    largeRomanFont = io.Fonts->AddFontFromFileTTF("Fonts/timesnewroman.ttf", 20.0f);
+    smallRomanFont = io.Fonts->AddFontFromFileTTF("Fonts/timesnewroman.ttf", 14.0f);
+    if (titleFont == nullptr) {
         fprintf(stderr, "Could not load font file!\n");
     }
 
