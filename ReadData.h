@@ -6,9 +6,6 @@
 #include <sstream>
 #include <string>
 
-
-
-
 class ReadData{
 
     protected:
