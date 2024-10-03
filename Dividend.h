@@ -21,7 +21,7 @@ class Dividend: public Investment{
 
         bool valid_pay_freq(std::string freq) override;
 
-        bool valid_start_date(std:: string start);
+        bool valid_start_date(std:: string start) override;
 
 
 
