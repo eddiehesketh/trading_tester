@@ -12,20 +12,13 @@ int main(){
 
     Display d1("test_csv_2.csv");
 
-    string today_price = d1.single_open_prices(1);
-    string today_close = d1.single_close_prices(1);
-    string date1 = d1.single_dates(1);
-    string vol1 = d1.single_volumes(1);
-    string five_day_open = d1.single_open_prices(5);
-    string five_day_close = d1.single_close_prices(5);
-    string date2 = d1.single_dates(5);
-    string vol2 = d1.single_volumes(5);
-
-    cout << "Open " << today_price << ", Close " << today_close << ", Date "<< date1 << ", Volume " << vol1 <<  endl;
-    cout << "Open " << five_day_open << ", Close " << five_day_close << ", Date "<< date2 << ", Volume " << vol2 <<  endl;
 
 
+    for (int i = 1; i < 8; i++){
+        cout << "Open " << d1.single_open_prices(i) << ", Close " << d1.single_close_prices(i) << ", Date "<< d1.single_dates(i) << ", Volume " << d1.single_volumes(i) << ", Change " << d1.daily_change(i) << endl;
 
+
+    }
 
 
     return 0;

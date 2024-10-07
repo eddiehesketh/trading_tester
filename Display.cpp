@@ -59,3 +59,57 @@ string Display::single_volumes(int day){
 
 }
 
+string Display::daily_change(int day){
+
+    float change = 0;
+    vector<float>& open = get_open_prices();
+    vector<float>& close = get_close_prices();
+    int index = open.size() - day;
+    string return_value = "";
+
+    change = ((close[index] - open[index]) / open[index]) * 100;
+
+    return_value = to_string(change);
+
+
+    if (close[index] >= open[index]){
+
+        return clean_daily_change(true, return_value);
+
+    } else if (close[index] < open[index]){
+
+        return clean_daily_change(false, return_value);
+
+    }
+
+    return NULL;
+
+
+}
+
+string Display::clean_daily_change(bool status, string value){
+
+    if (status){
+
+        value.insert(0, "+");
+
+        value.erase(value.find_first_of(".")+3);
+
+        value.append("%");
+
+        return value;
+
+    } else if (!status){
+
+        // value.insert(0, "-");
+
+        value.erase(value.find_first_of(".")+3);
+
+        value.append("%");
+
+        return value;
+    }
+
+    return NULL;
+}
+
