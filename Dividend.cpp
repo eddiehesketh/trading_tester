@@ -8,6 +8,8 @@ using namespace std;
 
 Dividend::Dividend(string start_date_, float initial_capital, string pay_freq_, string stock_info, bool status):Investment(initial_capital, stock_info), reinvest_status(status){
 
+    set_investment_type();
+
     set_final_capital(0);
 
     if (valid_pay_freq(pay_freq_)){
@@ -131,6 +133,8 @@ bool Dividend::valid_start_date(string start){
     return false;
 
 }
+
+void Dividend::set_investment_type(){this->investment_type = "Dividend";}
 
 
 
