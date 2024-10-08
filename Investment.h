@@ -53,6 +53,12 @@ class Investment: public ReadData{
         void set_pay_freq(std::string freq);
 
         std::string get_pay_freq();
+
+        void set_widthdrawn_cash(float v);
+
+        float get_widthdrawn_cash();
+        
+
     
         
  

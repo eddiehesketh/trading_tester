@@ -47,4 +47,8 @@ void Investment::set_start_date(string _start_date){this->start_date_ = _start_d
 
 void Investment::set_reivest_status(bool stat){this->reinvest_status = stat;}
 
+void Investment::set_widthdrawn_cash(float v){this->widthdrawn_cash = v;}
+
+float Investment::get_widthdrawn_cash(){return this->widthdrawn_cash;}
+
 
