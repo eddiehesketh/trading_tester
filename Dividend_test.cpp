@@ -1,5 +1,5 @@
 #include "ReadData.h"
-#include "SetDeposit.h"
+#include "Dividend.h"
 #include "Investment.h"
 #include <iostream>
 #include <vector>
@@ -11,8 +11,9 @@ using namespace std;
 
 int main(){
 
-    SetDeposit s1("10/5/2023", "test_csv_2.csv", 500);
+    Dividend s1("28/10/2005", 500, "Monthly", "test_csv_2.csv", false);
 
+     cout << "hello" << endl;
     cout << "initial capital: $" << s1.get_capital() << endl;
     cout << "Final capital: $" << s1.get_final_capital() << endl;
 
