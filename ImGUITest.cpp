@@ -8,7 +8,9 @@
 #include <stdio.h>
 #include <iostream>
 
-
+// g++ -o imgui_test ImGUITest.cpp Display.cpp ReadData.cpp libs/glad/src/glad.c imgui/imgui.cpp imgui/imgui_draw.cpp imgui/imgui_widgets.cpp imgui/imgui_tables.cpp imgui/backends/imgui_impl_glfw.cpp imgui/backends/imgui_impl_opengl3.cpp \
+-Ilibs/glad/include -I/opt/homebrew/include -Iimgui -Iimgui/backends \
+-L/opt/homebrew/lib -lglfw -framework OpenGL -DIMGUI_IMPL_OPENGL_LOADER_GLAD -std=c++11
 
 
 
@@ -47,7 +49,8 @@ int selectedStockIndex = -1;
 int main() {
 
     std::vector<Display> stockDisplays;
-
+// Test Graph
+std::vector<float> values = { 0.2f, 0.5f, 0.9f, 0.3f, 0.7f, 0.4f, 0.6f, 1.0f, 0.8f, 0.2f };
 
     // Initialize GLFW
 if (!glfwInit()) {
@@ -173,6 +176,16 @@ if (!glfwInit()) {
     } else {
         ImGui::Text("Invalid stock index.");
     }
+
+    ImGui::Text("Line Graph");
+        ImGui::PlotLines("Line Plot", values.data(), values.size());
+
+        // Plot a histogram
+        ImGui::Text("Histogram");
+        ImGui::PlotHistogram("Histogram", values.data(), values.size());
+
+        // End the ImGui window
+        ImGui::End();
 
     if (ImGui::Button("Go Back")) {
         currentScreen = 0;  // Return to main screen
