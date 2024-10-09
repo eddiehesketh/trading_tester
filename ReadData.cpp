@@ -186,7 +186,7 @@ void ReadData::set_stock_volume(stringstream& ss){
     string running_volume;
     getline(ss, running_volume, '\n');
  
-    running_volume = clean_value(running_volume);
+    // running_volume = clean_value(running_volume);
     if (running_volume == "#N/A" || running_volume.empty()) {
         std::cerr << "Invalid data for volume: " << running_volume << std::endl;
         volume.push_back(0.0f);  // Push a default value (e.g., 0.0) or skip this entry
