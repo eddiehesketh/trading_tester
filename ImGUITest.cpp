@@ -48,14 +48,6 @@ int main() {
 
     std::vector<Display> stockDisplays;
 
-// Initialize `stockDisplays` in `main()`
-// for (const auto& fileName : {"microsoft.csv", "apple.csv", "google.csv", "nvidia.csv", "tesla.csv", 
-//                              "amazon.csv", "berkshire.csv", "adobe.csv", "costco.csv", "mastercard.csv",
-//                              "coke.csv", "netflix.csv", "toyota.csv", "pepsico.csv", "mcdonald.csv",
-//                              "shell.csv", "caterpillar.csv", "disney.csv", "uber.csv", "bhp.csv"}) {
-//     stockDisplays.emplace_back(fileName);
-//     std::cout << "Initialized Display for stock: " << fileName << std::endl;
-// }
 
     // Initialize GLFW
 if (!glfwInit()) {
@@ -168,10 +160,11 @@ if (!glfwInit()) {
         // Stock-specific screen for selected stock
      const Display& display = stockDisplays[selectedStockIndex];
         //const Display& display = "adobe.csv";
-
-
-
-         ImGui::Text("Stock: %s", stockNames[selectedStockIndex]);
+            ImGui::PushFont(titleFont);
+            ImGui::SetCursorPos(ImVec2((350),(50)));
+            ImGui::Text("%s", stockNames[selectedStockIndex]);
+            ImGui::PopFont();
+        
         ImGui::Text("Open Price: %s", display.single_open_prices(1).c_str());
         ImGui::Text("Close Price: %s", display.single_close_prices(1).c_str());
         ImGui::Text("Volume: %s", display.single_volumes(1).c_str());
@@ -185,19 +178,34 @@ if (!glfwInit()) {
         currentScreen = 0;  // Return to main screen
         selectedStockIndex = -1; // Reset selected stock index
     }
+        ImGui::SetCursorPos(ImVec2((340),(530)));
+        if (ImGui::Button("Investment",  ImVec2(100, 40))) {
+        currentScreen = 3;  
+    }
+    
 }
 
 
         
-        // else if (currentScreen == 2) {
-        //     ImGui::PushFont(titleFont); // Set the custom font
-        //     ImGui::SetCursorPos(ImVec2(330, 50));
-        //     ImGui::Text("Portfolio"); // This text uses the custom font
-        //     ImGui::PopFont(); // Revert to the default font
-        //     if (ImGui::Button("goback")) {
-        //         currentScreen = 0; // Switch to screen 1 (original content)
-        //     }
-        // }
+        else if (currentScreen == 2) {
+            ImGui::PushFont(titleFont); // Set the custom font
+            ImGui::SetCursorPos(ImVec2(330, 50));
+            ImGui::Text("Portfolio"); // This text uses the custom font
+            ImGui::PopFont(); // Revert to the default font
+            if (ImGui::Button("goback")) {
+                currentScreen = 0; // Switch to screen 0 (original content)
+            }
+        }   
+        else if (currentScreen == 3) {
+            ImGui::PushFont(titleFont); 
+            ImGui::SetCursorPos(ImVec2(330, 50));
+            ImGui::Text("Investing"); 
+            ImGui::PopFont(); 
+            if (ImGui::Button("goback")) {
+                currentScreen = 0; 
+            }
+
+        }
 
         ImGui::PopStyleColor(); // Pop the style color to revert to the previous color
         ImGui::End();

@@ -192,14 +192,14 @@ void ReadData::set_stock_volume(stringstream& ss){
         volume.push_back(0.0f);  // Push a default value (e.g., 0.0) or skip this entry
     } else {
         try {
-            volume.push_back(stof(clean_money(running_volume)));
+            volume.push_back(stoll(clean_money(clear_commas((running_volume)))));
         } catch (const std::invalid_argument& e) {
             std::cerr << "Invalid data for volume: " << running_volume << std::endl;
             volume.push_back(0.0f);  // Or handle it in some other way
         }
     }
-
-    // volume.push_back(stoll(clean_money(clear_commas((running_volume)))));
+// volume.push_back(stof(clean_money(running_volume)));
+    // );
 }
 
 const vector<string>& ReadData::get_dates() const{
