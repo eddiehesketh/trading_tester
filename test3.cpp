@@ -13,7 +13,7 @@
 //     std::string startDate = "2023-01-01"; 
 //     MeanReversion meanReversion(startDate, initialCapital, stockInfo, meanPeriod);
 //     ReadData readData(csvFileName);
-//     std::vector<float>& closePrices = readData.get_close_prices();
+//     const std::vector<float>& closePrices = readData.get_close_prices();
 //     std::cout << "Testing Mean Reversion Strategy:\n";
 //     for (double price : closePrices) {
 //         meanReversion.addPrice(price);

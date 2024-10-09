@@ -6,15 +6,7 @@
 #include <utility>
 #include <string>
 
-class MovingAverageCrossover : public Investment{
-private:
-    int shortPeriod;
-    int longPeriod;
-    std::vector<double> prices;
-    std::vector<std::pair<int, std::string>> tradeSignals;
-    double calculateSMA(int period);
-    void executeStrategy();
-
+class MovingAverageCrossover : public Investment {
 public:
     MovingAverageCrossover(std::string _start_date, float initial_capital, std::string stock_info_, int shortPeriod, int longPeriod);
     void addPrice(double price);
@@ -22,8 +14,11 @@ public:
     void investment_stratergy() override;
     bool valid_pay_freq(std::string freq) override;
     void set_investment_type() override; 
-    int MovingAverage10D();
-    int MovingAverage20D();
+    double MovingAverage(int period); // Generalized moving average function
+    double MovingAverage10D(); // Specific for 10-day moving average
+    double MovingAverage20D(); // Specific for 20-day moving average
+    double calculateSMA(int period);
+    void executeStrategy();
 };
 
 #endif

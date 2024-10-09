@@ -4,8 +4,6 @@
 #include "Investment.h"
 
 class MeanReversion : public Investment{
-private:
-
 public:
     MeanReversion(std::string _start_date, float initial_capital, std::string stock_info, int period);
     void investment_stratergy() override; 

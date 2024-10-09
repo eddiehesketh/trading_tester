@@ -2,7 +2,8 @@
 #include <iostream>
 #include <numeric>
 
-MeanReversion::MeanReversion(std::string _start_date, float initial_capital, std::string stock_info, int period):Investment(initial_capital, stock_info), meanPeriod(period){
+MeanReversion::MeanReversion(std::string _start_date, float initial_capital, std::string stock_info, int period):Investment(initial_capital, stock_info){
+    this->meanPeriod = meanPeriod;
     if (valid_start_date(_start_date)){
         investment_stratergy();
     }
