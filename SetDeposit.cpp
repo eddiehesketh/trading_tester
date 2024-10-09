@@ -7,6 +7,7 @@ using namespace std;
 
 SetDeposit::SetDeposit(string _start_date, string stock_info, int capital): Investment(capital, stock_info){
 
+    set_investment_type();
     set_pay_freq("Once off");
     set_reivest_status(false);
 
@@ -46,7 +47,9 @@ void SetDeposit::investment_stratergy(){
     }
 
     return false;
- }
+}
+
+void SetDeposit::set_investment_type(){this->investment_type = "Depost";}
 
 
 

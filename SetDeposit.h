@@ -13,11 +13,9 @@ class SetDeposit: public Investment{
 
         bool valid_pay_freq(std::string freq) override;
 
+        void set_investment_type() override;
+
 
 };
-
-
-
-
 
 #endif
