@@ -20,6 +20,10 @@ class Investment: public ReadData{
         float widthdrawn_cash;
         std::string pay_freq;
         bool reinvest_status;
+    
+        int meanPeriod;
+        std::vector<double> signals; 
+        double meanPrice;
 
     public:
 

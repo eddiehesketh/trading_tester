@@ -50,3 +50,7 @@ void MeanReversion::displayTradeSignals(){
 bool MeanReversion::valid_pay_freq(std::string freq){
     return (freq == "monthly" || freq == "quarterly" || freq == "annually");
 }
+
+void MeanReversion::set_investment_type(){
+    std::string investmentType = "Mean Reversion";
+}
