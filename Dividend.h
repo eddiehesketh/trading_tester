@@ -23,6 +23,8 @@ class Dividend: public Investment{
 
         bool valid_start_date(std:: string start) override;
 
+        void set_investment_type() override;
+ 
 
 
 

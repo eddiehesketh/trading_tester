@@ -14,6 +14,8 @@ class Investment: public ReadData{
         float profits;
         std::string start_date_;
 
+        std::string investment_type;
+
         float dividend_yield;
         float widthdrawn_cash;
         std::string pay_freq;
@@ -22,6 +24,7 @@ class Investment: public ReadData{
     public:
 
         Investment(float initial_capital, std::string stock_info_);
+        virtual ~Investment() = default;
 
         // Investment();
 
@@ -57,6 +60,10 @@ class Investment: public ReadData{
         void set_widthdrawn_cash(float v);
 
         float get_widthdrawn_cash();
+
+        virtual void set_investment_type() = 0;
+
+        std::string get_investment_type();
         
 };
 

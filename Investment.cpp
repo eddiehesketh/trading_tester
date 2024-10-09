@@ -51,4 +51,6 @@ void Investment::set_widthdrawn_cash(float v){this->widthdrawn_cash = v;}
 
 float Investment::get_widthdrawn_cash(){return this->widthdrawn_cash;}
 
+string Investment::get_investment_type(){return this->investment_type;}
+
 
