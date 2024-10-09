@@ -28,7 +28,4 @@ class Dividend: public Investment{
 
 };
 
-
-
-
 #endif

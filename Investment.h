@@ -58,26 +58,6 @@ class Investment: public ReadData{
 
         float get_widthdrawn_cash();
         
-
-    
-        
- 
-
-
 };
 
-
-
-
-
-
-
-
-
 #endif
-
-
-
-
-
-

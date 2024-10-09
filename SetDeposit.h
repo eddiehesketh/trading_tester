@@ -16,8 +16,4 @@ class SetDeposit: public Investment{
 
 };
 
-
-
-
-
 #endif
