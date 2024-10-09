@@ -202,11 +202,12 @@ void ReadData::set_stock_volume(stringstream& ss){
     // volume.push_back(stoll(clean_money(clear_commas((running_volume)))));
 }
 
+// Return dates function, returns address for vector for better memory management. 
 const vector<string>& ReadData::get_dates() const{
     return this->date;
 }
 
-
+// Return open prices function, returns address for vector for better memory management. 
 const vector<float>& ReadData::get_open_prices() const{
    return this->stock_open;
 }
