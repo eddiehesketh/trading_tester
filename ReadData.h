@@ -18,6 +18,7 @@ class ReadData{
         std::vector<long long> volume;  
         std::ifstream stock_data;
 
+
     
     public:
 
@@ -45,12 +46,12 @@ class ReadData{
         void set_stock_low(std::stringstream& ss);
         void set_stock_volume(std::stringstream& ss);
 
-        std::vector<std::string>& get_dates();
-        std::vector<float>& get_open_prices();
-        std::vector<float>& get_close_prices();
-        std::vector<float>& get_stock_high();
-        std::vector<float>& get_stock_low();
-        std::vector<long long>& get_volume();
+        const std::vector<std::string>& get_dates() const;
+        const std::vector<float>& get_open_prices() const;
+        const std::vector<float>& get_close_prices() const;
+        const std::vector<float>& get_stock_high() const;
+        const std::vector<float>& get_stock_low() const;
+        const std::vector<long long>& get_volume() const;
     
 
         virtual void invest_strat(){};

@@ -106,56 +106,124 @@ void ReadData::set_dates(stringstream& ss){
 void ReadData::set_stock_open(stringstream& ss){
     string running_open;
     getline(ss, running_open, ',');
-    stock_open.push_back(stof(clean_money((clean_value(running_open)))));
+running_open = clean_value(running_open);
+    if (running_open == "#N/A" || running_open.empty()) {
+        std::cerr << "Invalid data for open price: " << running_open << std::endl;
+        stock_open.push_back(0.0f);  // Push a default value (e.g., 0.0) or skip this entry
+    } else {
+        try {
+            stock_open.push_back(stof(clean_money(running_open)));
+        } catch (const std::invalid_argument& e) {
+            std::cerr << "Invalid data for open price: " << running_open << std::endl;
+            stock_open.push_back(0.0f);  // Or handle it in some other way
+        }
+    }
 }
+
+
+
 
 
 void ReadData::set_stock_close(stringstream& ss){
     string running_close;
     getline(ss, running_close, ',');
-    stock_close.push_back(stof(clean_money((clean_value(running_close)))));
+
+    running_close = clean_value(running_close);
+    if (running_close == "#N/A" || running_close.empty()) {
+        std::cerr << "Invalid data for close price: " << running_close << std::endl;
+        stock_close.push_back(0.0f);  // Push a default value (e.g., 0.0) or skip this entry
+    } else {
+        try {
+            stock_close.push_back(stof(clean_money(running_close)));
+        } catch (const std::invalid_argument& e) {
+            std::cerr << "Invalid data for close price: " << running_close << std::endl;
+            stock_close.push_back(0.0f);  // Or handle it in some other way
+        }
+    }
+    // stock_close.push_back(stof(clean_money((clean_value(running_close)))));
 }
 
 void ReadData::set_stock_high(stringstream& ss){
     string running_high;
     getline(ss, running_high, ',');
-    stock_high.push_back(stof(clean_money((clean_value(running_high)))));
+     running_high = clean_value(running_high);
+    if (running_high == "#N/A" || running_high.empty()) {
+        std::cerr << "Invalid data for high price: " << running_high << std::endl;
+        stock_high.push_back(0.0f);  // Push a default value (e.g., 0.0) or skip this entry
+    } else {
+        try {
+            stock_high.push_back(stof(clean_money(running_high)));
+        } catch (const std::invalid_argument& e) {
+            std::cerr << "Invalid data for high price: " << running_high << std::endl;
+            stock_high.push_back(0.0f);  // Or handle it in some other way
+        }
+    }
+   // stock_high.push_back(stof(clean_money((clean_value(running_high)))));
 }
 
 void ReadData::set_stock_low(stringstream& ss){
     string running_low;
     getline(ss, running_low, ',');
-    stock_low.push_back(stof(clean_money((clean_value(running_low)))));
+
+     running_low = clean_value(running_low);
+    if (running_low == "#N/A" || running_low.empty()) {
+        std::cerr << "Invalid data for low price: " << running_low << std::endl;
+        stock_low.push_back(0.0f);  // Push a default value (e.g., 0.0) or skip this entry
+    } else {
+        try {
+            stock_low.push_back(stof(clean_money(running_low)));
+        } catch (const std::invalid_argument& e) {
+            std::cerr << "Invalid data for close price: " << running_low << std::endl;
+            stock_low.push_back(0.0f);  // Or handle it in some other way
+        }
+    }
+
+
+    //stock_low.push_back(stof(clean_money((clean_value(running_low)))));
 }
 
 void ReadData::set_stock_volume(stringstream& ss){
     string running_volume;
     getline(ss, running_volume, '\n');
-    volume.push_back(stoll(clean_money(clear_commas((running_volume)))));
+ 
+    running_volume = clean_value(running_volume);
+    if (running_volume == "#N/A" || running_volume.empty()) {
+        std::cerr << "Invalid data for volume: " << running_volume << std::endl;
+        volume.push_back(0.0f);  // Push a default value (e.g., 0.0) or skip this entry
+    } else {
+        try {
+            volume.push_back(stof(clean_money(running_volume)));
+        } catch (const std::invalid_argument& e) {
+            std::cerr << "Invalid data for volume: " << running_volume << std::endl;
+            volume.push_back(0.0f);  // Or handle it in some other way
+        }
+    }
+
+    // volume.push_back(stoll(clean_money(clear_commas((running_volume)))));
 }
 
-vector<string>& ReadData::get_dates(){
+const vector<string>& ReadData::get_dates() const{
     return this->date;
 }
 
 
-vector<float>& ReadData::get_open_prices(){
+const vector<float>& ReadData::get_open_prices() const{
    return this->stock_open;
 }
 
-vector<float>& ReadData::get_close_prices(){
+const vector<float>& ReadData::get_close_prices() const{
     return this->stock_close;
 }
 
-vector<float>& ReadData::get_stock_high(){
+const vector<float>& ReadData::get_stock_high() const{
     return this->stock_high;
 }
 
-vector<float>& ReadData::get_stock_low(){
+const vector<float>& ReadData::get_stock_low() const{
     return this->stock_low;
 }
 
-vector<long long>& ReadData::get_volume(){
+const vector<long long>& ReadData::get_volume() const{
     return this->volume;
 }
 

@@ -3,6 +3,8 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "ReadData.h"
+#include "Display.h"
 #include <stdio.h>
 #include <iostream>
 
@@ -26,12 +28,35 @@ const char *stockNames[20] = {"Microsoft", "Apple","Google", "Nvidia","Tesla", "
 
 const char *stockCodes[20] = {"MSFT", "AAPL","GOOG", "NVDA","TSLA", "AMZA", "BRK-B", "ADBE","COST","MA",
                               "KO", "NFLX", "TM", "PEP", "MCD", "SHEL", "CAT", "DIS", "UBER", "BHP"};
+                             
+const char *stockFiles[20] = {"microsoft.csv", "apple.csv", "google.csv", "nvidia.csv", "tesla.csv", 
+                             "amazon.csv", "berkshire.csv", "adobe.csv", "costco.csv", "mastercard.csv",
+                             "coke.csv", "netflix.csv", "toyota.csv", "pepsico.csv", "mcdonald.csv",
+                             "shell.csv", "caterpillar.csv", "disney.csv", "uber.csv", "bhp.csv"};
 
 
 // Variable to track the current screen (0 for the default, 1 for a second screen, etc.)
 int currentScreen = 0;
+int selectedStockIndex = -1;
+
+
+
+
+
 
 int main() {
+
+    std::vector<Display> stockDisplays;
+
+// Initialize `stockDisplays` in `main()`
+// for (const auto& fileName : {"microsoft.csv", "apple.csv", "google.csv", "nvidia.csv", "tesla.csv", 
+//                              "amazon.csv", "berkshire.csv", "adobe.csv", "costco.csv", "mastercard.csv",
+//                              "coke.csv", "netflix.csv", "toyota.csv", "pepsico.csv", "mcdonald.csv",
+//                              "shell.csv", "caterpillar.csv", "disney.csv", "uber.csv", "bhp.csv"}) {
+//     stockDisplays.emplace_back(fileName);
+//     std::cout << "Initialized Display for stock: " << fileName << std::endl;
+// }
+
     // Initialize GLFW
 if (!glfwInit()) {
     fprintf(stderr, "Failed to initialize GLFW\n");
@@ -62,6 +87,14 @@ if (!glfwInit()) {
     // Setup ImGui context
     setupImGui(window);
 
+    for (int i = 0; i < 20; ++i) {
+    stockDisplays.emplace_back(stockFiles[i]); // Pass stock code to Display constructor
+    std::cout << "Initialized Display for stock: " << stockCodes[i] << std::endl;
+}
+
+
+
+
     // Main loop
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents(); // Poll events
@@ -91,9 +124,9 @@ if (!glfwInit()) {
         ImGui::Text("Cursor Position: (%.1f, %.1f)", cursorPos.x, cursorPos.y);
 
         // Display content based on the current screen
-        if (currentScreen == 0) {
-            // Use the custom font for "Wallet"
-            ImGui::PushFont(titleFont); // Set the custom font
+    if (currentScreen == 0) {
+            // Main screen with stock list
+ ImGui::PushFont(titleFont); // Set the custom font
             ImGui::SetCursorPos(ImVec2(350, 50));
             ImGui::Text("Wallet"); // This text uses the custom font
             ImGui::PopFont(); // Revert to the default font
@@ -114,35 +147,57 @@ if (!glfwInit()) {
 
                     std::string buttonLabel = "View ##" + std::to_string(j) + "_" + std::to_string(i);
                     if (ImGui::Button(buttonLabel.c_str(), ImVec2(100, 30))) {
+                    selectedStockIndex = (i + 10*j);
+    std::cout << "Selected stock index: " << selectedStockIndex << std::endl;
+
                     currentScreen = 1; // Switch to screen 2
                     }                    
                     ImGui::SetCursorPos(ImVec2((700),(30)));
+
 
                 }
             }
             if (ImGui::Button("Porfolio", ImVec2(100, 30))) {
                 currentScreen = 2; // Switch to screen 2
             }
-        } else if (currentScreen == 1) {
-            // Screen 2: New content
-            ImGui::PushFont(titleFont); // Set the custom font
-            ImGui::SetCursorPos(ImVec2(330, 50));
-            ImGui::Text("Invest"); // This text uses the custom font
-            ImGui::PopFont(); // Revert to the default font
 
-            ImGui::Text("This is a different screen.");
-            if (ImGui::Button("goback")) {
-                currentScreen = 0; // Switch to screen 1 (original content)
-            }
-        } else if (currentScreen == 2) {
-            ImGui::PushFont(titleFont); // Set the custom font
-            ImGui::SetCursorPos(ImVec2(330, 50));
-            ImGui::Text("Portfolio"); // This text uses the custom font
-            ImGui::PopFont(); // Revert to the default font
-            if (ImGui::Button("goback")) {
-                currentScreen = 0; // Switch to screen 1 (original content)
-            }
+        
         }
+        else if (currentScreen == 1 && selectedStockIndex != -1) {
+    if (selectedStockIndex >= 0 && selectedStockIndex < stockDisplays.size()) {
+        // Stock-specific screen for selected stock
+     const Display& display = stockDisplays[selectedStockIndex];
+        //const Display& display = "adobe.csv";
+
+
+
+         ImGui::Text("Stock: %s", stockNames[selectedStockIndex]);
+        ImGui::Text("Open Price: %s", display.single_open_prices(1).c_str());
+        ImGui::Text("Close Price: %s", display.single_close_prices(1).c_str());
+        ImGui::Text("Volume: %s", display.single_volumes(1).c_str());
+        ImGui::Text("Date: %s", display.single_dates(1).c_str());
+        ImGui::Text("Daily Change: %s", display.daily_change(1).c_str());
+    } else {
+        ImGui::Text("Invalid stock index.");
+    }
+
+    if (ImGui::Button("Go Back")) {
+        currentScreen = 0;  // Return to main screen
+        selectedStockIndex = -1; // Reset selected stock index
+    }
+}
+
+
+        
+        // else if (currentScreen == 2) {
+        //     ImGui::PushFont(titleFont); // Set the custom font
+        //     ImGui::SetCursorPos(ImVec2(330, 50));
+        //     ImGui::Text("Portfolio"); // This text uses the custom font
+        //     ImGui::PopFont(); // Revert to the default font
+        //     if (ImGui::Button("goback")) {
+        //         currentScreen = 0; // Switch to screen 1 (original content)
+        //     }
+        // }
 
         ImGui::PopStyleColor(); // Pop the style color to revert to the previous color
         ImGui::End();
@@ -154,6 +209,7 @@ if (!glfwInit()) {
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData()); // Render ImGui
 
         glfwSwapBuffers(window); // Swap buffers
+    
     }
 
     // Cleanup
@@ -213,3 +269,4 @@ void cleanupImGui() {
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 }
+ 

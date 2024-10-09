@@ -9,7 +9,15 @@ Display::Display(std::string stock): ReadData(stock){};
 
 
 
-string Display::single_open_prices(int day){
+string Display::single_open_prices(int day) const {
+
+
+// debugging - check if openPrices is empty
+    auto openPrices = get_open_prices();
+    if (openPrices.empty()) {
+        std::cerr << "Error: open prices data is empty for stock." << std::endl;
+        return "$0.00";  // Or any default value
+    }
 
     float price1 = get_open_prices()[get_open_prices().size()-day];
 
@@ -24,7 +32,7 @@ string Display::single_open_prices(int day){
 
 }
 
-string Display::single_close_prices(int day){
+string Display::single_close_prices(int day) const {
 
     float price1 = get_close_prices()[get_close_prices().size()-day];
 
@@ -38,13 +46,13 @@ string Display::single_close_prices(int day){
 
 }
 
-string Display::single_dates(int day){
+string Display::single_dates(int day) const {
 
     return get_dates()[get_dates().size()-day];
 
 }
 
-string Display::single_volumes(int day){
+string Display::single_volumes(int day) const {
 
     float volume = get_volume()[get_volume().size()-day];
 
@@ -59,11 +67,11 @@ string Display::single_volumes(int day){
 
 }
 
-string Display::daily_change(int day){
+string Display::daily_change(int day) const {
 
     float change = 0;
-    vector<float>& open = get_open_prices();
-    vector<float>& close = get_close_prices();
+    const vector<float>& open = get_open_prices();
+    const vector<float>& close = get_close_prices();
     int index = open.size() - day;
     string return_value = "";
 
@@ -87,7 +95,7 @@ string Display::daily_change(int day){
 
 }
 
-string Display::clean_daily_change(bool status, string value){
+string Display::clean_daily_change(bool status, string value) const {
 
     if (status){
 
