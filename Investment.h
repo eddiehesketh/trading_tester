@@ -24,6 +24,7 @@ class Investment: public ReadData{
     public:
 
         Investment(float initial_capital, std::string stock_info_);
+        virtual ~Investment() = default;
 
         // Investment();
 

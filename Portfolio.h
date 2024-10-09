@@ -21,7 +21,8 @@ class Portfolio{
 
         // void set_portfolio_value();
 
-        void calculate_portfolio_value();
+        void set_portfolio_value();
+
 
         float get_portfolio_value();
 
@@ -29,6 +30,7 @@ class Portfolio{
 
         int get_count();
 
+        ~Portfolio();
 
 
 
