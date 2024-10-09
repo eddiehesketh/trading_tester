@@ -28,8 +28,8 @@ int main() {
     std::string csvFileName = "apple.csv"; // Ensure this file exists
     float initialCapital = 10000.0f;
     std::string stockInfo = "Example Stock"; 
-    int shortPeriod = 5; 
-    int longPeriod = 10; 
+    int shortPeriod = 10; 
+    int longPeriod = 20; 
     std::string startDate = "2023-01-01";
     // Create an instance of MovingAverageCrossover
     MovingAverageCrossover movingAverage(startDate, initialCapital, stockInfo, shortPeriod, longPeriod);
@@ -45,26 +45,17 @@ int main() {
         movingAverage.addPrice(price); // Add each price to the MovingAverageCrossover instance
     }
     
-    movingAverage.investment_stratergy(); // Execute investment strategy
+    // movingAverage.investment_stratergy(); // Execute investment strategy
 
-    // Output the closing prices
-    for (size_t i = 0; i < closePrices.size(); ++i) {
-        std::cout << "Close Price on " << readData.get_dates()[i] << ": " << closePrices[i] << std::endl;
-    }
+    // // Output the closing prices
+    // for (size_t i = 0; i < closePrices.size(); ++i) {
+    //     std::cout << "Close Price on " << readData.get_dates()[i] << ": " << closePrices[i] << std::endl;
+    // }
 
-    try {
-        double ma20 = movingAverage.MovingAverage20D();
-        std::cout << "The previous 20-day moving average is: " << ma20 << std::endl;
-    } catch (const std::out_of_range& e) {
-        std::cerr << e.what() << std::endl; // Handle the case where there are not enough prices
-    }
+    double MA1 = movingAverage.MovingAverage(shortPeriod);
+    std::cout << "The previous " << shortPeriod << " day moving average is: " << MA1 << std::endl;
 
-    try {
-        double ma10 = movingAverage.MovingAverage10D();
-        std::cout << "The previous 10-day moving average is: " << ma10 << std::endl;
-    } catch (const std::out_of_range& e) {
-        std::cerr << e.what() << std::endl; // Handle the case where there are not enough prices
-    }
+    double MA2 = movingAverage.MovingAverage(longPeriod);
+    std::cout << "The previous " << longPeriod << " day moving average is: " << MA2 << std::endl;
 
-    return 0;
 }
