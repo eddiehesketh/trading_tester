@@ -49,7 +49,7 @@ void SetDeposit::investment_stratergy(){
     return false;
 }
 
-void SetDeposit::set_investment_type(){this->investment_type = "Depost";}
+void SetDeposit::set_investment_type(){this->investment_type = "Deposit";}
 
 
 
