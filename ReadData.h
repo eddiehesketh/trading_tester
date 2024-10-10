@@ -57,6 +57,7 @@ class ReadData{
         const std::vector<float>& get_stock_high() const;
         const std::vector<float>& get_stock_low() const;
         const std::vector<long long>& get_volume() const;
+
     
 
         virtual void invest_strat(){};

@@ -283,6 +283,8 @@ const string ReadData::get_name(){return this->name;}
 
 
 
+
+
 // ReadData::~ReadData(){
 //     stock_data.close();
 // }
