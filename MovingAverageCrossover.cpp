@@ -1,31 +1,30 @@
 #include "MovingAverageCrossover.h"
 #include <iostream>
 
-MovingAverageCrossover::MovingAverageCrossover(std::string _start_date, float initial_capital, std::string stock_info_, int shortPeriod, int longPeriod)
+MovingAverageCrossover::MovingAverageCrossover(std::string _start_date, float initial_capital, std::string stock_info_, int Period1, int Period2)
     : Investment(initial_capital, stock_info_) {
-    this->shortPeriod = shortPeriod;
-    this->longPeriod = longPeriod;
+    this->Period1 = Period1;
+    this->Period2 = Period2;
     if (valid_start_date(_start_date)) {
-        investment_stratergy();
+        return;
+    }
+}
+
+void MovingAverageCrossover::largePeriod(int Period1, int Period2) {
+    if (Period1 > Period2){
+        longPeriod = Period1;
+        shortPeriod = Period2;
+    } else {
+        longPeriod = Period2;
+        shortPeriod = Period1;
     }
 }
 
 void MovingAverageCrossover::addPrice(double price) {
     prices.push_back(price);
-    if (prices.size() >= longPeriod) {
+    if (prices.size() >= Period2) {
         executeStrategy();
     }
-}
-
-void MovingAverageCrossover::executeStrategy() {
-    if (prices.size() < longPeriod) return;
-
-    // Calculate moving averages
-    double MA1 = MovingAverage(shortPeriod);
-    double MA2 = MovingAverage(longPeriod);
-    
-    // Detect crossover
-    detectCrossover(); // This will handle buying/selling based on crossover
 }
 
 void MovingAverageCrossover::displayTradeSignals() {
@@ -40,6 +39,7 @@ void MovingAverageCrossover::investment_stratergy() {
     std::cout << "Current capital: " << get_capital() << std::endl;
 }
 
+// ???
 bool MovingAverageCrossover::valid_pay_freq(std::string freq) {
     return (freq == "Monthly" || freq == "Quarterly" || freq == "Annually");
 }
@@ -60,28 +60,36 @@ double MovingAverageCrossover::MovingAverage(int period) {
 }
 
 void MovingAverageCrossover::detectCrossover(){
+    largePeriod(Period1, Period2);
     if (prices.size() < longPeriod) return;
 
-    double MA1 = MovingAverage(shortPeriod); // Calculate 10-day SMA
-    double MA2 = MovingAverage(longPeriod);   // Calculate 20-day SMA
-    static double previousMA1 = 0.0; // Store previous 10-day SMA
-    static double previousMA2 = 0.0;  // Store previous 20-day SMA
+    // Calculate MA's
+    double shortMA = MovingAverage(shortPeriod);
+    double longMA = MovingAverage(longPeriod);
+    // Store previous MA's
+    static double previousShortMA = 0.0; 
+    static double previousLongMA = 0.0;
 
     // Check for crossover
-    if (previousMA1 != 0.0 && previousMA2 != 0.0) {
+    if (previousShortMA != 0.0 && previousLongMA != 0.0) {
         // Buy signal (shortMA crosses above longMA)
-        if (previousMA1 <= previousMA2 && MA1 > MA2){
-            int day = prices.size(); // Current day index
+        if (previousShortMA <= previousLongMA && shortMA > longMA){
+            int day = prices.size();
             tradeSignals.emplace_back(day, "Buy");
         }
         // Sell signal (shortMA crosses below longMA)
-        else if (previousMA1 >= previousMA2 && MA1 < MA2) {
-            int day = prices.size(); // Current day index
+        else if (previousShortMA >= previousLongMA && shortMA < longMA) {
+            int day = prices.size();
             tradeSignals.emplace_back(day, "Sell");
         }
     }
 
     // Update previous values
-    previousMA1 = MA1;
-    previousMA2 = MA2;
+    previousShortMA = shortMA;
+    previousLongMA = longMA;
+}
+
+void MovingAverageCrossover::executeStrategy(){
+    // Detect crossover
+    detectCrossover();
 }

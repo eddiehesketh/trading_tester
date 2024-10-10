@@ -27,6 +27,8 @@ class Investment: public ReadData{
         double meanPrice;
 
         // MovingAverageCrossover
+        int Period1;
+        int Period2;
         int shortPeriod;
         int longPeriod;
         std::vector<double> prices;

@@ -8,7 +8,8 @@
 
 class MovingAverageCrossover : public Investment {
 public:
-    MovingAverageCrossover(std::string _start_date, float initial_capital, std::string stock_info_, int shortPeriod, int longPeriod);
+    MovingAverageCrossover(std::string _start_date, float initial_capital, std::string stock_info_, int Period1, int Period2);
+    void largePeriod(int Period1, int Period2);
     void addPrice(double price);
     void displayTradeSignals();
     void investment_stratergy() override;
