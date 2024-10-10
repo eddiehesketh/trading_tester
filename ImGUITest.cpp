@@ -7,10 +7,9 @@
 #include "Display.h"
 #include <stdio.h>
 #include <iostream>
+#include <algorithm>
 
-// g++ -o imgui_test ImGUITest.cpp Display.cpp ReadData.cpp libs/glad/src/glad.c imgui/imgui.cpp imgui/imgui_draw.cpp imgui/imgui_widgets.cpp imgui/imgui_tables.cpp imgui/backends/imgui_impl_glfw.cpp imgui/backends/imgui_impl_opengl3.cpp \
--Ilibs/glad/include -I/opt/homebrew/include -Iimgui -Iimgui/backends \
--L/opt/homebrew/lib -lglfw -framework OpenGL -DIMGUI_IMPL_OPENGL_LOADER_GLAD -std=c++11
+
 
 
 
@@ -36,6 +35,8 @@ const char *stockFiles[20] = {"microsoft.csv", "apple.csv", "google.csv", "nvidi
                              "coke.csv", "netflix.csv", "toyota.csv", "pepsico.csv", "mcdonald.csv",
                              "shell.csv", "caterpillar.csv", "disney.csv", "uber.csv", "bhp.csv"};
 
+enum class TimeRange { Max, Year1, Month6, Month1 };
+TimeRange selectedRange = TimeRange::Max;
 
 // Variable to track the current screen (0 for the default, 1 for a second screen, etc.)
 int currentScreen = 0;
@@ -162,30 +163,108 @@ if (!glfwInit()) {
     if (selectedStockIndex >= 0 && selectedStockIndex < stockDisplays.size()) {
         // Stock-specific screen for selected stock
      const Display& display = stockDisplays[selectedStockIndex];
-        //const Display& display = "adobe.csv";
-            ImGui::PushFont(titleFont);
-            ImGui::SetCursorPos(ImVec2((350),(50)));
-            ImGui::Text("%s", stockNames[selectedStockIndex]);
-            ImGui::PopFont();
+    
+    ImVec2 windowSize = ImGui::GetWindowSize();
+    // Calculate text width based on the selected font and stock name text
+    ImGui::PushFont(titleFont);
+    ImVec2 textSize = ImGui::CalcTextSize(stockNames[selectedStockIndex]);
+    // Calculate position to center the text
+    ImVec2 centeredPos((windowSize.x - textSize.x) / 2.0f, (50));
+    ImGui::SetCursorPos(centeredPos);
+    // Display the centered text
+    ImGui::Text("%s", stockNames[selectedStockIndex]);
+    ImGui::PopFont();
+
         
-        ImGui::Text("Open Price: %s", display.single_open_prices(1).c_str());
-        ImGui::Text("Close Price: %s", display.single_close_prices(1).c_str());
-        ImGui::Text("Volume: %s", display.single_volumes(1).c_str());
-        ImGui::Text("Date: %s", display.single_dates(1).c_str());
-        ImGui::Text("Daily Change: %s", display.daily_change(1).c_str());
+
+// Retrieve open prices for plotting
+    const std::vector<float>& openPrices = display.get_open_prices();
+    const std::vector<std::string>& dates = display.get_dates();
+
+
+    ImGui::SetCursorPos(ImVec2(100, 75));
+    ImGui::PushItemWidth(150.0f);
+
+    const char* timeRangeLabels[] = { "Max", "1 Year", "6 Month", "1 Month" };
+    int currentRangeIndex = static_cast<int>(selectedRange);
+    if (ImGui::Combo("Time Range", &currentRangeIndex, timeRangeLabels, IM_ARRAYSIZE(timeRangeLabels))) {
+            selectedRange = static_cast<TimeRange>(currentRangeIndex);
+    }
+
+ImGui::PopItemWidth();
+// Filter data based on selected time range
+    std::vector<float> filteredPrices;
+    std::vector<std::string> filteredDates;
+
+    size_t dataSize = openPrices.size();
+    size_t startIndex = 0;
+
+    switch (selectedRange) {
+        case TimeRange::Max:
+            startIndex = 0;
+            break;
+        case TimeRange::Year1:
+            startIndex = (dataSize > 252) ? dataSize - 252 : 0;  // Approx. 252 trading days in a year
+            break;
+        case TimeRange::Month6:
+            startIndex = (dataSize > 126) ? dataSize - 126 : 0;   
+            break;
+        case TimeRange::Month1:
+            startIndex = (dataSize > 21) ? dataSize - 21 : 0;   
+            break;
+    }
+    filteredPrices.assign(openPrices.begin() + startIndex, openPrices.end());
+    filteredDates.assign(dates.begin() + startIndex, dates.end());
+
+if (!filteredPrices.empty()) {
+                    float graphWidth = 600.0f;  // Set desired width for the graph box
+                    float graphHeight = 200.0f; // Set desired height for the graph box
+                    ImVec2 graphPos((windowSize.x - graphWidth) / 2, 100.0f);  // Centered horizontally, offset from top
+                    ImGui::SetCursorPos(graphPos);
+
+                    ImGui::BeginChild("GraphWindow", ImVec2(graphWidth, graphHeight), true, ImGuiWindowFlags_HorizontalScrollbar);
+                    ImGui::PlotLines("##OpenPrices", filteredPrices.data(), filteredPrices.size(), 0, nullptr, FLT_MIN, FLT_MAX, ImVec2(graphWidth - 20, 150));
+
+
+                    
+                    static int hoveredIndex = -1;
+
+                    if (ImGui::IsItemHovered()) {
+                        ImVec2 mousePosInGraph = ImGui::GetMousePos();
+                        ImVec2 graphOrigin = ImGui::GetItemRectMin();
+                        float relativeX = mousePosInGraph.x - graphOrigin.x;
+                        hoveredIndex = static_cast<int>((relativeX / 580) * filteredPrices.size());
+                        hoveredIndex = (hoveredIndex < 0) ? 0 : (hoveredIndex > static_cast<int>(filteredPrices.size() - 1) ? static_cast<int>(filteredPrices.size() - 1) : hoveredIndex);
+
+                        ImGui::SetTooltip("Date: %s\nOpen Price: %.2f", filteredDates[hoveredIndex].c_str(), filteredPrices[hoveredIndex]);
+                    }
+                    ImVec2 lineStartPos = ImVec2(graphPos.x + (graphWidth * hoveredIndex / filteredPrices.size()), graphPos.y);
+                    float price = filteredPrices[hoveredIndex];
+                    const std::string& dateLabel = filteredDates[hoveredIndex];
+
+                    // Draw line indicator
+                    ImDrawList* drawList = ImGui::GetWindowDrawList();
+                    drawList->AddLine(ImVec2(lineStartPos.x, lineStartPos.y), ImVec2(lineStartPos.x, lineStartPos.y + graphHeight), IM_COL32(200, 0, 0, 255), 1.5f);
+
+
+                    ImGui::EndChild();
+
+    if (hoveredIndex >= 0 && hoveredIndex < filteredPrices.size()) {
+        
+
+         ImGui::SetCursorPosY(graphPos.y + graphHeight + 20);  // Position date label below the graph
+         ImGui::SetCursorPosX(lineStartPos.x - 20);  // Adjust for label alignment
+         ImGui::Text("%s", dateLabel.c_str());
+    }
+                    
+
+                } else {
+                    ImGui::Text("No data available for plotting.");
+                }
+
     } else {
         ImGui::Text("Invalid stock index.");
     }
-
-    ImGui::Text("Line Graph");
-        ImGui::PlotLines("Line Plot", values.data(), values.size());
-
-        // Plot a histogram
-        ImGui::Text("Histogram");
-        ImGui::PlotHistogram("Histogram", values.data(), values.size());
-
-        // End the ImGui window
-        ImGui::End();
 
     if (ImGui::Button("Go Back")) {
         currentScreen = 0;  // Return to main screen
@@ -205,6 +284,18 @@ if (!glfwInit()) {
             ImGui::SetCursorPos(ImVec2(330, 50));
             ImGui::Text("Portfolio"); // This text uses the custom font
             ImGui::PopFont(); // Revert to the default font
+
+        std::vector<float> values = { 0.2f, 0.5f, 0.9f, 0.3f, 0.7f, 0.4f, 0.6f, 1.0f, 0.8f, 0.2f };
+
+        ImGui::Text("Line Graph");
+        ImGui::PlotLines("Line Plot", values.data(), values.size());
+
+        // Plot a histogram
+        ImGui::Text("Histogram");
+        ImGui::PlotHistogram("Histogram", values.data(), values.size());
+
+
+
             if (ImGui::Button("goback")) {
                 currentScreen = 0; // Switch to screen 0 (original content)
             }
