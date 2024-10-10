@@ -226,6 +226,56 @@ const vector<long long>& ReadData::get_volume() const{
     return this->volume;
 }
 
+void ReadData::set_stock_name(string file_name){
+
+    if (file_name == "microsoft.csv"){
+        this->name = "Microsoft";
+    } else if (file_name == "apple.csv"){
+        this->name = "Apple";
+    } else if (file_name == "google.csv"){
+        this->name = "Google";
+    } else if (file_name == "nvidia.csv"){
+        this->name = "Nvidia";
+    } else if (file_name == "tesla.csv"){
+        this->name = "Tesla";
+    } else if (file_name == "amazon.csv"){
+        this->name = "Amazon";
+    } else if (file_name == "berkshire.csv"){
+        this->name = "Berkshire Hathaway";
+    } else if (file_name == "adobe.csv"){
+        this->name = "Adobe";
+    } else if (file_name == "costco.csv"){
+        this->name = "Costco";
+    } else if (file_name == "mastercard.csv"){
+        this->name = "Mastercard";
+    } else if (file_name == "coke.csv"){
+        this->name = "Coca-Cola";
+    } else if (file_name == "netflix.csv"){
+        this->name = "Netflix";
+    } else if (file_name == "toyota.csv"){
+        this->name = "Toyota";
+    } else if (file_name == "pepsi.csv"){
+        this->name = "Pepsi";
+    } else if (file_name == "mcdonalds.csv"){
+        this->name = "McDonalds";
+    } else if (file_name == "shell.csv"){
+        this->name = "Shell";
+    } else if (file_name == "caterpillar.csv"){
+        this->name = "Caterpillar";
+    } else if (file_name == "disney.csv"){
+        this->name = "Walt Disney";
+    } else if (file_name == "uber.csv"){
+        this->name = "Uber";
+    } else if (file_name == "bhp.csv"){
+        this->name = "BHP Group";
+    } else {
+        this->name = "Unknown";
+    }
+
+}
+
+const string ReadData::get_name(){return this->name;}
+
 
 
 

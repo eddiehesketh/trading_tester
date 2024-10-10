@@ -10,6 +10,7 @@ class ReadData{
 
     protected:
         std::string titles;
+        std::string name;
         std::vector<std::string> date;
         std::vector<float> stock_open;
         std::vector<float> stock_close;
@@ -45,6 +46,10 @@ class ReadData{
         void set_stock_high(std::stringstream& ss);
         void set_stock_low(std::stringstream& ss);
         void set_stock_volume(std::stringstream& ss);
+
+        void set_stock_name(std::string name);
+
+        const std::string get_name();
 
         const std::vector<std::string>& get_dates() const;
         const std::vector<float>& get_open_prices() const;
