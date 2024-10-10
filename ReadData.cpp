@@ -7,6 +7,8 @@ using namespace std;
 // Read data class constructor.
 ReadData::ReadData(string stock_info){
 
+    set_stock_name(stock_info);
+
     // Initialising stock data based off name of csv file.
     set_stock_data(stock_info);
     
