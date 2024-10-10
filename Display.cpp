@@ -72,6 +72,9 @@ string Display::daily_change(int day) const {
     float change = 0;
     const vector<float>& open = get_open_prices();
     const vector<float>& close = get_close_prices();
+    if (day >= open.size() || day >= close.size() || day < 0) {
+        return "N/A"; 
+    }
     int index = open.size() - day;
     string return_value = "";
 
@@ -89,11 +92,24 @@ string Display::daily_change(int day) const {
         return clean_daily_change(false, return_value);
 
     }
-
-    return NULL;
-
+    return "N/A";
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 string Display::clean_daily_change(bool status, string value) const {
 
