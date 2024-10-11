@@ -32,7 +32,7 @@ const char *stockCodes[20] = {"MSFT", "AAPL","GOOG", "NVDA","TSLA", "AMZA", "BRK
                              
 const char *stockFiles[20] = {"microsoft.csv", "apple.csv", "google.csv", "nvidia.csv", "tesla.csv", 
                              "amazon.csv", "berkshire.csv", "adobe.csv", "costco.csv", "mastercard.csv",
-                             "coke.csv", "netflix.csv", "toyota.csv", "pepsico.csv", "mcdonald.csv",
+                             "coke.csv", "netflix.csv", "toyota.csv", "pepsi.csv", "mcdonalds.csv",
                              "shell.csv", "caterpillar.csv", "disney.csv", "uber.csv", "bhp.csv"};
 
 enum class TimeRange { Max, Year1, Month6, Month1 };
