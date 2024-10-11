@@ -34,7 +34,6 @@ class Investment: public ReadData{
         int shares;
         float invested_capital;
         bool isInvested;
-        std::vector<double> prices;
         std::vector<std::pair<int, std::string>> tradeSignals;
 
     public:

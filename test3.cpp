@@ -25,19 +25,11 @@
 // }
 
 // FOR MOVING AVERAGE CROSSOVER
+#include "MovingAverageCrossover.h"
+#include <iostream>
+
 int main() {
     std::string csvFileName = "MA.csv";
-    float initialCapital = 10000.0f;
-    std::string stockInfo = csvFileName; 
-    int Period1 = 10; 
-    int Period2 = 20; 
-    std::string startDate = "2001-01-01";
-
-    // Create an instance of MovingAverageCrossover
-    MovingAverageCrossover movingAverage(startDate, initialCapital, stockInfo, Period1, Period2);
-    
-    // Load prices from CSV directly in MovingAverageCrossover
-    movingAverage.investment_stratergy();
-    
+    MovingAverageCrossover movingAverage("2000-01-05", 10000.0, csvFileName, 10, 20);
     return 0;
 }

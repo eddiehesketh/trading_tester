@@ -5,6 +5,7 @@
 #include <vector>
 #include <utility>
 #include <string>
+#include <optional>
 
 class MovingAverageCrossover : public Investment {
 public:
@@ -12,14 +13,13 @@ public:
     bool valid_pay_freq(std::string freq) override;
     void set_investment_type() override; 
     void largePeriod(int period1, int period2);
-    double MovingAverage(int period);
-    void addPrice(double price);
+    double MovingAverage(int period, int currentIndex);
     void detectCrossover();
-    void loadPricesFromCSV();
     void investment_stratergy() override;
     int capitalToShares(double capital, double closePrice);
     double sharesToCapital(int shares, double closePrice);
     void finalizeSimulation();
+    void loadDataFromCSV(const std::string& filename);
 };
 
 #endif
