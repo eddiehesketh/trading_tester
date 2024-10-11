@@ -31,7 +31,9 @@ class Investment: public ReadData{
         int Period2;
         int shortPeriod;
         int longPeriod;
-        std::vector<double> prices;
+        int shares;
+        float invested_capital;
+        bool isInvested;
         std::vector<std::pair<int, std::string>> tradeSignals;
 
     public:
@@ -73,6 +75,8 @@ class Investment: public ReadData{
         void set_widthdrawn_cash(float v);
 
         float get_widthdrawn_cash();
+
+        float get_profits();
 
         virtual void set_investment_type() = 0;
 
