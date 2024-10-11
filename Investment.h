@@ -77,6 +77,8 @@ class Investment: public ReadData{
 
         float get_widthdrawn_cash();
 
+        float get_profits();
+
         virtual void set_investment_type() = 0;
 
         std::string get_investment_type();

@@ -53,4 +53,6 @@ float Investment::get_widthdrawn_cash(){return this->widthdrawn_cash;}
 
 string Investment::get_investment_type(){return this->investment_type;}
 
+float Investment::get_profits(){return this->profits;}
+
 
