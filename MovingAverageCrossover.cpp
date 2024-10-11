@@ -103,7 +103,6 @@ void MovingAverageCrossover::investment_stratergy(){
     std::cout << "Initial capital: " << get_capital() << std::endl;
     
     detectCrossover();
-
     finalizeSimulation();
 }
 
