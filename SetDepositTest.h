@@ -60,7 +60,7 @@ class SetDepsoitTest{
         }
 
         void test_valid_pay_freq(){
-            SetDeposit deposit("2/1/2020", "nvidia.csv", 1000);
+            SetDeposit deposit("25/10/2015", "nvidia.csv", 1000);
 
             if (deposit.get_pay_freq() == "Once off"){
                 cout << "Valid pay frequency test passed" << endl;
