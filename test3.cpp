@@ -26,55 +26,18 @@
 
 // FOR MOVING AVERAGE CROSSOVER
 int main() {
-    std::string csvFileName = "MA.csv"; // Ensure this file exists
+    std::string csvFileName = "MA.csv";
     float initialCapital = 10000.0f;
-    std::string stockInfo = "Example Stock"; 
+    std::string stockInfo = csvFileName; 
     int Period1 = 10; 
     int Period2 = 20; 
-    std::string startDate = "2000-01-01";
+    std::string startDate = "2001-01-01";
 
     // Create an instance of MovingAverageCrossover
     MovingAverageCrossover movingAverage(startDate, initialCapital, stockInfo, Period1, Period2);
     
     // Load prices from CSV directly in MovingAverageCrossover
     movingAverage.investment_stratergy();
-
+    
     return 0;
 }
-// Execute investment strategy
-
-// const std::vector<std::string>& dates = readData.get_dates();
-// for (size_t i = 0; i < dates.size(); ++i) {
-//     std::cout << "Date " << i + 1 << ": " << dates[i] << std::endl; // Print the date
-// }
-
-// Ensure you return an integer from main
-
-
-// // Moving average calc
-// for (size_t i = 0; i < closePrices.size(); ++i) {
-//     double price = closePrices[i];
-//     movingAverage.addPrice(price); 
-
-//     // Check if there are enough prices for short-term moving average
-//     if (i + 1 >= shortPeriod){
-//         double MA1 = movingAverage.MovingAverage(shortPeriod);
-//         std::cout << "The previous " << shortPeriod << " day moving average is: " << MA1 << std::endl;
-//     }
-//     // Check if there are enough prices for long-term moving average
-//     if (i + 1 >= longPeriod){
-//         double MA2 = movingAverage.MovingAverage(longPeriod);
-//         std::cout << "The previous " << longPeriod << " day moving average is: " << MA2 << std::endl;
-//     }
-// }
-    
-
-
-// // Output the closing prices
-// for (size_t i = 0; i < closePrices.size(); ++i) {
-//     std::cout << "Close Price on " << readData.get_dates()[i] << ": " << closePrices[i] << std::endl;
-// }
-
-// for (size_t i = 0; i < closePrices.size(); ++i) {
-//     std::cout << closePrices[i] << std::endl;
-//  }

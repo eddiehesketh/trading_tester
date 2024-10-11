@@ -15,8 +15,11 @@ public:
     double MovingAverage(int period);
     void addPrice(double price);
     void detectCrossover();
-    void loadPricesFromCSV(const std::string& filename);
+    void loadPricesFromCSV();
     void investment_stratergy() override;
+    int capitalToShares(double capital, double closePrice);
+    double sharesToCapital(int shares, double closePrice);
+    void finalizeSimulation();
 };
 
 #endif
