@@ -7,7 +7,7 @@
 
 // // FOR MOMENTUM
 int main() {
-    std::string csvFileName = "MA.csv";
+    std::string csvFileName = "test_csv_2.csv";
     Momentum momentem("3/1/2000", 10000.0, csvFileName, 10);
     return 0;
 }

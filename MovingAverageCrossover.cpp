@@ -8,7 +8,7 @@ MovingAverageCrossover::MovingAverageCrossover(std::string _start_date, float in
     shares = 0;
 
     largePeriod(period1, period2);
-     
+
     if (valid_start_date(_start_date)){
         investment_stratergy();
     }
@@ -18,7 +18,7 @@ bool MovingAverageCrossover::valid_pay_freq(std::string freq){
     return true;
 }
 
-void MovingAverageCrossover::set_investment_type() {
+void MovingAverageCrossover::set_investment_type(){
     this->investment_type = "Moving Average Crossover";
 }
 
@@ -38,15 +38,15 @@ double MovingAverageCrossover::MovingAverage(int period, int index_val){
     const std::vector<float>& close_stock = get_close_prices();
     double sum = 0.0;
 
-    // Calculate the sum of the prices for the moving average
+    // Calculate and return the sum of the prices for the moving average
     for (int i = index_val; i >= (index_val - period + 1); i--){
         sum += close_stock[i]; // Use closePrices instead of prices
     }
-
-    return sum / period; // Return the calculated moving average
+    return sum / period;
 }
 
 void MovingAverageCrossover::detectCrossover(){
+    // Creates reference to close prices and dates called close_stock and current_date
     const std::vector<float>& close_stock = get_close_prices();
     const std::vector<std::string>& current_date = get_dates();
 
@@ -56,6 +56,7 @@ void MovingAverageCrossover::detectCrossover(){
     int index_val = longPeriod - 1;
     isInvested = false;
 
+    // Iterate through all moving averages
     for (; index_val < close_stock.size(); index_val++){
         // Calculate the current moving averages for the current index
         double shortMA = MovingAverage(shortPeriod, index_val);
@@ -107,27 +108,33 @@ void MovingAverageCrossover::investment_stratergy(){
     std::cout << "Investment strategy executed. Trading signals:\n";
     std::cout << "Initial capital: " << get_capital() << std::endl;
     
+    // Runs dectection and finalisation of the strategy
     detectCrossover();
     finalizeSimulation();
 }
 
 int MovingAverageCrossover::capitalToShares(double capital, double closePrice){
+    // Determines if shares can be bought
     if (capital <= 0){
         std::cerr << "Error: Insufficient capital to buy shares." << std::endl;
         return 0;
     }
+    // Returns number of purchasable shares
     return static_cast<int>(capital / closePrice);
 }
 
 double MovingAverageCrossover::sharesToCapital(int shares, double closePrice){
+    // Determines if shares can be sold
     if (shares <= 0){
         std::cerr << "Error: Cannot convert negative shares to capital." << std::endl;
         return 0.0;
     }
+    // Returns number of sellable shares
     return shares * closePrice;
 }
 
 void MovingAverageCrossover::finalizeSimulation(){
+    // Sells all remaining shares 
     if (isInvested && shares > 0){
         double lastClosePrice = stock_close.back();
         double finalCapital = sharesToCapital(shares, lastClosePrice);

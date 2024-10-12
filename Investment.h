@@ -45,7 +45,6 @@ class Investment: public ReadData{
 
         virtual void investment_stratergy() = 0;
 
-
         float get_capital();
 
         void set_capital(float new_capital);

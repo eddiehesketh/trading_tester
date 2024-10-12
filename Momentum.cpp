@@ -5,7 +5,6 @@ Momentum::Momentum(std::string _start_date, float initial_capital, std::string s
     this->period = period;
     shares = 0;
 
-    set_investment_type(); 
     if (valid_start_date(_start_date)){
         investment_stratergy();
     }
@@ -28,8 +27,11 @@ double Momentum::calcMomentum(int period, int index_val){
 }
 
 void Momentum::detectMomentum(){
+    // Creates reference to close prices and dates called close_stock and current_date
     const std::vector<float>& close_stock = get_close_prices();
     const std::vector<std::string>& current_date = get_dates();
+    
+    // Set conditions
     int index_val = period - 1;
     isInvested = false;
 
@@ -62,7 +64,7 @@ void Momentum::detectMomentum(){
             }
         } 
         // Check for sell signal
-        else if (isInvested && momentum <= 0){
+        else if (isInvested && momentum < 0){
             std::cout << "Sell signal on " << current_date[index_val] << ": Momentum " << momentum << std::endl;
             
             // Sell shares
@@ -78,27 +80,33 @@ void Momentum::detectMomentum(){
 void Momentum::investment_stratergy(){
     std::cout << "Investment strategy executed. Trading signals:\n";
     std::cout << "Initial capital: " << get_capital() << std::endl;
-    
+
+    // Runs dectection and finalisation of the strategy
     detectMomentum();
     finalizeSimulation();
 }
 
 int Momentum::capitalToShares(double capital, double closePrice){
+    // Determines if shares can be bought
     if (capital <= 0){
         std::cerr << "Error: Insufficient capital to buy shares." << std::endl;
         return 0;
     }
+    // Returns number of purchasable shares
     return static_cast<int>(capital / closePrice);
 }
 
 double Momentum::sharesToCapital(int shares, double closePrice){
+    // Determines if shares can be sold
     if (shares <= 0){
         std::cerr << "Error: Cannot convert negative shares to capital." << std::endl;
         return 0.0;
     }
+    // Returns number of sellable shares
     return shares * closePrice;
 }
 void Momentum::finalizeSimulation(){
+    // Sells all remaining shares 
     if (isInvested && shares > 0){
         double lastClosePrice = stock_close.back();
         double finalCapital = sharesToCapital(shares, lastClosePrice);
