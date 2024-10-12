@@ -29,5 +29,4 @@ int main() {
     std::string csvFileName = "MA.csv";
     MovingAverageCrossover movingAverage("3/1/2000", 10000.0, csvFileName, 10, 20);
     return 0;
-
 }

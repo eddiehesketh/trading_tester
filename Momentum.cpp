@@ -1,22 +1,35 @@
-#include "MeanReversion.h"
+#include "Momentum.h"
 #include <iostream>
 #include <numeric>
 
-MeanReversion::MeanReversion(std::string _start_date, float initial_capital, std::string stock_info, int period):Investment(initial_capital, stock_info){
-    this->meanPeriod = meanPeriod;
-    if (valid_start_date(_start_date)){
-        investment_stratergy();
-    }
+Momentum::Momentum(std::string _start_date, float initial_capital, std::string stock_info, int period):Investment(initial_capital, stock_info){
+    this->Period = period;
+
+    set_investment_type(); 
+    investment_stratergy();
+    // if (valid_start_date(_start_date)){
+    //     investment_stratergy();
+    // }
 }
 
-void MeanReversion::addPrice(double price){
-    signals.push_back(price);
-    if (signals.size() > meanPeriod){
-        signals.erase(signals.begin());
-    }
+bool Momentum::valid_pay_freq(std::string freq){
+    return true;
 }
 
-void MeanReversion::investment_stratergy(){
+double Momentum::MovingAverage(int period, int index_val){
+    // Creates reference to close prices called close_stock
+    const std::vector<float>& close_stock = get_close_prices();
+    double sum = 0.0;
+
+    // Calculate the sum of the prices for the moving average
+    for (int i = index_val; i >= (index_val - period + 1); i--){
+        sum += close_stock[i]; // Use closePrices instead of prices
+    }
+
+    return sum / period; // Return the calculated moving average
+}
+
+void Momentum::investment_stratergy(){
     if (signals.size() < meanPeriod){
         std::cout << "Not enough data to determine mean.\n";
         return;
@@ -41,17 +54,17 @@ void MeanReversion::investment_stratergy(){
     }
 }
 
-void MeanReversion::displayTradeSignals(){
+void Momentum::displayTradeSignals(){
     std::cout << "Trade signals based on mean reversion strategy:\n";
     for (size_t i = 0; i < signals.size(); ++i){
         std::cout << "Price: " << signals[i] << "\n";
     }
 }
 
-bool MeanReversion::valid_pay_freq(std::string freq){
+bool Momentum::valid_pay_freq(std::string freq){
     return (freq == "monthly" || freq == "quarterly" || freq == "annually");
 }
 
-void MeanReversion::set_investment_type(){
-    this-> investment_type = "Mean Reversion";
+void Momentum::set_investment_type(){
+    this-> investment_type = "Momentum";
 }
