@@ -6,6 +6,7 @@
 #include "ReadData.h"
 #include "Display.h"
 #include <stdio.h>
+#include <string>
 #include <iostream>
 #include <algorithm>
 
@@ -35,12 +36,15 @@ const char *stockFiles[20] = {"microsoft.csv", "apple.csv", "google.csv", "nvidi
                              "coke.csv", "netflix.csv", "toyota.csv", "pepsi.csv", "mcdonalds.csv",
                              "shell.csv", "caterpillar.csv", "disney.csv", "uber.csv", "bhp.csv"};
 
+const char *investmentNames[4] = {"Dividend", "Mean Reversion", "Set Deposit", "Moving Average Crossover"};
+
 enum class TimeRange { Max, Year1, Month6, Month1 };
 TimeRange selectedRange = TimeRange::Max;
 
 // Variable to track the current screen (0 for the default, 1 for a second screen, etc.)
 int currentScreen = 0;
 int selectedStockIndex = -1;
+int investmentIndex = -1;
 
 
 
@@ -114,8 +118,6 @@ if (!glfwInit()) {
         ImGui::SameLine();
         ImGui::SetCursorPos(ImVec2(50, 50));
         ImGui::Text("Mouse Position: (%.1f, %.1f)", ImGui::GetMousePos().x, ImGui::GetMousePos().y);
-        ImVec2 cursorPos = ImGui::GetCursorPos();
-        ImGui::Text("Cursor Position: (%.1f, %.1f)", cursorPos.x, cursorPos.y);
 
         // Display content based on the current screen
     if (currentScreen == 0) {
@@ -338,8 +340,6 @@ if (!filteredOpenPrices.empty()) {
             ImGui::Text("Investing"); 
             ImGui::PopFont(); 
 
-            int investmentIndex = -1;
-
             ImGui::SetCursorPos(ImVec2((30),(150)));
             if (ImGui::Button("Dividend",  ImVec2(100, 40))) {
             currentScreen = 4;  
@@ -368,25 +368,116 @@ if (!filteredOpenPrices.empty()) {
             }
 
         }
-        else if (currentScreen == 4) {
-            ImGui::PushFont(titleFont); 
-            ImGui::SetCursorPos(ImVec2(330, 50));
-            ImGui::Text("Investing"); 
-            ImGui::PopFont(); 
+        else if (currentScreen == 4 && investmentIndex != -1) {
 
+            ImGui::PushFont(titleFont); 
+            ImVec2 textSize = ImGui::CalcTextSize(investmentNames[investmentIndex]);
+            ImVec2 centeredPos((windowSize.x - textSize.x) / 2.0f, (50));
+            ImGui::SetCursorPos(centeredPos);
+            ImGui::Text("%s", investmentNames[investmentIndex]); 
+            ImGui::PopFont(); 
+            
+            // Styling for input box
+        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10, 5));  // Add padding inside input box
+        ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(240, 240, 255, 255));  // Light background color
+        ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, IM_COL32(200, 200, 250, 255));  // Darker on hover
+        ImGui::PushStyleColor(ImGuiCol_FrameBgActive, IM_COL32(180, 180, 230, 255));  // Darker on active
+        ImGui::PushStyleColor(ImGuiCol_Border, IM_COL32(100, 100, 200, 255));  // Blue border color
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5.0f);  // Rounded corners
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.5f);  // Border size
+
+        // Center the label above the input box
+        ImVec2 labelPos((windowSize.x - 150.0f) / 2.0f, 100.0f); // Adjust position based on window size
+        ImGui::SetCursorPos(labelPos);
+        ImGui::Text("Enter Capital to Invest:");
+
+        // Center the input box
+        ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 130.0f));
+        static float capitalInvestment = 0.0f;
+        ImGui::SetNextItemWidth(150.0f); // Set the width of the input box
+        ImGui::InputFloat("##CapitalInput", &capitalInvestment, 0.0f, 0.0f, "%.2f", ImGuiInputTextFlags_AutoSelectAll);
+
+        // Display the current capital amount below the input for user confirmation
+        ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 160.0f));
+        ImGui::Text("Current Capital: %.2f", capitalInvestment);
+
+        ImVec2 dateTextPos((windowSize.x - 150.0f) / 2.0f, 200.0f); // Adjust position based on window size
+        ImGui::SetCursorPos(dateTextPos);;
+        ImGui::Text("Select Start Date:");
+
+        static int day = 1;
+        static int month = 1;
+        static int year = 2024;
+
+        // Position the date selection widgets in the center
+        ImVec2 datePos((windowSize.x - 300.0f) / 2.0f, 230.0f); // Adjust the offset as needed
+        ImGui::SetCursorPos(datePos);
+
+
+        // Day Picker
+        ImGui::PushItemWidth(60);
+        if (ImGui::BeginCombo("##Day", std::to_string(day).c_str())) {
+            for (int i = 1; i <= 31; ++i) {
+                bool isSelected = (day == i);
+                if (ImGui::Selectable(std::to_string(i).c_str(), isSelected)) {
+                    day = i;
+                }
+                if (isSelected) ImGui::SetItemDefaultFocus();
+            }
+            ImGui::EndCombo();
+        }
+        ImGui::PopItemWidth();
+        ImGui::SameLine();
+
+        // Month Picker
+        ImGui::PushItemWidth(100);
+        const char* months[] = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+        if (ImGui::BeginCombo("##Month", months[month - 1])) {
+            for (int i = 1; i <= 12; ++i) {
+                bool isSelected = (month == i);
+                if (ImGui::Selectable(months[i - 1], isSelected)) {
+                    month = i;
+                }
+                if (isSelected) ImGui::SetItemDefaultFocus();
+            }
+            ImGui::EndCombo();
+        }
+        ImGui::PopItemWidth();
+        ImGui::SameLine();
+
+        // Year Picker
+        ImGui::PushItemWidth(80);
+        if (ImGui::BeginCombo("##Year", std::to_string(year).c_str())) {
+            for (int i = 1990; i <= 2025; ++i) {
+                bool isSelected = (year == i);
+                if (ImGui::Selectable(std::to_string(i).c_str(), isSelected)) {
+                    year = i;
+                }
+                if (isSelected) ImGui::SetItemDefaultFocus();
+            }
+            ImGui::EndCombo();
+        }
+        ImGui::PopItemWidth();
+
+        // Display selected date below
+        ImGui::SetCursorPos(ImVec2((windowSize.x - 200.0f) / 2.0f, 270.0f));
+        ImGui::Text("Selected Date: %02d/%02d/%d", day, month, year);
+
+
+        // Pop styling to revert to default
+        ImGui::PopStyleColor(4);
+        ImGui::PopStyleVar(3);
+            
 
             ImGui::SetCursorPos(ImVec2((340),(530)));
-            if (ImGui::Button("Investment",  ImVec2(100, 40))) {
-            currentScreen = 4;  
-            }
-
-
-
+            if (ImGui::Button("Invest",  ImVec2(100, 40))) {
+         currentScreen = 3; 
+            }        
             ImGui::SetCursorPos(ImVec2((5),(575)));
             if (ImGui::Button("Go Back")) {
                 currentScreen = 3; 
             }
-
+            
         }
 
         ImGui::PopStyleColor(); // Pop the style color to revert to the previous color
