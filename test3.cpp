@@ -26,7 +26,8 @@
 
 // FOR MOVING AVERAGE CROSSOVER
 int main() {
-    std::string csvFileName = "test_csv_2.csv";
-    MovingAverageCrossover movingAverage("2000-01-05", 10000.0, csvFileName, 10, 20);
+    std::string csvFileName = "MA.csv";
+    MovingAverageCrossover movingAverage("3/1/2000", 10000.0, csvFileName, 10, 20);
     return 0;
+
 }

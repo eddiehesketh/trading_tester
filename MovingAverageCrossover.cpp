@@ -9,7 +9,9 @@ MovingAverageCrossover::MovingAverageCrossover(std::string _start_date, float in
 
     largePeriod(period1, period2);
     set_investment_type();   
-    investment_stratergy();
+    if (valid_start_date(_start_date)){
+        investment_stratergy();
+    }
 }
 
 bool MovingAverageCrossover::valid_pay_freq(std::string freq){
@@ -21,6 +23,7 @@ void MovingAverageCrossover::set_investment_type() {
 }
 
 void MovingAverageCrossover::largePeriod(int period1, int period2){
+    // Of the two period inputs determine which is larger
     if (period1 > period2) {
         longPeriod = period1;
         shortPeriod = period2;
@@ -31,6 +34,7 @@ void MovingAverageCrossover::largePeriod(int period1, int period2){
 }
 
 double MovingAverageCrossover::MovingAverage(int period, int index_val){
+    // Creates reference to close prices called close_stock
     const std::vector<float>& close_stock = get_close_prices();
     double sum = 0.0;
 
@@ -44,6 +48,7 @@ double MovingAverageCrossover::MovingAverage(int period, int index_val){
 
 void MovingAverageCrossover::detectCrossover(){
     const std::vector<float>& close_stock = get_close_prices();
+    const std::vector<std::string>& current_date = get_dates();
 
     // Set conditions
     double previousShortMA = 0;
@@ -58,7 +63,7 @@ void MovingAverageCrossover::detectCrossover(){
 
         // Check for buy signal
         if (!isInvested && (previousShortMA <= previousLongMA && shortMA > longMA && previousShortMA !=0)){
-            std::cout << "Buy signal on day " << (index_val - longPeriod + 1) << ": ShortMA " << shortMA << " crossed above LongMA " << longMA << " Previous ShortMA " << previousShortMA << " Previous LongMA " << previousLongMA << std::endl;
+            std::cout << "Buy signal on " << current_date[index_val] << ": ShortMA " << shortMA << " crossed above LongMA " << longMA << " Previous ShortMA " << previousShortMA << " Previous LongMA " << previousLongMA << std::endl;
             isInvested = true;
 
             // Check for purchase shares
@@ -82,7 +87,7 @@ void MovingAverageCrossover::detectCrossover(){
         } 
         // Check for sell signal
         else if (isInvested && (previousShortMA >= previousLongMA && shortMA < longMA)){
-            std::cout << "Sell signal on Day " << (index_val - longPeriod + 1) << ": ShortMA " << shortMA << " crossed below LongMA " << longMA << " Previous ShortMA " << previousShortMA << " Previous LongMA " << previousLongMA << std::endl;
+            std::cout << "Sell signal on " << current_date[index_val] << ": ShortMA " << shortMA << " crossed below LongMA " << longMA << " Previous ShortMA " << previousShortMA << " Previous LongMA " << previousLongMA << std::endl;
             
             // Sell shares
             isInvested = false;
