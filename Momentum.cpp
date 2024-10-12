@@ -6,10 +6,9 @@ Momentum::Momentum(std::string _start_date, float initial_capital, std::string s
     shares = 0;
 
     set_investment_type(); 
-    investment_stratergy();
-    // if (valid_start_date(_start_date)){
-    //     investment_stratergy();
-    // }
+    if (valid_start_date(_start_date)){
+        investment_stratergy();
+    }
 }
 
 bool Momentum::valid_pay_freq(std::string freq){
