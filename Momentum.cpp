@@ -1,9 +1,9 @@
 #include "Momentum.h"
 #include <iostream>
-#include <numeric>
 
 Momentum::Momentum(std::string _start_date, float initial_capital, std::string stock_info, int period):Investment(initial_capital, stock_info){
-    this->Period = period;
+    this->period = period;
+    shares = 0;
 
     set_investment_type(); 
     investment_stratergy();
@@ -16,55 +16,98 @@ bool Momentum::valid_pay_freq(std::string freq){
     return true;
 }
 
-double Momentum::MovingAverage(int period, int index_val){
+void Momentum::set_investment_type() {
+    this->investment_type = "Momentum";
+}
+
+double Momentum::calcMomentum(int period, int index_val){
     // Creates reference to close prices called close_stock
     const std::vector<float>& close_stock = get_close_prices();
-    double sum = 0.0;
+    double sum = 0.0; 
+    sum = close_stock[index_val] - close_stock[index_val - period + 1];
+    return sum;
+}
 
-    // Calculate the sum of the prices for the moving average
-    for (int i = index_val; i >= (index_val - period + 1); i--){
-        sum += close_stock[i]; // Use closePrices instead of prices
+void Momentum::detectMomentum(){
+    const std::vector<float>& close_stock = get_close_prices();
+    const std::vector<std::string>& current_date = get_dates();
+    int index_val = period - 1;
+    isInvested = false;
+
+    for (; index_val < close_stock.size(); index_val++){
+        // Calculate the current moving averages for the current index
+        double momentum = calcMomentum(period, index_val);
+
+        // Check for buy signal
+        if (!isInvested && (momentum >= 0)){
+            std::cout << "Buy signal on " << current_date[index_val] << ": Momentum " << momentum << std::endl;
+            isInvested = true;
+
+            // Check for purchase shares
+            int sharesToBuy = capitalToShares(get_capital(), close_stock[index_val]);
+            if (sharesToBuy > 0){
+                double cost = sharesToCapital(sharesToBuy, close_stock[index_val]);
+                if (cost > capital){
+                    std::cerr << "Not enough capital to buy shares." << std::endl;
+                    isInvested = false;
+                } else {
+                    // Buy shares
+                    shares += sharesToBuy;
+                    capital -= cost;
+                    std::cout << "Bought " << sharesToBuy << " shares." << std::endl;
+                    sharesToBuy = 0;
+                    cost = 0;
+                }
+            } else{
+                std::cout << "No shares can be bought" << std::endl;
+            }
+        } 
+        // Check for sell signal
+        else if (isInvested && momentum <= 0){
+            std::cout << "Sell signal on " << current_date[index_val] << ": Momentum " << momentum << std::endl;
+            
+            // Sell shares
+            isInvested = false;
+            double earnings = sharesToCapital(shares, close_stock[index_val]);
+            capital += earnings;
+            std::cout << "Sold all shares. Capital: " << capital << std::endl;
+            shares = 0;
+        }
     }
-
-    return sum / period; // Return the calculated moving average
 }
 
 void Momentum::investment_stratergy(){
-    if (signals.size() < meanPeriod){
-        std::cout << "Not enough data to determine mean.\n";
-        return;
-    }
-
-    // Calculate the mean price
-    double sum = std::accumulate(signals.begin(), signals.end(), 0.0);
-    meanPrice = sum / meanPeriod;
-
-    // Last price for comparison
-    double lastPrice = signals.back();
-
-    // Simple mean reversion logic
-    if (lastPrice < meanPrice) {
-        std::cout << "Buy signal generated: Current Price (" << lastPrice << ") is below Mean Price (" << meanPrice << ").\n";
-        // Here, you could implement logic to buy the asset, increase capital, etc.
-    } else if (lastPrice > meanPrice) {
-        std::cout << "Sell signal generated: Current Price (" << lastPrice << ") is above Mean Price (" << meanPrice << ").\n";
-        // Here, you could implement logic to sell the asset, decrease capital, etc.
-    } else {
-        std::cout << "No action: Current Price (" << lastPrice << ") is equal to Mean Price (" << meanPrice << ").\n";
-    }
+    std::cout << "Investment strategy executed. Trading signals:\n";
+    std::cout << "Initial capital: " << get_capital() << std::endl;
+    
+    detectMomentum();
+    finalizeSimulation();
 }
 
-void Momentum::displayTradeSignals(){
-    std::cout << "Trade signals based on mean reversion strategy:\n";
-    for (size_t i = 0; i < signals.size(); ++i){
-        std::cout << "Price: " << signals[i] << "\n";
+int Momentum::capitalToShares(double capital, double closePrice){
+    if (capital <= 0){
+        std::cerr << "Error: Insufficient capital to buy shares." << std::endl;
+        return 0;
     }
+    return static_cast<int>(capital / closePrice);
 }
 
-bool Momentum::valid_pay_freq(std::string freq){
-    return (freq == "monthly" || freq == "quarterly" || freq == "annually");
+double Momentum::sharesToCapital(int shares, double closePrice){
+    if (shares <= 0){
+        std::cerr << "Error: Cannot convert negative shares to capital." << std::endl;
+        return 0.0;
+    }
+    return shares * closePrice;
 }
-
-void Momentum::set_investment_type(){
-    this-> investment_type = "Momentum";
+void Momentum::finalizeSimulation(){
+    if (isInvested && shares > 0){
+        double lastClosePrice = stock_close.back();
+        double finalCapital = sharesToCapital(shares, lastClosePrice);
+        std::cout << "Converting remaining " << shares << " shares to capital at $" << lastClosePrice << " each." << std::endl;
+        std::cout << "Final capital: $" << finalCapital << std::endl;
+        capital += finalCapital;
+        shares = 0;
+    } else{
+        std::cout << "Final capital: $" << capital << std::endl;
+    }
 }

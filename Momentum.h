@@ -1,16 +1,24 @@
-#ifndef MEANREVERSIONS_H
-#define MEANREVERSIONS_H
-
+#ifndef MOMENTUM_H
+#define MOMENTUM_H
+#include "ReadData.h"
 #include "Investment.h"
+#include <vector>
+#include <utility>
+#include <string>
+#include <optional>
+#include <numeric>
 
 class Momentum : public Investment{
 public:
     Momentum(std::string _start_date, float initial_capital, std::string stock_info, int period);
-    void investment_stratergy() override; 
     bool valid_pay_freq(std::string freq) override;
     void set_investment_type() override; 
-    void displayTradeSignals(); 
-    void addPrice(double price); 
+    double calcMomentum(int period, int index_val);
+    void detectMomentum();
+    void investment_stratergy() override;
+    int capitalToShares(double capital, double closePrice);
+    double sharesToCapital(int shares, double closePrice);
+    void finalizeSimulation();
 };
 
 #endif

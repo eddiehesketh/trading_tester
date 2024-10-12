@@ -5,7 +5,6 @@
 #include <vector>
 #include <utility>
 #include <string>
-#include <optional>
 
 class MovingAverageCrossover : public Investment {
 public:
@@ -19,7 +18,6 @@ public:
     int capitalToShares(double capital, double closePrice);
     double sharesToCapital(int shares, double closePrice);
     void finalizeSimulation();
-    void loadDataFromCSV(const std::string& filename);
 };
 
 #endif
