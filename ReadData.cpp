@@ -1,7 +1,9 @@
+// Including relevant libraries.
 #include "ReadData.h"
 #include <iostream>
 #include <algorithm>
 
+// infroming program that the standard namespace will be used.
 using namespace std;
 
 // Read data class constructor.
@@ -33,10 +35,7 @@ ReadData::ReadData(string stock_info){
 
     }
 
-    // for (size_t i = 0; i < stock_open.size(); i++) {
-    //     cout << "Date: " << date[i] << ", Open: " << stock_open[i] <<", Volume: " << volume[i] << endl;
-    // }
-
+        // Closing stock data stream as it is no longer needed.
         stock_data.close();
 
 
@@ -105,19 +104,39 @@ void ReadData::set_dates(stringstream& ss){
     date.push_back(clean_value(running_date));
 }
 
+// Set stock open function, used to set the open stock prices protected vector.
 void ReadData::set_stock_open(stringstream& ss){
+
+    // Creating running open variable.
     string running_open;
+
+    // Use getline funciton to read a string from the input stream ss, extracting data up until the next comma.
     getline(ss, running_open, ',');
-running_open = clean_value(running_open);
+
+    // Running open is cleaned, ready for numerical data type conversion.
+    running_open = clean_value(running_open);
+
+    // Checking if this process worked correctly for error handling.
     if (running_open == "#N/A" || running_open.empty()) {
+
+        // Infomring user of the invalid data or error.
         std::cerr << "Invalid data for open price: " << running_open << std::endl;
-        stock_open.push_back(0.0f);  // Push a default value (e.g., 0.0) or skip this entry
+
+        // If so, push a dafualt float value.
+        stock_open.push_back(0.0f);
     } else {
+        // If the data is valid, attempt to convert the cleaned string to a float.
         try {
-            stock_open.push_back(stof(clean_money(running_open)));
-        } catch (const std::invalid_argument& e) {
+            // Pushback value into stock open vector.
+            stock_open.push_back(stof(clean_money(running_open))); // Cleans the dollar signs from the string and converts it into a float.
+
+        } catch (const std::invalid_argument& e) { // If the conversion fails, catch the exception and print an error message.
+
+            // print the error.
             std::cerr << "Invalid data for open price: " << running_open << std::endl;
-            stock_open.push_back(0.0f);  // Or handle it in some other way
+
+            // Push back a default value
+            stock_open.push_back(0.0f); 
         }
     }
 }
@@ -125,166 +144,231 @@ running_open = clean_value(running_open);
 
 
 
-
+// Set stock close function, used the set the protected stock close vector.
 void ReadData::set_stock_close(stringstream& ss){
+
+    // Create a running close string.
     string running_close;
+
+    // Use getline funciton to read a string from the input stream ss, extracting data up until the next comma.
     getline(ss, running_close, ',');
 
+    // Running close is cleaned, ready for numerical data type conversion.
     running_close = clean_value(running_close);
+
+    // Checking if this process worked correctly for error handling.
     if (running_close == "#N/A" || running_close.empty()) {
+
+        // Infomring user of the invalid data or error.
         std::cerr << "Invalid data for close price: " << running_close << std::endl;
-        stock_close.push_back(0.0f);  // Push a default value (e.g., 0.0) or skip this entry
+
+        // If so, push a dafualt float value.
+        stock_close.push_back(0.0f); 
     } else {
+        // If the data is valid, attempt to convert the cleaned string to a float.
         try {
-            stock_close.push_back(stof(clean_money(running_close)));
-        } catch (const std::invalid_argument& e) {
+            stock_close.push_back(stof(clean_money(running_close)));  // Cleans the dollar signs from the string and converts it into a float.
+
+        } catch (const std::invalid_argument& e) { // If the conversion fails, catch the exception and print an error message.
+
+            // Inform user of error.
             std::cerr << "Invalid data for close price: " << running_close << std::endl;
-            stock_close.push_back(0.0f);  // Or handle it in some other way
+
+            // Push back a defualt value.
+            stock_close.push_back(0.0f); 
         }
     }
-    // stock_close.push_back(stof(clean_money((clean_value(running_close)))));
 }
 
+// Set stock high function, used to set the procted stock highs vector.
 void ReadData::set_stock_high(stringstream& ss){
+
+    // Creating a running high string.
     string running_high;
+
+    // Use getline funciton to read a string from the input stream ss, extracting data up until the next comma.
     getline(ss, running_high, ',');
-     running_high = clean_value(running_high);
+
+    // Running high is cleaned, ready for numerical data type conversion.
+    running_high = clean_value(running_high);
+
+    // Checking if this process worked correctly for error handling.
     if (running_high == "#N/A" || running_high.empty()) {
+
+        // Infomring user of the invalid data or error.
         std::cerr << "Invalid data for high price: " << running_high << std::endl;
-        stock_high.push_back(0.0f);  // Push a default value (e.g., 0.0) or skip this entry
+
+        // Pushing back a default value, to cover for the error.
+        stock_high.push_back(0.0f);  
     } else {
+        // If the data is valid, attempt to convert the cleaned string to a float.
         try {
-            stock_high.push_back(stof(clean_money(running_high)));
-        } catch (const std::invalid_argument& e) {
+            stock_high.push_back(stof(clean_money(running_high))); // Cleans the dollar signs from the string and converts it into a float.
+
+        } catch (const std::invalid_argument& e) { // If the conversion fails, catch the exception and print an error message.
+
+            // Inform user of error.
             std::cerr << "Invalid data for high price: " << running_high << std::endl;
-            stock_high.push_back(0.0f);  // Or handle it in some other way
+
+            // Push back a default value.
+            stock_high.push_back(0.0f);  
         }
     }
-   // stock_high.push_back(stof(clean_money((clean_value(running_high)))));
 }
 
+// Set stock low function, used to set the procted stock vector.
 void ReadData::set_stock_low(stringstream& ss){
+
+    // Creating a running low variable.
     string running_low;
+
+    // Use getline funciton to read a string from the input stream ss, extracting data up until the next comma.
     getline(ss, running_low, ',');
 
-     running_low = clean_value(running_low);
+    // Running low is cleaned, ready for numerical data type conversion.
+    running_low = clean_value(running_low);
+
+    // Checking if this process worked correctly for error handling.
     if (running_low == "#N/A" || running_low.empty()) {
+
+        // If so, inform user of the error.
         std::cerr << "Invalid data for low price: " << running_low << std::endl;
-        stock_low.push_back(0.0f);  // Push a default value (e.g., 0.0) or skip this entry
+
+        // Pushback a default value.
+        stock_low.push_back(0.0f); 
+
     } else {
+        // If the data is valid, attempt to convert the cleaned string to a float.
         try {
-            stock_low.push_back(stof(clean_money(running_low)));
-        } catch (const std::invalid_argument& e) {
+            stock_low.push_back(stof(clean_money(running_low))); // Cleans the dollar signs from the string and converts it into a float.
+
+        } catch (const std::invalid_argument& e) { // If the conversion fails, catch the exception and print an error message.
+
+            // Inform user of the error.
             std::cerr << "Invalid data for close price: " << running_low << std::endl;
-            stock_low.push_back(0.0f);  // Or handle it in some other way
+
+            // Pushback a default value.
+            stock_low.push_back(0.0f);  
         }
     }
 
-
-    //stock_low.push_back(stof(clean_money((clean_value(running_low)))));
 }
 
+// Set stock volume sets the protected stock vector.
 void ReadData::set_stock_volume(stringstream& ss){
+
+    // Creates a runnning volume string, which will be manipulated.
     string running_volume;
+
+    // Use getline funciton to read a string from the input stream ss, extracting data up until the next comma.
     getline(ss, running_volume, '\n');
  
+    // Checking if this process worked correctly for error handling.
     if (running_volume == "#N/A" || running_volume.empty()) {
+
+        // If so, inform user of the error.
         std::cerr << "Invalid data for volume: " << running_volume << std::endl;
-        volume.push_back(0.0f);  // Push a default value (e.g., 0.0) or skip this entry
+
+        // Push back a default float value.
+        volume.push_back(0.0f); 
+
     } else {
         try {
-            volume.push_back(stoll(clean_money(clear_commas((running_volume)))));
-        } catch (const std::invalid_argument& e) {
+            // If the data is valid, attempt to convert the cleaned string to a long long.
+            volume.push_back(stoll(clean_money(clear_commas((running_volume))))); // Cleans are commas or quotations from the volume string.
+
+        } catch (const std::invalid_argument& e) { // If the conversion fails, catch the exception and print an error message.
+
+            // Inform user of the error.
             std::cerr << "Invalid data for volume: " << running_volume << std::endl;
-            volume.push_back(0.0f);  // Or handle it in some other way
+
+            // Push back a defualt value.
+            volume.push_back(0.0f);
         }
     }
 
 }
 
-// Return dates function, returns address for vector for better memory management. 
+// Get dates function, returns address for vector for better memory management. 
 const vector<string>& ReadData::get_dates() const{
-    return this->date;
+    return this->date; // Returns the proctected dates vector.
 }
 
-// Return open prices function, returns address for vector for better memory management. 
+// Get open prices function, returns address for vector for better memory management. 
 const vector<float>& ReadData::get_open_prices() const{
-   return this->stock_open;
+   return this->stock_open; // Returns the protected stock open vector.
 }
-
+// Get close prices function, returns address for vector for better memory management. 
 const vector<float>& ReadData::get_close_prices() const{
-    return this->stock_close;
+    return this->stock_close;   // Returns the protected stock close vector.
 }
-
+// Get high prices function, returns address for vector for better memory management. 
 const vector<float>& ReadData::get_stock_high() const{
-    return this->stock_high;
+    return this->stock_high;  // Returns the protected stock high vector.
 }
 
+// Get stock low function, returns address for vector for better memory management. 
 const vector<float>& ReadData::get_stock_low() const{
-    return this->stock_low;
+    return this->stock_low; // Returns the protected stock low vector.
 }
 
+// Get stock volume function, returns address for vector for better memory management. 
 const vector<long long>& ReadData::get_volume() const{
-    return this->volume;
+    return this->volume; // Returns the protected volume vector.
 }
 
-void ReadData::set_stock_name(string file_name){
-
-    if (file_name == "microsoft.csv"){
-        this->name = "Microsoft";
-    } else if (file_name == "apple.csv"){
-        this->name = "Apple";
-    } else if (file_name == "google.csv"){
-        this->name = "Google";
-    } else if (file_name == "nvidia.csv"){
-        this->name = "Nvidia";
-    } else if (file_name == "tesla.csv"){
-        this->name = "Tesla";
-    } else if (file_name == "amazon.csv"){
-        this->name = "Amazon";
-    } else if (file_name == "berkshire.csv"){
-        this->name = "Berkshire Hathaway";
-    } else if (file_name == "adobe.csv"){
-        this->name = "Adobe";
-    } else if (file_name == "costco.csv"){
-        this->name = "Costco";
-    } else if (file_name == "mastercard.csv"){
-        this->name = "Mastercard";
-    } else if (file_name == "coke.csv"){
-        this->name = "Coca-Cola";
-    } else if (file_name == "netflix.csv"){
-        this->name = "Netflix";
-    } else if (file_name == "toyota.csv"){
-        this->name = "Toyota";
-    } else if (file_name == "pepsi.csv"){
-        this->name = "Pepsi";
-    } else if (file_name == "mcdonalds.csv"){
-        this->name = "McDonalds";
-    } else if (file_name == "shell.csv"){
-        this->name = "Shell";
-    } else if (file_name == "caterpillar.csv"){
-        this->name = "Caterpillar";
-    } else if (file_name == "disney.csv"){
-        this->name = "Walt Disney";
-    } else if (file_name == "uber.csv"){
-        this->name = "Uber";
-    } else if (file_name == "bhp.csv"){
-        this->name = "BHP Group";
-    } else {
-        this->name = "Unknown";
-    }
-
-}
-
+// Get name function to return the name of a given stock.
 const string ReadData::get_name(){return this->name;}
 
+// Set stock name function, based off file name.
+void ReadData::set_stock_name(string file_name){
 
-
-
-
-
-
-
-ReadData::~ReadData(){
-    // stock_data.close();
+    // If statement checking the file name, and assigning the correspinding company stock name.
+    if (file_name == "microsoft.csv"){ 
+        this->name = "Microsoft"; // Sets to microsoft.
+    } else if (file_name == "apple.csv"){
+        this->name = "Apple"; // Sets to apple.
+    } else if (file_name == "google.csv"){
+        this->name = "Google"; // Sets to google.
+    } else if (file_name == "nvidia.csv"){
+        this->name = "Nvidia"; // Sets to nvidia.
+    } else if (file_name == "tesla.csv"){
+        this->name = "Tesla"; // Sets to tesla.
+    } else if (file_name == "amazon.csv"){
+        this->name = "Amazon"; // Sets to amazon.
+    } else if (file_name == "berkshire.csv"){
+        this->name = "Berkshire Hathaway"; // Sets to berkshire hathaway.
+    } else if (file_name == "adobe.csv"){
+        this->name = "Adobe"; // Sets to adobe..
+    } else if (file_name == "costco.csv"){
+        this->name = "Costco"; // Sets to costco.
+    } else if (file_name == "mastercard.csv"){
+        this->name = "Mastercard"; // Sets to mastercard.
+    } else if (file_name == "coke.csv"){
+        this->name = "Coca-Cola"; // Sets to coke.
+    } else if (file_name == "netflix.csv"){
+        this->name = "Netflix"; // Sets to netflix.
+    } else if (file_name == "toyota.csv"){
+        this->name = "Toyota"; // Sets to toyota.
+    } else if (file_name == "pepsi.csv"){
+        this->name = "Pepsi";  // Sets to pepsi.
+    } else if (file_name == "mcdonalds.csv"){
+        this->name = "McDonalds"; // Sets to mcdonalds.
+    } else if (file_name == "shell.csv"){
+        this->name = "Shell"; // Sets to shell.
+    } else if (file_name == "caterpillar.csv"){
+        this->name = "Caterpillar"; // Sets to caterpillar.
+    } else if (file_name == "disney.csv"){
+        this->name = "Walt Disney"; // Sets to disney.
+    } else if (file_name == "uber.csv"){
+        this->name = "Uber"; // Sets to uber.
+    } else if (file_name == "bhp.csv"){
+        this->name = "BHP Group"; // Sets to BHP.
+    } else {
+        this->name = "Unknown"; // Sets to unkown if file name is invalid, for error proofing.
+    }
 }
+
+
+// Read Data destructor.
+ReadData::~ReadData(){};
