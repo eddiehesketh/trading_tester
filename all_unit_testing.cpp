@@ -10,11 +10,11 @@ using namespace std;
 int main(){
 
 
-    // cout << "READ DATA TESTING: \n\n\n";
+    cout << "READ DATA TESTING: \n\n\n";
 
-    // ReadDataTest test1;
+    ReadDataTest test1;
 
-    // test1.run_tests();
+    test1.run_tests();
 
     cout << "\n\n\nSET DEPOSIT TESTING: \n\n\n";
 
