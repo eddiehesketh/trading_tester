@@ -7,10 +7,10 @@
 class Dividend: public Investment{
 
     protected:
-        float dividend_yield;
-        float widthdrawn_cash;
-        std::string pay_freq;
-        bool reinvest_status;
+        // float dividend_yield;
+        // float widthdrawn_cash;
+        // std::string pay_freq;
+        // bool reinvest_status;
 
 
     public:

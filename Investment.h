@@ -16,7 +16,7 @@ class Investment: public ReadData{
 
         std::string investment_type;
 
-        float dividend_yield;
+        // float dividend_yield;
         float widthdrawn_cash;
         std::string pay_freq;
         bool reinvest_status;

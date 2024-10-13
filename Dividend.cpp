@@ -5,7 +5,9 @@
 
 using namespace std;
 
-Dividend::Dividend(string start_date_, float initial_capital, string pay_freq_, string stock_info, bool status):Investment(initial_capital, stock_info), reinvest_status(status){
+Dividend::Dividend(string start_date_, float initial_capital, string pay_freq_, string stock_info, bool status):Investment(initial_capital, stock_info){
+
+    set_reivest_status(status);
 
     set_investment_type();
 
