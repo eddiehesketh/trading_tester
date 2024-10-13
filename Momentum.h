@@ -16,6 +16,7 @@ class Momentum : public Investment{
         double calcMomentum(int period, int index_val) override; 
         void detectMomentum() override;
         void investment_stratergy() override;
+        int dateIndex(const std::vector<std::string>& dates, const std::string& _start_date);
         // // int capitalToShares(double capital, double closePrice);
         // double sharesToCapital(int shares, double closePrice);
         void finalizeSimulation() override;

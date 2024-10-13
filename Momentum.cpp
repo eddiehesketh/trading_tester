@@ -3,10 +3,13 @@
 
 Momentum::Momentum(std::string _start_date, float initial_capital, std::string stock_info, int period):Investment(initial_capital, stock_info){
     this->period = period;
+    this-> start_date_ = _start_date;
     shares = 0;
 
-    if (valid_start_date(_start_date)){
+    if (valid_start_date(start_date_)){
         investment_stratergy();
+    } else{
+        std::cout << "Non-existant start date" << std::endl;
     }
 }
 
@@ -18,10 +21,24 @@ void Momentum::set_investment_type() {
     this->investment_type = "Momentum";
 }
 
+int Momentum::dateIndex(const std::vector<std::string>& dates, const std::string& _start_date){
+    for (int i = 0; i < dates.size(); i++){
+        if (dates[i] == _start_date) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 double Momentum::calcMomentum(int period, int index_val){
     // Creates reference to close prices called close_stock
     const std::vector<float>& close_stock = get_close_prices();
     double sum = 0.0; 
+    
+    if (index_val < period - 1){
+        return 1000000;
+    }
+
     sum = close_stock[index_val] - close_stock[index_val - period + 1];
     return sum;
 }
@@ -29,50 +46,56 @@ double Momentum::calcMomentum(int period, int index_val){
 void Momentum::detectMomentum(){
     // Creates reference to close prices and dates called close_stock and current_date
     const std::vector<float>& close_stock = get_close_prices();
-    const std::vector<std::string>& current_date = get_dates();
+    const std::vector<std::string>& dates = get_dates();
     
     // Set conditions
-    int index_val = period - 1;
     isInvested = false;
-
-    for (; index_val < close_stock.size(); index_val++){
-        // Calculate the current moving averages for the current index
-        double momentum = calcMomentum(period, index_val);
-
-        // Check for buy signal
-        if (!isInvested && (momentum >= 0)){
-            std::cout << "Buy signal on " << current_date[index_val] << ": Momentum " << momentum << std::endl;
-            isInvested = true;
-
-            // Check for purchase shares
-            int sharesToBuy = capitalToShares(get_capital(), close_stock[index_val]);
-            if (sharesToBuy > 0){
-                double cost = sharesToCapital(sharesToBuy, close_stock[index_val]);
-                if (cost > capital){
-                    std::cerr << "Not enough capital to buy shares." << std::endl;
-                    isInvested = false;
-                } else {
-                    // Buy shares
-                    shares += sharesToBuy;
-                    capital -= cost;
-                    std::cout << "Bought " << sharesToBuy << " shares." << std::endl;
-                    sharesToBuy = 0;
-                    cost = 0;
-                }
-            } else{
-                std::cout << "No shares can be bought" << std::endl;
+    int index_val = dateIndex(dates, start_date_);
+    if (index_val == -1){
+        std::cout << "Start date " << start_date_ << " Not found" << std::endl;
+    } else{
+        for (; index_val < close_stock.size(); index_val++){
+            // Calculate the current moving averages for the current index
+            double momentum = calcMomentum(period, index_val);
+            if (momentum == 1000000){
+            std::cout << "Invalid start date" << std::endl;
+            break;
             }
-        } 
-        // Check for sell signal
-        else if (isInvested && momentum < 0){
-            std::cout << "Sell signal on " << current_date[index_val] << ": Momentum " << momentum << std::endl;
+            // Check for buy signal
+            if (!isInvested && (momentum >= 0)){
+                std::cout << "Buy signal on " << dates[index_val] << ": Momentum " << momentum << std::endl;
+                isInvested = true;
+
+                // Check for purchase shares
+                int sharesToBuy = capitalToShares(get_capital(), close_stock[index_val]);
+                if (sharesToBuy > 0){
+                    double cost = sharesToCapital(sharesToBuy, close_stock[index_val]);
+                    if (cost > capital){
+                        std::cerr << "Not enough capital to buy shares." << std::endl;
+                        isInvested = false;
+                    } else{
+                        // Buy shares
+                        shares += sharesToBuy;
+                        capital -= cost;
+                        std::cout << "Bought " << sharesToBuy << " shares." << std::endl;
+                        sharesToBuy = 0;
+                        cost = 0;
+                    }
+                } else{
+                    std::cout << "No shares can be bought" << std::endl;
+                }
+            } 
+            // Check for sell signal
+            else if (isInvested && momentum < 0){
+                std::cout << "Sell signal on " << dates[index_val] << ": Momentum " << momentum << std::endl;
             
-            // Sell shares
-            isInvested = false;
-            double earnings = sharesToCapital(shares, close_stock[index_val]);
-            capital += earnings;
-            std::cout << "Sold all shares. Capital: " << capital << std::endl;
-            shares = 0;
+                // Sell shares
+                isInvested = false;
+                double earnings = sharesToCapital(shares, close_stock[index_val]);
+                capital += earnings;
+                std::cout << "Sold all shares. Capital: " << capital << std::endl;
+                shares = 0;
+            }
         }
     }
 }
