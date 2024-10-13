@@ -5,16 +5,16 @@
 #include "Investment.h"
 #include <string>
 
-// // FOR MOMENTUM
+// FOR MOMENTUM
 int main() {
     std::string csvFileName = "MA.csv";
-    Momentum momentem("3/1/2000", 10000.0, csvFileName, 10);
+    Momentum momentem("14/1/2000", 10000.0, csvFileName, 10);
     return 0;
 }
 
 // FOR MOVING AVERAGE CROSSOVER
 // int main() {
 //     std::string csvFileName = "MA.csv";
-//     MovingAverageCrossover movingAverage("3/1/2000", 10000.0, csvFileName, 10, 20);
+//     MovingAverageCrossover movingAverage("31/1/2000", 10000.0, csvFileName, 10, 20);
 //     return 0;
 // }
