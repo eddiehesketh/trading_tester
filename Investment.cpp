@@ -81,3 +81,17 @@ double Investment::sharesToCapital(int shares, double closePrice){
 }
 
 void Investment::finalizeSimulation(){};
+
+void Investment::largePeriod(int period1, int period2){};
+
+double Investment::MovingAverage(int period, int currentIndex){return 0;}
+
+void detectCrossover(){};
+
+
+
+
+
+    // void largePeriod(int period1, int period2);
+    // double MovingAverage(int period, int currentIndex);
+    // void detectCrossover();

@@ -11,8 +11,8 @@ public:
     MovingAverageCrossover(std::string _start_date, float initial_capital, std::string stock_info_, int period1, int period2);
     bool valid_pay_freq(std::string freq) override;
     void set_investment_type() override; 
-    void largePeriod(int period1, int period2);
-    double MovingAverage(int period, int currentIndex);
+    void largePeriod(int period1, int period2) override;
+    double MovingAverage(int period, int currentIndex) override;
     void detectCrossover();
     void investment_stratergy() override;
     // int capitalToShares(double capital, double closePrice);

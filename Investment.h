@@ -91,9 +91,17 @@ class Investment: public ReadData{
 
         virtual void finalizeSimulation(); 
 
+        virtual void largePeriod(int period1, int period2);
+        
+        virtual double MovingAverage(int period, int currentIndex);
+
+        virtual void detectCrossover();
+
+
 
         
 };
 
 #endif
 
+    // void detectCrossover();
