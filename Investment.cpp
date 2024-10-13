@@ -92,6 +92,8 @@ double Investment::MovingAverage(int period, int currentIndex){return 0;}
 
 void Investment::detectCrossover(){};
 
+bool Investment::get_reinvest_status(){return this->reinvest_status;}
+
 
 
 

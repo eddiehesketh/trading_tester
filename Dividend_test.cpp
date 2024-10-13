@@ -11,11 +11,12 @@ using namespace std;
 
 int main(){
 
-    Dividend s1("28/10/2005", 500, "Monthly", "test_csv_2.csv", true);
+    Dividend s1("2/1/2020", 1000, "Quarterly", "microsoft.csv", false);
 
      cout << "hello" << endl;
     cout << "initial capital: $" << s1.get_capital() << endl;
     cout << "Final capital: $" << s1.get_final_capital() << endl;
+    cout << "Final Profits: $" << s1.get_profits() << endl;
 
 
 

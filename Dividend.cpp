@@ -45,6 +45,8 @@ void Dividend::investment_stratergy() {
 
     if (!reinvest_status){
 
+        payment = get_capital();
+
         for (int i = get_index(); i < get_dates().size(); i++){
 
             float dividend = (get_close_prices()[i]*(0.03)/365)*num_shares;
@@ -54,6 +56,7 @@ void Dividend::investment_stratergy() {
 
         set_final_capital(payment);
         set_widthdrawn_cash(payment);
+        set_profits(get_final_capital()-get_capital());
     }
 
     if (reinvest_status) {
@@ -66,6 +69,7 @@ void Dividend::investment_stratergy() {
 
         float final_value = num_shares * get_close_prices().back();
         set_final_capital(final_value);
+        set_profits(get_final_capital()-get_capital());
         set_widthdrawn_cash(0);
     }
 
