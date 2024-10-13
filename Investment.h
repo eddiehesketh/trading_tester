@@ -16,7 +16,7 @@ class Investment: public ReadData{
 
         std::string investment_type;
 
-        float dividend_yield;
+        // float dividend_yield;
         float widthdrawn_cash;
         std::string pay_freq;
         bool reinvest_status;
@@ -80,7 +80,28 @@ class Investment: public ReadData{
         virtual void set_investment_type() = 0;
 
         std::string get_investment_type();
+
+        virtual double calcMomentum(int period, int index_val);
+        
+        virtual void detectMomentum();
+
+        int capitalToShares(double capital, double closePrice);
+
+        double sharesToCapital(int shares, double closePrice);
+
+        virtual void finalizeSimulation(); 
+
+        virtual void largePeriod(int period1, int period2);
+        
+        virtual double MovingAverage(int period, int currentIndex);
+
+        virtual void detectCrossover();
+
+
+
         
 };
 
 #endif
+
+    // void detectCrossover();
