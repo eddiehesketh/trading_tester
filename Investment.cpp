@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Investment::Investment(float initial_capital, string stock_info_):capital(initial_capital), invest_return(0), deposit_amount(0), index(0), 
+Investment::Investment(float initial_capital, string stock_info_):capital(initial_capital), index(0), 
                                                                     final_capital(0), profits(0),widthdrawn_cash(0), period(0), momentum(0), meanPrice(0), 
                                                                     Period1(0), Period2(0), shortPeriod(0), longPeriod(0), shares(0), invested_capital(0),
                                                                     ReadData(stock_info_){};
