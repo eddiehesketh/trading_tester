@@ -41,6 +41,7 @@ class Investment: public ReadData{
 
         // Investment class contructor, which takes in an inital capital value and stock file title.
         Investment(float initial_capital, std::string stock_info_);
+        Investment(); // Default constructor.
 
         // Virtual destructor.
         virtual ~Investment() = default;
