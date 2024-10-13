@@ -51,6 +51,8 @@ int main(){
 
     cout << "current portfolio value with all investments: " << p.get_portfolio_value() << endl;
 
+    p.write_portfolio_summary();
+
 
 
     // delete p1;

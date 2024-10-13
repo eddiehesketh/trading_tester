@@ -143,3 +143,6 @@ int Investment::date_index(const std::vector<std::string>& dates, const std::str
 
 // Getter function for the reinvestment status.
 bool Investment::get_reinvest_status(){return this->reinvest_status;}
+
+// Getter function to return start date.
+string Investment::get_start_date(){return this->start_date_;}

@@ -1,0 +1,51 @@
+Investment portfolio summary
+
+Investment 1: Deposit
+    Company name: Nvidia
+    Start date: 2/1/2020
+    Initial capital: $1000
+    Final capital: $20162
+    Profits: $19162.5
+
+
+Investment 2: Deposit
+    Company name: Coca-Cola
+    Start date: 2/1/2020
+    Initial capital: $1000
+    Final capital: $1155
+    Profits: $155.821
+
+
+Investment 3: Dividend
+    Company name: Apple
+    Start date: 2/1/2020
+    Initial capital: $5000
+    Final capital: $10885
+    Profits: $5885
+
+
+Investment 4: Deposit
+    Company name: Google
+    Start date: 2/1/2020
+    Initial capital: $1000
+    Final capital: $2630
+    Profits: $1630.44
+
+
+Investment 5: Dividend
+    Company name: Microsoft
+    Start date: 2/1/2020
+    Initial capital: $5000
+    Final capital: $14678
+    Profits: $9678
+
+
+Investment 6: Deposit
+    Company name: Nvidia
+    Start date: 2/1/2020
+    Initial capital: $1000
+    Final capital: $20162
+    Profits: $19162.5
+
+
+Total portfolio value: $69672

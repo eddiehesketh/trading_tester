@@ -131,7 +131,10 @@ class Investment: public ReadData{
         virtual int date_index(const std::vector<std::string>& dates, const std::string& _start_date);
 
         // getter function to return the reinvestment status.
-        bool get_reinvest_status();        
+        bool get_reinvest_status();       
+
+        // Getter function to return the start date.
+        std::string get_start_date(); 
 };
 
 #endif

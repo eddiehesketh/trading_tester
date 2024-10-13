@@ -30,6 +30,8 @@ class Portfolio{
 
         int get_count();
 
+        void write_portfolio_summary();
+
         ~Portfolio();
 
 

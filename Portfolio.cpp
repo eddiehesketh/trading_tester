@@ -1,7 +1,8 @@
 #include "Investment.h"
 #include "Portfolio.h"
 #include <iostream>
-
+#include <fstream>
+#include <ostream>
 using  namespace std;
 
 Portfolio::Portfolio(): portfolio_value(0.0), capacity(6), count(0){
@@ -66,3 +67,28 @@ Portfolio::~Portfolio(){
     delete[] investments;
 }
 
+void Portfolio::write_portfolio_summary(){
+
+    ofstream output_file("investment_summary.txt");
+
+    if (output_file.is_open()){
+
+        output_file << "Investment portfolio summary\n\n";
+
+        for (int i = 0; i < get_count(); i++){
+            output_file << "Investment " << i+1 << ": " << investments[i]->get_investment_type() << "\n";
+            output_file << "    Company name: " << investments[i]->get_name() << "\n";
+            output_file << "    Start date: " << investments[i]->get_start_date() << "\n";
+            output_file << "    Initial capital: $" << investments[i]->get_capital() << "\n";
+            output_file << "    Final capital: $" << investments[i]->get_final_capital() << "\n";
+            output_file << "    Profits: $" << investments[i]->get_profits() << "\n";
+            output_file << "\n\n";
+        }
+
+        output_file << "Total portfolio value: $" << get_portfolio_value() << "\n";
+        output_file.close();
+
+    }
+
+
+}
