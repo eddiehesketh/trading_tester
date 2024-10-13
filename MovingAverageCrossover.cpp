@@ -8,7 +8,6 @@ MovingAverageCrossover::MovingAverageCrossover(std::string _start_date, float in
     shares = 0;
 
     largePeriod(period1, period2);
-
     if (valid_start_date(_start_date)){
         investment_stratergy();
     }
