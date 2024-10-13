@@ -1,70 +1,47 @@
-#include "MovingAverageCrossover.h"
+#include "Momentum.h"
 #include <iostream>
 
-MovingAverageCrossover::MovingAverageCrossover(std::string _start_date, float initial_capital, std::string stock_info_, int period1, int period2)
-    : Investment(initial_capital, stock_info_){
-    this->Period1 = period1;
-    this->Period2 = period2;
+Momentum::Momentum(std::string _start_date, float initial_capital, std::string stock_info, int period):Investment(initial_capital, stock_info){
+    this->period = period;
     shares = 0;
-
-    largePeriod(period1, period2);
 
     if (valid_start_date(_start_date)){
         investment_stratergy();
     }
 }
 
-bool MovingAverageCrossover::valid_pay_freq(std::string freq){
+bool Momentum::valid_pay_freq(std::string freq){
     return true;
 }
 
-void MovingAverageCrossover::set_investment_type(){
-    this->investment_type = "Moving Average Crossover";
+void Momentum::set_investment_type() {
+    this->investment_type = "Momentum";
 }
 
-void MovingAverageCrossover::largePeriod(int period1, int period2){
-    // Of the two period inputs determine which is larger
-    if (period1 > period2) {
-        longPeriod = period1;
-        shortPeriod = period2;
-    } else {
-        longPeriod = period2;
-        shortPeriod = period1;
-    }
-}
-
-double MovingAverageCrossover::MovingAverage(int period, int index_val){
+double Momentum::calcMomentum(int period, int index_val){
     // Creates reference to close prices called close_stock
     const std::vector<float>& close_stock = get_close_prices();
-    double sum = 0.0;
-
-    // Calculate and return the sum of the prices for the moving average
-    for (int i = index_val; i >= (index_val - period + 1); i--){
-        sum += close_stock[i]; // Use closePrices instead of prices
-    }
-    return sum / period;
+    double sum = 0.0; 
+    sum = close_stock[index_val] - close_stock[index_val - period + 1];
+    return sum;
 }
 
-void MovingAverageCrossover::detectCrossover(){
+void Momentum::detectMomentum(){
     // Creates reference to close prices and dates called close_stock and current_date
     const std::vector<float>& close_stock = get_close_prices();
     const std::vector<std::string>& current_date = get_dates();
-
+    
     // Set conditions
-    double previousShortMA = 0;
-    double previousLongMA = 0;
-    int index_val = longPeriod - 1;
+    int index_val = period - 1;
     isInvested = false;
 
-    // Iterate through all moving averages
     for (; index_val < close_stock.size(); index_val++){
         // Calculate the current moving averages for the current index
-        double shortMA = MovingAverage(shortPeriod, index_val);
-        double longMA = MovingAverage(longPeriod, index_val);
+        double momentum = calcMomentum(period, index_val);
 
         // Check for buy signal
-        if (!isInvested && (previousShortMA <= previousLongMA && shortMA > longMA && previousShortMA !=0)){
-            std::cout << "Buy signal on " << current_date[index_val] << ": ShortMA " << shortMA << " crossed above LongMA " << longMA << ", Previous ShortMA " << previousShortMA << " Previous LongMA " << previousLongMA << std::endl;
+        if (!isInvested && (momentum >= 0)){
+            std::cout << "Buy signal on " << current_date[index_val] << ": Momentum " << momentum << std::endl;
             isInvested = true;
 
             // Check for purchase shares
@@ -87,8 +64,8 @@ void MovingAverageCrossover::detectCrossover(){
             }
         } 
         // Check for sell signal
-        else if (isInvested && (previousShortMA >= previousLongMA && shortMA < longMA)){
-            std::cout << "Sell signal on " << current_date[index_val] << ": ShortMA " << shortMA << " crossed below LongMA " << longMA << ", Previous ShortMA " << previousShortMA << " Previous LongMA " << previousLongMA << std::endl;
+        else if (isInvested && momentum < 0){
+            std::cout << "Sell signal on " << current_date[index_val] << ": Momentum " << momentum << std::endl;
             
             // Sell shares
             isInvested = false;
@@ -97,23 +74,19 @@ void MovingAverageCrossover::detectCrossover(){
             std::cout << "Sold all shares. Capital: " << capital << std::endl;
             shares = 0;
         }
-
-        // Update previous moving averages for the next iteration
-        previousShortMA = shortMA;
-        previousLongMA = longMA;
     }
 }
 
-void MovingAverageCrossover::investment_stratergy(){
+void Momentum::investment_stratergy(){
     std::cout << "Investment strategy executed. Trading signals:\n";
     std::cout << "Initial capital: " << get_capital() << std::endl;
-    
+
     // Runs dectection and finalisation of the strategy
-    detectCrossover();
+    detectMomentum();
     finalizeSimulation();
 }
 
-int MovingAverageCrossover::capitalToShares(double capital, double closePrice){
+int Momentum::capitalToShares(double capital, double closePrice){
     // Determines if shares can be bought
     if (capital <= 0){
         std::cerr << "Error: Insufficient capital to buy shares." << std::endl;
@@ -123,7 +96,7 @@ int MovingAverageCrossover::capitalToShares(double capital, double closePrice){
     return static_cast<int>(capital / closePrice);
 }
 
-double MovingAverageCrossover::sharesToCapital(int shares, double closePrice){
+double Momentum::sharesToCapital(int shares, double closePrice){
     // Determines if shares can be sold
     if (shares <= 0){
         std::cerr << "Error: Cannot convert negative shares to capital." << std::endl;
@@ -132,8 +105,7 @@ double MovingAverageCrossover::sharesToCapital(int shares, double closePrice){
     // Returns number of sellable shares
     return shares * closePrice;
 }
-
-void MovingAverageCrossover::finalizeSimulation(){
+void Momentum::finalizeSimulation(){
     // Sells all remaining shares 
     if (isInvested && shares > 0){
         double lastClosePrice = stock_close.back();

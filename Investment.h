@@ -21,8 +21,9 @@ class Investment: public ReadData{
         std::string pay_freq;
         bool reinvest_status;
 
-        // MeanReversion
-        int meanPeriod;
+        // Momentum
+        int period;
+        int momentum;
         std::vector<double> signals; 
         double meanPrice;
 
@@ -31,8 +32,9 @@ class Investment: public ReadData{
         int Period2;
         int shortPeriod;
         int longPeriod;
-        std::vector<double> prices;
-        std::vector<std::pair<int, std::string>> tradeSignals;
+        int shares;
+        float invested_capital;
+        bool isInvested;
 
     public:
 
@@ -42,7 +44,6 @@ class Investment: public ReadData{
         // Investment();
 
         virtual void investment_stratergy() = 0;
-
 
         float get_capital();
 
