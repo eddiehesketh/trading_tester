@@ -18,6 +18,7 @@ public:
     // int capitalToShares(double capital, double closePrice);
     // double sharesToCapital(int shares, double closePrice);
     void finalizeSimulation() override;
+    int dateIndex(const std::vector<std::string>& current_date, const std::string& _start_date);
 };
 
 #endif

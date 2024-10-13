@@ -97,6 +97,8 @@ class Investment: public ReadData{
 
         virtual void detectCrossover();
 
+        bool get_reinvest_status();
+
 
 
         

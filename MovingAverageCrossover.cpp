@@ -32,6 +32,15 @@ void MovingAverageCrossover::largePeriod(int period1, int period2){
     }
 }
 
+int MovingAverageCrossover::dateIndex(const std::vector<std::string>& current_date, const std::string& _start_date){
+    for (size_t i = 0; i < current_date.size(); ++i) {
+        if (current_date[i] == _start_date) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 double MovingAverageCrossover::MovingAverage(int period, int index_val){
     // Creates reference to close prices called close_stock
     const std::vector<float>& close_stock = get_close_prices();
@@ -52,7 +61,10 @@ void MovingAverageCrossover::detectCrossover(){
     // Set conditions
     double previousShortMA = 0;
     double previousLongMA = 0;
-    int index_val = longPeriod - 1;
+    int index_val = dateIndex(current_date, _start_date);
+    if (index_val = -1){
+        std::cout << "'" << current_date << "' not found in the list." << std::endl;
+    }
     isInvested = false;
 
     // Iterate through all moving averages
