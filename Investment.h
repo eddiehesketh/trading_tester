@@ -80,7 +80,20 @@ class Investment: public ReadData{
         virtual void set_investment_type() = 0;
 
         std::string get_investment_type();
+
+        virtual double calcMomentum(int period, int index_val);
+        
+        virtual void detectMomentum();
+
+        int capitalToShares(double capital, double closePrice);
+
+        double sharesToCapital(int shares, double closePrice);
+
+        virtual void finalizeSimulation(); 
+
+
         
 };
 
 #endif
+

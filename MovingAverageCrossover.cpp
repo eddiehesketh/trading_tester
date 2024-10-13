@@ -113,25 +113,25 @@ void MovingAverageCrossover::investment_stratergy(){
     finalizeSimulation();
 }
 
-int MovingAverageCrossover::capitalToShares(double capital, double closePrice){
-    // Determines if shares can be bought
-    if (capital <= 0){
-        std::cerr << "Error: Insufficient capital to buy shares." << std::endl;
-        return 0;
-    }
-    // Returns number of purchasable shares
-    return static_cast<int>(capital / closePrice);
-}
+// int MovingAverageCrossover::capitalToShares(double capital, double closePrice){
+//     // Determines if shares can be bought
+//     if (capital <= 0){
+//         std::cerr << "Error: Insufficient capital to buy shares." << std::endl;
+//         return 0;
+//     }
+//     // Returns number of purchasable shares
+//     return static_cast<int>(capital / closePrice);
+// }
 
-double MovingAverageCrossover::sharesToCapital(int shares, double closePrice){
-    // Determines if shares can be sold
-    if (shares <= 0){
-        std::cerr << "Error: Cannot convert negative shares to capital." << std::endl;
-        return 0.0;
-    }
-    // Returns number of sellable shares
-    return shares * closePrice;
-}
+// double MovingAverageCrossover::sharesToCapital(int shares, double closePrice){
+//     // Determines if shares can be sold
+//     if (shares <= 0){
+//         std::cerr << "Error: Cannot convert negative shares to capital." << std::endl;
+//         return 0.0;
+//     }
+//     // Returns number of sellable shares
+//     return shares * closePrice;
+// }
 
 void MovingAverageCrossover::finalizeSimulation(){
     // Sells all remaining shares 

@@ -55,4 +55,29 @@ string Investment::get_investment_type(){return this->investment_type;}
 
 float Investment::get_profits(){return this->profits;}
 
+double Investment::calcMomentum(int period, int index_val){return 0;}
 
+void Investment::detectMomentum(){};
+
+int Investment::capitalToShares(double capital, double closePrice){
+    // Determines if shares can be bought
+    if (capital <= 0){
+        std::cerr << "Error: Insufficient capital to buy shares." << std::endl;
+        return 0;
+    }
+    // Returns number of purchasable shares
+    return static_cast<int>(capital / closePrice);
+}
+
+
+double Investment::sharesToCapital(int shares, double closePrice){
+    // Determines if shares can be sold
+    if (shares <= 0){
+        std::cerr << "Error: Cannot convert negative shares to capital." << std::endl;
+        return 0.0;
+    }
+    // Returns number of sellable shares
+    return shares * closePrice;
+}
+
+void Investment::finalizeSimulation(){};

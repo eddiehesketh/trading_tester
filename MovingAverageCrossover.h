@@ -15,9 +15,9 @@ public:
     double MovingAverage(int period, int currentIndex);
     void detectCrossover();
     void investment_stratergy() override;
-    int capitalToShares(double capital, double closePrice);
-    double sharesToCapital(int shares, double closePrice);
-    void finalizeSimulation();
+    // int capitalToShares(double capital, double closePrice);
+    // double sharesToCapital(int shares, double closePrice);
+    void finalizeSimulation() override;
 };
 
 #endif
