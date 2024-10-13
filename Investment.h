@@ -27,14 +27,15 @@ class Investment: public ReadData{
         int period; // Period for momentum calculation.
         int momentum; // Momentum value.
 
-        int shares; // Number of shares owned.
-        bool isInvested;  // Flag to check if the investment is active.
-
         // Variables for Moving Average Crossover strategy.
         int Period1; // First period for the moving average crossover.
         int Period2; // Second period for the moving average crossover.
         int shortPeriod; // Shorter of the two periods.
         int longPeriod;  // Longer of the two periods
+
+        // Shares between Momentum and Moving Average Crossover
+        int shares; // Number of shares owned.
+        bool isInvested;  // Flag to check if the investment is active.
 
     public:
 
@@ -129,11 +130,7 @@ class Investment: public ReadData{
         virtual int date_index(const std::vector<std::string>& dates, const std::string& _start_date);
 
         // getter function to return the reinvestment status.
-        bool get_reinvest_status();
-
-
-
-        
+        bool get_reinvest_status();        
 };
 
 #endif

@@ -1,3 +1,4 @@
+// MovingAverageCrossover is one of the investment strategies inherits to Investment
 #ifndef MOVINGAVERAGECROSSOVER_H
 #define MOVINGAVERAGECROSSOVER_H
 #include "ReadData.h"
@@ -15,10 +16,7 @@ public:
     double moving_average(int period, int currentIndex) override;
     void detect_crossover();
     void investment_stratergy() override;
-    // int capitalToShares(double capital, double closePrice);
-    // double sharesToCapital(int shares, double closePrice);
     void finalize_simulation() override;
-    // int date_index(const std::vector<std::string>& dates, const std::string& _start_date) override;
 };
 
 #endif

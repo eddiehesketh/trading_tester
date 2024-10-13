@@ -21,15 +21,6 @@ void Momentum::set_investment_type() {
     this->investment_type = "Momentum";
 }
 
-// int Momentum::date_index(const std::vector<std::string>& dates, const std::string& _start_date){
-//     for (int i = 0; i < dates.size(); i++){
-//         if (dates[i] == _start_date) {
-//             return i;
-//         }
-//     }
-//     return -1;
-// }
-
 double Momentum::calc_momentum(int period, int index_val){
     // Creates reference to close prices called close_stock
     const std::vector<float>& close_stock = get_close_prices();
@@ -109,25 +100,6 @@ void Momentum::investment_stratergy(){
     finalize_simulation();
 }
 
-// int Momentum::capitalToShares(double capital, double closePrice){
-//     // Determines if shares can be bought
-//     if (capital <= 0){
-//         std::cerr << "Error: Insufficient capital to buy shares." << std::endl;
-//         return 0;
-//     }
-//     // Returns number of purchasable shares
-//     return static_cast<int>(capital / closePrice);
-// }
-
-// double Momentum::sharesToCapital(int shares, double closePrice){
-//     // Determines if shares can be sold
-//     if (shares <= 0){
-//         std::cerr << "Error: Cannot convert negative shares to capital." << std::endl;
-//         return 0.0;
-//     }
-//     // Returns number of sellable shares
-//     return shares * closePrice;
-// }
 void Momentum::finalize_simulation(){
     // Sells all remaining shares 
     if (isInvested && shares > 0){
