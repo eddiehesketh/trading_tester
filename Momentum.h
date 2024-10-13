@@ -13,13 +13,14 @@ class Momentum : public Investment{
         Momentum(std::string _start_date, float initial_capital, std::string stock_info, int period);
         bool valid_pay_freq(std::string freq) override;
         void set_investment_type() override; 
-        double calcMomentum(int period, int index_val) override; 
-        void detectMomentum() override;
+        double calc_momentum(int period, int index_val) override; 
+        void detect_momentum() override;
         void investment_stratergy() override;
-        int dateIndex(const std::vector<std::string>& dates, const std::string& _start_date);
         // // int capitalToShares(double capital, double closePrice);
         // double sharesToCapital(int shares, double closePrice);
-        void finalizeSimulation() override;
+        void finalize_simulation() override;
+        // int date_index(const std::vector<std::string>& dates, const std::string& _start_date) override;
+
 };
 
 #endif

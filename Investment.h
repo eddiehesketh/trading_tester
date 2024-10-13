@@ -26,17 +26,15 @@ class Investment: public ReadData{
         // Variables for momentum based strategy. 
         int period; // Period for momentum calculation.
         int momentum; // Momentum value.
-        std::vector<double> signals; // Vector to store momentum signals
-        double meanPrice; // Mean price for momentum calculation
+
+        int shares; // Number of shares owned.
+        bool isInvested;  // Flag to check if the investment is active.
 
         // Variables for Moving Average Crossover strategy.
         int Period1; // First period for the moving average crossover.
         int Period2; // Second period for the moving average crossover.
         int shortPeriod; // Shorter of the two periods.
         int longPeriod;  // Longer of the two periods
-        int shares; // Number of shares owned.
-        float invested_capital; // Capital invested in shares.
-        bool isInvested;  // Flag to check if the investment is active.
 
     public:
 
@@ -104,28 +102,31 @@ class Investment: public ReadData{
         std::string get_investment_type();
 
         // Virtual calculate momentum function.
-        virtual double calcMomentum(int period, int index_val);
+        virtual double calc_momentum(int period, int index_val);
         
         // Virtual detect momentum function.
-        virtual void detectMomentum();
+        virtual void detect_momentum();
 
         // Capital to shares function to calulate the number of shares based off a certain capital.
-        int capitalToShares(double capital, double closePrice);
+        int capital_to_shares(double capital, double closePrice);
 
         // Shares to capital function to determine the captial based off a set number of shares.
-        double sharesToCapital(int shares, double closePrice);
+        double shares_to_capital(int shares, double closePrice);
 
         // Virtual finalize simulation function used to simulate high frequency stratergies.
-        virtual void finalizeSimulation(); 
+        virtual void finalize_simulation(); 
 
         // Virtual function used to determine the large period.
-        virtual void largePeriod(int period1, int period2);
+        virtual void large_period(int period1, int period2);
         
         // Virtual function used to determine the moving average combintion.
-        virtual double MovingAverage(int period, int currentIndex);
+        virtual double moving_average(int period, int currentIndex);
 
         // Virtual function which detects crossovers of different moving averages.
-        virtual void detectCrossover();
+        virtual void detect_crossover();
+
+        // Virtual function used to determine the index of a given date
+        virtual int date_index(const std::vector<std::string>& dates, const std::string& _start_date);
 
         // getter function to return the reinvestment status.
         bool get_reinvest_status();
