@@ -409,17 +409,17 @@ static float capitalInvestment = 0.0f;
 ImGui::SetNextItemWidth(150.0f);
 ImGui::InputFloat("##CapitalInput", &capitalInvestment, 0.0f, 0.0f, "%.2f", ImGuiInputTextFlags_AutoSelectAll);
 
-// Display the current capital amount
-ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 160.0f));
-ImGui::Text("Current Capital: %.2f", capitalInvestment);
 
+const char* payFreqOptions[] = { "Monthly", "Quarterly" };
+static int payFreqIndex = 0;
+static bool reinvestStatus = true;  // Static to persist across frames
+static int period = 1;
 
+if (investmentIndex == 0){
 // Pay Frequency Selector
     ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 190.0f));
     ImGui::Text("Select Payment Frequency:");
 
-    static int payFreqIndex = 0;
-    const char* payFreqOptions[] = { "Monthly", "Quarterly" };
     ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 220.0f));
     ImGui::SetNextItemWidth(150.0f);
     if (ImGui::BeginCombo("##PayFrequency", payFreqOptions[payFreqIndex])) {
@@ -433,13 +433,20 @@ ImGui::Text("Current Capital: %.2f", capitalInvestment);
         ImGui::EndCombo();
     }
 
+
     // Reinvest Status Checkbox
     ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 260.0f));
     ImGui::Text("Reinvest Dividends:");
-    static bool reinvestStatus = true;  // Static to persist across frames
     ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 290.0f));
     ImGui::Checkbox("##ReinvestStatus", &reinvestStatus);
-
+} else if (investmentIndex == 1){
+            // Period Selector (for Momentum)
+        ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 220.0f));
+        ImGui::Text("Select Period:");
+        ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 250.0f));
+        ImGui::SetNextItemWidth(150.0f);
+        ImGui::InputInt("##PeriodInput", &period);
+}
 
 
 ImVec2 dateTextPos((windowSize.x - 150.0f) / 2.0f, 350.0f);
@@ -507,45 +514,50 @@ std::string startDate = std::to_string(day) + "/" + std::to_string(month) + "/" 
 ImGui::SetCursorPos(ImVec2((windowSize.x - 100.0f) / 2.0f, 450.0f));
 if (ImGui::Button("Invest", ImVec2(100, 40))) {
 
-    
+
             std::cout<<startDate<<std::endl;
             // Create Dividend instance with user input
             bool showFinalCapital = true;
 
         ReadData readData(stockFiles[selectedStockIndex]);
 
-
-        std::cout << "Start Date: " << startDate << ", Capital: " << capitalInvestment << ", Pay Frequency: " << payFreqOptions[payFreqIndex] << "Stock Selected: " << stockFiles[selectedStockIndex] << "Reinvest Status: " << reinvestStatus <<  "\n";
-
-
+if (investmentIndex == 0){
+    std::cout << "Start Date: " << startDate << ", Capital: " << capitalInvestment << ", Pay Frequency: " << payFreqOptions[payFreqIndex] << "Stock Selected: " << stockFiles[selectedStockIndex] << "Reinvest Status: " << reinvestStatus <<  "\n";
 std::unique_ptr<Dividend> dividendInvestment = std::make_unique<Dividend>(startDate, capitalInvestment, payFreqOptions[payFreqIndex], stockFiles[selectedStockIndex], reinvestStatus);
-int dayIndex = 1;
-        // Check if the start date is valid; if not, adjust it
-        while (!dividendInvestment->valid_start_date(startDate)) {
-            // Increment to the next day if start date is invalid
-            std::cout << "Invalid start date: " << startDate << ". Trying next day.\n";
+ // Adjust date if necessary
+            int dayIndex = 1;
+            while (!dividendInvestment->valid_start_date(startDate)) {
+                startDate = std::to_string(day + dayIndex) + "/" + std::to_string(month) + "/" + std::to_string(year);
+                dividendInvestment = std::make_unique<Dividend>(startDate, capitalInvestment, payFreqOptions[payFreqIndex], stockFiles[selectedStockIndex], reinvestStatus);
+                dayIndex++;
+                if (dayIndex == 10) break;
+            }
+            finalCapital = dividendInvestment->get_final_capital();
+} else if (investmentIndex == 1){
+    std::unique_ptr<Momentum> momentumInvestment = std::make_unique<Momentum>(
+                startDate, capitalInvestment, stockFiles[selectedStockIndex], period);
+                int dayIndex = 1;
+            while (!momentumInvestment->valid_start_date(startDate)) {
+                startDate = std::to_string(day + dayIndex) + "/" + std::to_string(month) + "/" + std::to_string(year);
+                momentumInvestment = std::make_unique<Momentum>(startDate, capitalInvestment, stockFiles[selectedStockIndex], period);
+                dayIndex++;
+                if (dayIndex == 10) break;
+            }
+            finalCapital = momentumInvestment->get_final_capital();
+} else if (investmentIndex == 2){
+    std::unique_ptr<SetDeposit> setDepositInvestment = std::make_unique<SetDeposit>(
+                startDate, stockFiles[selectedStockIndex], capitalInvestment);
+                int dayIndex = 1;
+            while (!setDepositInvestment->valid_start_date(startDate)) {
+                startDate = std::to_string(day + dayIndex) + "/" + std::to_string(month) + "/" + std::to_string(year);
+                setDepositInvestment = std::make_unique<SetDeposit>(startDate, stockFiles[selectedStockIndex], capitalInvestment);
+                dayIndex++;
+                if (dayIndex == 10) break;
+            }
+            finalCapital = setDepositInvestment->get_final_capital();
+}
 
-            // Logic to increment the start date to the next day
-            // You might need a date-handling utility or function to manage this increment
-            startDate = std::to_string(day + dayIndex) + "/" + std::to_string(month) + "/" + std::to_string(year);;  // Assuming a function like this exists
-
-            // Recreate the Dividend instance with the new start date
-              dividendInvestment = std::make_unique<Dividend>(startDate, capitalInvestment, payFreqOptions[payFreqIndex], stockFiles[selectedStockIndex], reinvestStatus);
-        dayIndex++;
-
-
-
-        if (dayIndex == 10){
-            break;
-        }
-        }
-        
-// Now we have a valid Dividend instance
-std::cout << "Valid start date found: " << startDate << "\n";
-                // Display investment results
-                finalCapital = dividendInvestment->get_final_capital();
-                        // Open the popup to show final capital
-                       showFinalCapitalPopup = true;
+        showFinalCapitalPopup = true;
         ImGui::OpenPopup("Investment Result");
     }
 
@@ -560,9 +572,9 @@ std::cout << "Valid start date found: " << startDate << "\n";
             if (ImGui::Button("ok")) {
                 showFinalCapitalPopup = false;
                 ImGui::CloseCurrentPopup();
-                currentScreen = 0;
-                investmentIndex = -1;
-                selectedStockIndex = -1;
+                currentScreen = 4;
+                // investmentIndex = -1;
+                // selectedStockIndex = -1;
             }
             ImGui::EndPopup();
         } else {
@@ -575,9 +587,6 @@ std::cout << "Valid start date found: " << startDate << "\n";
 
 
 
-// Display selected date
-ImGui::SetCursorPos(ImVec2((windowSize.x - 200.0f) / 2.0f, 400.0f));
-ImGui::Text("Selected Date: %02d/%02d/%d", day, month, year);
 
 // Pop styling
 ImGui::PopStyleColor(4);
