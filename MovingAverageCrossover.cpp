@@ -3,6 +3,7 @@
 
 MovingAverageCrossover::MovingAverageCrossover(std::string _start_date, float initial_capital, std::string stock_info_, int period1, int period2)
     : Investment(initial_capital, stock_info_){
+    set_investment_type();
     this->Period1 = period1;
     this->Period2 = period2;
     this->start_date_ = _start_date;
