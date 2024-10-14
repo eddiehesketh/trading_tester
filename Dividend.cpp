@@ -28,6 +28,9 @@ Dividend::Dividend(string start_date_, float initial_capital, string pay_freq_, 
         }
     }
 
+    std::cout << "In Dividend constructor, get_dates().size() = " << get_dates().size() << std::endl;
+
+
 }
 
 // Overriding the investment stratergy and re-implementing it.
@@ -137,63 +140,42 @@ bool Dividend::valid_pay_freq(string freq){
 }
 
 // Validate the start date for the dividend strategy.
-bool Dividend::valid_start_date(string start){
+bool Dividend::valid_start_date(string start) {
+    // Check if get_dates() is empty before accessing
+    if (get_dates().empty()) {
+        std::cerr << "Error: get_dates() is empty in valid_start_date for stock " << name << std::endl;
+        return false;
+    }
 
-    // Get the most recent date from the stock data.
-    string current_date = get_dates().back();
+    std::cout << "Validating start date: " << start << std::endl;
 
-    // Initialize an index to track the matching start date.
+    string current_date = get_dates().back(); // Safe now because we checked if it's empty
     int index = 0;
 
-    // Loop through the stock data dates.
-    for (int i = 0; i < get_dates().size(); i++){
+    for (int i = 0; i < get_dates().size(); i++) {
+        if (start == get_dates()[i]) {
+            index = i;
 
-        // Check if the provided start date matches the date in the stock data.
-        if (start == get_dates()[i]){
-
-            index = i; //  Set the index to the matching date.
-
-            // If the payment frequency is Monthly, check if at least 30 days remain for the investment.
-            if (get_pay_freq() == "Monthly"){
-
-                 // Ensure that there are at least 30 days available after the start date.
-                if (get_dates().size()-1-index >= 30){
-
-                    // Set the index for the start date and set the start date for the investment.
-                    set_index(index);
-                    set_start_date(start);
-
-                    return true; // Return true if valid.
-                }
+            // Check for Monthly pay frequency
+            if (get_pay_freq() == "Monthly" && (get_dates().size() - 1 - index >= 30)) {
+                set_index(index);
+                set_start_date(start);
+                return true;
             }
 
-            // If the payment frequency is Quarterly, check if at least 92 days remain for the investment.
-            if (get_pay_freq() == "Quarterly"){
-
-                // Ensure that there are at least 92 days available after the start date.
-                if (get_dates().size()-1-index >= 92){
-
-                    // Set the index for the start date and set the start date for the investment.
-                    set_index(index);
-                    set_start_date(start);
-
-                    return true; // Return true if valid.
-                }
+            // Check for Quarterly pay frequency
+            if (get_pay_freq() == "Quarterly" && (get_dates().size() - 1 - index >= 92)) {
+                set_index(index);
+                set_start_date(start);
+                return true;
             }
-
-            
         }
     }
 
-    // Return false if the start date is not valid.
+    std::cerr << "Error: Start date not found or insufficient date range for the selected pay frequency." << std::endl;
     return false;
-
 }
+
 
 // Set the type of investment to Dividend.
 void Dividend::set_investment_type(){this->investment_type = "Dividend";}
-
-
-
-
-
