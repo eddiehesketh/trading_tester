@@ -8,6 +8,7 @@
 #include "Dividend.h"
 #include "Momentum.h"
 #include "SetDeposit.h"
+#include "MovingAverageCrossover.h"
 #include "Portfolio.h"
 #include "Investment.h"
 #include <stdio.h>
@@ -60,10 +61,12 @@ static float finalCapital = 0.0f;
 int main() {
 
 std::vector<std::unique_ptr<Display>> stockDisplays;
+Portfolio portfolio;
+
+float bank = 100000.0f;
 
 for (int i = 0; i < 20; ++i) {
 stockDisplays.emplace_back(std::make_unique<Display>(std::string(stockFiles[i])));
-    // std::cout << "Initialized Display for stock: " << stockCodes[i] << std::endl;
 }
 
 
@@ -137,11 +140,12 @@ if (!glfwInit()) {
  ImGui::PushFont(titleFont); // Set the custom font
             ImGui::SetCursorPos(ImVec2(350, 50));
             ImGui::Text("Wallet"); // This text uses the custom font
+            ImGui::SetCursorPos(ImVec2(10, 40));
+            ImGui::Text("Bank: $%.2f", bank); // This text uses the custom font
             ImGui::PopFont(); // Revert to the default font
 
             ImDrawList* drawList = ImGui::GetForegroundDrawList();
             drawGrid(drawList, windowSize, 50, 2, 100);
-
 
 
             for (int j=0; j<2; j++){
@@ -336,16 +340,35 @@ if (!filteredOpenPrices.empty()) {
     
 }       
         else if (currentScreen == 2) {
-            ImGui::PushFont(titleFont); // Set the custom font
-            ImGui::SetCursorPos(ImVec2(320, 50));
-            ImGui::Text("Portfolio"); // This text uses the custom font
-            ImGui::PopFont(); // Revert to the default font
+ ImGui::PushFont(titleFont);
+    ImGui::SetCursorPos(ImVec2(320, 50));
+    ImGui::Text("Portfolio");
+    ImGui::PopFont();
 
-            ImGui::SetCursorPos(ImVec2((5),(575)));
-            if (ImGui::Button("Go Back")) {
-                currentScreen = 0; // Switch to screen 0 (original content)
-            }
-        }   
+    // Display each investment in the portfolio
+    for (int i = 0; i < portfolio.get_count(); ++i) {
+        Investment* inv = portfolio.get_investment(i);
+        ImGui::Separator();
+
+        // Show each investment's details
+        ImGui::Text("Investment %d: %s", i + 1, inv->get_investment_type().c_str());
+        ImGui::Text("  Company: %s", inv->get_name().c_str());
+        ImGui::Text("  Start Date: %s", inv->get_start_date().c_str());
+        ImGui::Text("  Initial Capital: $%.2f", inv->get_capital());
+        ImGui::Text("  Final Capital: $%.2f", inv->get_final_capital());
+        ImGui::Text("  Profit: $%.2f", inv->get_profits());
+
+
+        ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10); // Add some spacing between investments
+    }
+
+    ImGui::Text("Total Portfolio Value: $%.2f", portfolio.get_portfolio_value());
+
+    ImGui::SetCursorPos(ImVec2((5), (575)));
+    if (ImGui::Button("Go Back")) {
+        currentScreen = 0;
+    }
+}   
         else if (currentScreen == 3) {
             ImGui::PushFont(titleFont); 
             ImGui::SetCursorPos(ImVec2(330, 50));
@@ -399,7 +422,7 @@ if (!filteredOpenPrices.empty()) {
         ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.5f);  // Border size
 
        // Center the label above the input box
-ImVec2 labelPos((windowSize.x - 150.0f) / 2.0f, 100.0f);
+ImVec2 labelPos((windowSize.x - 165.0f) / 2.0f, 100.0f);
 ImGui::SetCursorPos(labelPos);
 ImGui::Text("Enter Capital to Invest:");
 
@@ -414,13 +437,18 @@ const char* payFreqOptions[] = { "Monthly", "Quarterly" };
 static int payFreqIndex = 0;
 static bool reinvestStatus = true;  // Static to persist across frames
 static int period = 1;
+static int secondPeriod = 1;
+float capitalProfit = finalCapital - capitalInvestment;
+static bool insufficientFunds = false;
+std::string availableStartDate;
+
 
 if (investmentIndex == 0){
 // Pay Frequency Selector
-    ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 190.0f));
+    ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 240.0f));
     ImGui::Text("Select Payment Frequency:");
 
-    ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 220.0f));
+    ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 270.0f));
     ImGui::SetNextItemWidth(150.0f);
     if (ImGui::BeginCombo("##PayFrequency", payFreqOptions[payFreqIndex])) {
         for (int n = 0; n < IM_ARRAYSIZE(payFreqOptions); n++) {
@@ -435,28 +463,36 @@ if (investmentIndex == 0){
 
 
     // Reinvest Status Checkbox
-    ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 260.0f));
+    ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 310.0f));
     ImGui::Text("Reinvest Dividends:");
-    ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 290.0f));
+    ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 340.0f));
     ImGui::Checkbox("##ReinvestStatus", &reinvestStatus);
-} else if (investmentIndex == 1){
+} else if (investmentIndex == 1 || investmentIndex == 3){
             // Period Selector (for Momentum)
-        ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 220.0f));
+        ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 240.0f));
         ImGui::Text("Select Period:");
-        ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 250.0f));
+        ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 270.0f));
         ImGui::SetNextItemWidth(150.0f);
         ImGui::InputInt("##PeriodInput", &period);
 }
+if (investmentIndex == 3) {
+                // Period Selector (for Momentum)
+        ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 310.0f));
+        ImGui::Text("Select Period:");
+        ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 340.0f));
+        ImGui::SetNextItemWidth(150.0f);
+        ImGui::InputInt("##secondPeriodInput", &secondPeriod);
+}
 
 
-ImVec2 dateTextPos((windowSize.x - 150.0f) / 2.0f, 350.0f);
+ImVec2 dateTextPos((windowSize.x - 150.0f) / 2.0f, 170.0f);
 ImGui::SetCursorPos(dateTextPos);
 ImGui::Text("Select Start Date:");
 
 static int day = 1, month = 1, year = 2024;
 
 // Position date pickers in the center
-ImVec2 datePos((windowSize.x - 300.0f) / 2.0f, 380.0f);
+ImVec2 datePos((windowSize.x - 250.0f) / 2.0f, 190.0f);
 ImGui::SetCursorPos(datePos);
 
 // Day Picker
@@ -511,9 +547,10 @@ std::string startDate = std::to_string(day) + "/" + std::to_string(month) + "/" 
 
 
 // Handle Invest button
-ImGui::SetCursorPos(ImVec2((windowSize.x - 100.0f) / 2.0f, 450.0f));
+ImGui::SetCursorPos(ImVec2((windowSize.x - 100.0f) / 2.0f, 530.0f));
 if (ImGui::Button("Invest", ImVec2(100, 40))) {
 
+            Investment* newInvestment = nullptr;
 
             std::cout<<startDate<<std::endl;
             // Create Dividend instance with user input
@@ -523,66 +560,82 @@ if (ImGui::Button("Invest", ImVec2(100, 40))) {
 
 if (investmentIndex == 0){
     std::cout << "Start Date: " << startDate << ", Capital: " << capitalInvestment << ", Pay Frequency: " << payFreqOptions[payFreqIndex] << "Stock Selected: " << stockFiles[selectedStockIndex] << "Reinvest Status: " << reinvestStatus <<  "\n";
-std::unique_ptr<Dividend> dividendInvestment = std::make_unique<Dividend>(startDate, capitalInvestment, payFreqOptions[payFreqIndex], stockFiles[selectedStockIndex], reinvestStatus);
+  newInvestment = new Dividend(startDate, capitalInvestment, payFreqOptions[payFreqIndex], stockFiles[selectedStockIndex], reinvestStatus);
  // Adjust date if necessary
-            int dayIndex = 1;
-            while (!dividendInvestment->valid_start_date(startDate)) {
-                startDate = std::to_string(day + dayIndex) + "/" + std::to_string(month) + "/" + std::to_string(year);
-                dividendInvestment = std::make_unique<Dividend>(startDate, capitalInvestment, payFreqOptions[payFreqIndex], stockFiles[selectedStockIndex], reinvestStatus);
-                dayIndex++;
-                if (dayIndex == 10) break;
-            }
-            finalCapital = dividendInvestment->get_final_capital();
+        int dayIndex = 1;
+        while (!newInvestment->valid_start_date(startDate)) {
+            startDate = std::to_string(day + dayIndex) + "/" + std::to_string(month) + "/" + std::to_string(year);
+            newInvestment->set_start_date(startDate);  // Assume a set_start_date function exists for date updates
+            newInvestment = new Dividend(startDate, capitalInvestment, payFreqOptions[payFreqIndex], stockFiles[selectedStockIndex], reinvestStatus);
+            dayIndex++;
+            if (dayIndex == 10) break;
+        }
 } else if (investmentIndex == 1){
-    std::unique_ptr<Momentum> momentumInvestment = std::make_unique<Momentum>(
-                startDate, capitalInvestment, stockFiles[selectedStockIndex], period);
-                int dayIndex = 1;
-            while (!momentumInvestment->valid_start_date(startDate)) {
-                startDate = std::to_string(day + dayIndex) + "/" + std::to_string(month) + "/" + std::to_string(year);
-                momentumInvestment = std::make_unique<Momentum>(startDate, capitalInvestment, stockFiles[selectedStockIndex], period);
-                dayIndex++;
-                if (dayIndex == 10) break;
-            }
-            finalCapital = momentumInvestment->get_final_capital();
-} else if (investmentIndex == 2){
-    std::unique_ptr<SetDeposit> setDepositInvestment = std::make_unique<SetDeposit>(
-                startDate, stockFiles[selectedStockIndex], capitalInvestment);
-                int dayIndex = 1;
-            while (!setDepositInvestment->valid_start_date(startDate)) {
-                startDate = std::to_string(day + dayIndex) + "/" + std::to_string(month) + "/" + std::to_string(year);
-                setDepositInvestment = std::make_unique<SetDeposit>(startDate, stockFiles[selectedStockIndex], capitalInvestment);
-                dayIndex++;
-                if (dayIndex == 10) break;
-            }
-            finalCapital = setDepositInvestment->get_final_capital();
-}
+     newInvestment = new Momentum(startDate, capitalInvestment, stockFiles[selectedStockIndex], period);
 
+                int dayIndex = 1;
+            while (!newInvestment->valid_start_date(startDate)) {
+                startDate = std::to_string(day + dayIndex) + "/" + std::to_string(month) + "/" + std::to_string(year);
+                newInvestment = new Momentum(startDate, capitalInvestment, stockFiles[selectedStockIndex], period);
+                dayIndex++;
+                if (dayIndex == 10) break;
+            }
+} else if (investmentIndex == 2){
+    newInvestment = new SetDeposit(startDate, stockFiles[selectedStockIndex], capitalInvestment);
+
+                int dayIndex = 1;
+            while (!newInvestment->valid_start_date(startDate)) {
+                startDate = std::to_string(day + dayIndex) + "/" + std::to_string(month) + "/" + std::to_string(year);
+                newInvestment = new SetDeposit(startDate, stockFiles[selectedStockIndex], capitalInvestment);
+                dayIndex++;
+                if (dayIndex == 10) break;
+            }
+} else if (investmentIndex == 3){
+        newInvestment = new MovingAverageCrossover(startDate, capitalInvestment, stockFiles[selectedStockIndex], period, secondPeriod);
+
+                int dayIndex = 1;
+            while (!newInvestment->valid_start_date(startDate)) {
+                startDate = std::to_string(day + dayIndex) + "/" + std::to_string(month) + "/" + std::to_string(year);
+            newInvestment = new MovingAverageCrossover(startDate, capitalInvestment, stockFiles[selectedStockIndex], period, secondPeriod);
+            dayIndex++;
+                if (dayIndex == 10) break;
+            }
+}
+        finalCapital = newInvestment->get_final_capital();
+        portfolio.add_investment(newInvestment);  // Add investment to portfolio
         showFinalCapitalPopup = true;
         ImGui::OpenPopup("Investment Result");
     }
+
+    
 
     // Display the popup modal with Final Capital
     if (showFinalCapitalPopup) {
         if (ImGui::BeginPopupModal("Investment Result", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
             ImGui::Text("Inital Capital: $%.2f", capitalInvestment);
             ImGui::Text("Final Capital: $%.2f", finalCapital);
-            float capitalProfit = finalCapital - capitalInvestment;
             ImGui::Text("Total Profit: $%.2f", capitalProfit);
 
             if (ImGui::Button("ok")) {
                 showFinalCapitalPopup = false;
                 ImGui::CloseCurrentPopup();
-                currentScreen = 4;
-                // investmentIndex = -1;
-                // selectedStockIndex = -1;
+                currentScreen = 0;
+                investmentIndex = -1;
+                selectedStockIndex = -1;
+                day = 1;
+                month = 1;
+                year = 2024;
+                period = 0.0f;
+                secondPeriod = 0.0f;
+                capitalInvestment = 0.0f;
+                bank = bank + capitalProfit;
             }
             ImGui::EndPopup();
         } else {
             // Debug to confirm the popup attempt
-            std::cout << "Popup modal is active but not visible." << std::endl;;
+            std::cout << "Popup model is active but not visible." << std::endl;;
         }
     }
-
 
 
 

@@ -50,6 +50,10 @@ class Portfolio{
         // Write portfolio function to write a file.
         void write_portfolio_summary();
 
+        // Getter to return the investment.
+        Investment* get_investment(int index);
+
+
         // Destructor.
         ~Portfolio();
 

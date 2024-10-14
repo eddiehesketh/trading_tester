@@ -140,3 +140,11 @@ void Portfolio::write_portfolio_summary(){
 
 
 }
+
+// Get Investment function
+Investment* Portfolio::get_investment(int index) {
+    if (index >= 0 && index < count) {
+        return investments[index];
+    }
+    return nullptr;  // Return null if index is out of bounds
+}
