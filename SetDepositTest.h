@@ -1,3 +1,6 @@
+// Set deposit unit testing.
+
+// Defining the class and including relevant libraries.
 #ifndef SETDEPOSIT_TEST
 #define SETDEPOSIT_TEST
 #include "ReadData.h"
@@ -9,13 +12,16 @@
 #include <sstream>
 #include <string>
 
-
+// Using standard namespace.
 using namespace std;
 
+
+// Set Deposit Test class.
 class SetDepsoitTest{
 
     public:
 
+        // Run tests funcion to call all of the tests simeltaneously.
         void run_tests(){
 
             test_initial_capital();
@@ -27,6 +33,7 @@ class SetDepsoitTest{
 
         }
 
+        // Testing if the intial capital is correctly set.
         void test_initial_capital(){
             
             SetDeposit deposit("2/1/2020", "microsoft.csv", 1000);
@@ -38,6 +45,7 @@ class SetDepsoitTest{
             }
         }
 
+        // Testing if the final capital matches that of what it is expected to.
         void test_final_capital(){
             SetDeposit deposit("12/12/1980", "apple.csv", 1);
 
@@ -49,6 +57,7 @@ class SetDepsoitTest{
             }
         }
 
+        // Testing if the profits match what it is expected to.
         void test_profits(){
             SetDeposit deposit("2/1/2020", "tesla.csv", 1000);
 
@@ -59,6 +68,7 @@ class SetDepsoitTest{
             }
         }
 
+        // Testing if the pay frequencey is automatically set to once off like it should be.
         void test_valid_pay_freq(){
             SetDeposit deposit("25/10/2015", "nvidia.csv", 1000);
 
@@ -69,6 +79,7 @@ class SetDepsoitTest{
             }
         }
 
+        // Ensuring the investment type is set to deposit.
         void test_investment_type(){
             SetDeposit deposit("2/1/2020", "google.csv", 1000);
 

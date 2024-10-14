@@ -12,3 +12,4 @@ clean:
 
 # Target to build everything
 all: test
+

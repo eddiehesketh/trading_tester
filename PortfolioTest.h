@@ -1,6 +1,12 @@
+// Portfolio unit testing file to test the portfolio class.
+
+
+// Defining the class
 #ifndef PORTFOLIOTEST_H
 #define PORTFOLIOTEST_H
 
+
+// Including relevnnt libraries.
 #include "Portfolio.h"
 #include "SetDeposit.h"
 #include "Dividend.h"
@@ -9,8 +15,11 @@
 #include <fstream>
 #include <vector>
 
+// Portfolio test class.
 class PortfolioTest {
 public:
+
+    // Run tests to run all tests at once.
     void run_tests() {
         test_add_investment();
         test_remove_investment();
@@ -20,8 +29,11 @@ public:
 
     // Test adding an investment to the portfolio
     void test_add_investment() {
+
         Portfolio portfolio;
+
         SetDeposit* deposit = new SetDeposit("1/1/2020", "apple.csv", 1000);
+
         portfolio.add_investment(deposit);
         
         if (portfolio.get_count() == 1) {
@@ -33,9 +45,13 @@ public:
 
     // Test removing an investment from the portfolio
     void test_remove_investment() {
+
         Portfolio portfolio;
+
         SetDeposit* deposit1 = new SetDeposit("1/1/2020", "apple.csv", 1000);
+
         SetDeposit* deposit2 = new SetDeposit("1/1/2021", "tesla.csv", 2000);
+
         portfolio.add_investment(deposit1);
         portfolio.add_investment(deposit2);
 
@@ -50,9 +66,12 @@ public:
 
     // Test if the portfolio value is updated correctly after adding investments
     void test_portfolio_value() {
+
         Portfolio portfolio;
+
         SetDeposit* deposit = new SetDeposit("2/1/2020", "apple.csv", 1000);
         Dividend* dividend = new Dividend("2/1/2020", 1000, "Monthly", "microsoft.csv", true);
+
         portfolio.add_investment(deposit);
         portfolio.add_investment(dividend);
 
@@ -68,9 +87,12 @@ public:
 
     // Test writing the portfolio summary to a file
     void test_portfolio_summary() {
+
         Portfolio portfolio;
+
         SetDeposit* deposit = new SetDeposit("2/1/2020", "apple.csv", 1000);
         Dividend* dividend = new Dividend("2/1/2020", 1000, "Monthly", "microsoft.csv", true);
+        
         portfolio.add_investment(deposit);
         portfolio.add_investment(dividend);
         portfolio.write_portfolio_summary();
