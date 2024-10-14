@@ -79,7 +79,7 @@ class Investment: public ReadData{
         virtual bool valid_pay_freq(std::string freq) = 0;
 
         // Setter function to set the reinvestment status.
-        void set_reivest_status(bool stat);
+        void set_reinvest_status(bool stat);
 
         // Setter function to set the pay frequency.
         void set_pay_freq(std::string freq);

@@ -55,7 +55,16 @@ int investmentIndex = -1;
 
 int main() {
 
-    std::vector<Display> stockDisplays;
+std::vector<std::unique_ptr<Display>> stockDisplays;
+
+for (int i = 0; i < 20; ++i) {
+stockDisplays.emplace_back(std::make_unique<Display>(std::string(stockFiles[i])));
+    // std::cout << "Initialized Display for stock: " << stockCodes[i] << std::endl;
+}
+
+
+
+
 // Test Graph
 
     // Initialize GLFW
@@ -88,10 +97,7 @@ if (!glfwInit()) {
     // Setup ImGui context
     setupImGui(window);
 
-    for (int i = 0; i < 20; ++i) {
-    stockDisplays.emplace_back(stockFiles[i]); // Pass stock code to Display constructor
-    std::cout << "Initialized Display for stock: " << stockCodes[i] << std::endl;
-}
+
 
 
 
@@ -136,7 +142,7 @@ if (!glfwInit()) {
 
             for (int j=0; j<2; j++){
                 for (int i=0; i<10; i++) {
-                    const Display& displayScreen0 = stockDisplays[i + 10 * j];
+                    const Display& displayScreen0 = *(stockDisplays[i + 10 * j]);
 
                     // Call daily_change and check for NULL directly
                     std::string dailyChangeStr = displayScreen0.daily_change(1).c_str();
@@ -190,7 +196,7 @@ if (!glfwInit()) {
         else if (currentScreen == 1 && selectedStockIndex != -1) {
     if (selectedStockIndex >= 0 && selectedStockIndex < stockDisplays.size()) {
         // Stock-specific screen for selected stock
-     const Display& display = stockDisplays[selectedStockIndex];
+     const Display& display = *(stockDisplays[selectedStockIndex]);
     
     ImVec2 windowSize = ImGui::GetWindowSize();
     // Calculate text width based on the selected font and stock name text
@@ -463,19 +469,21 @@ std::string startDate = std::to_string(day) + "/" + std::to_string(month) + "/" 
 // Handle Invest button
 ImGui::SetCursorPos(ImVec2((windowSize.x - 100.0f) / 2.0f, 300.0f));
 if (ImGui::Button("Invest", ImVec2(100, 40))) {
-    std::cout<<startDate<<std::endl;
-    // Create Dividend instance with user input
-    bool reinvestStatus = true;
-    std::string payFreq = "Monthly";
+            std::cout<<startDate<<std::endl;
+            // Create Dividend instance with user input
+            bool reinvestStatus = true;
+            std::string payFreq = "Monthly";
 
 
+        std::cout << "Start Date: " << startDate << ", Capital: " << capitalInvestment << ", Pay Frequency: " << payFreq << "\n";
+        ReadData readData("AAPL");
 
-   Dividend dividendInvestment(startDate, capitalInvestment, payFreq, "AAPL", reinvestStatus);
+        Dividend dividendInvestment(startDate, capitalInvestment, payFreq, "AAPL", reinvestStatus);
 
-        // Display investment results
-        float finalCapital = dividendInvestment.get_final_capital();
-        ImGui::SetCursorPos(ImVec2((windowSize.x - 200.0f) / 2.0f, 350.0f));
-        ImGui::Text("Final Capital: %.2f", finalCapital);
+                // Display investment results
+                float finalCapital = dividendInvestment.get_final_capital();
+                ImGui::SetCursorPos(ImVec2((windowSize.x - 200.0f) / 2.0f, 350.0f));
+                ImGui::Text("Final Capital: %.2f", finalCapital);
 }
 
 // Display selected date
@@ -487,11 +495,6 @@ ImGui::PopStyleColor(4);
 ImGui::PopStyleVar(3);
 
             
-
-            ImGui::SetCursorPos(ImVec2((340),(530)));
-            if (ImGui::Button("Invest##InvestButton", ImVec2(100, 40))) {
-                currentScreen = 3; 
-            }
 
             ImGui::SetCursorPos(ImVec2((5),(575)));
             if (ImGui::Button("Go Back")) {

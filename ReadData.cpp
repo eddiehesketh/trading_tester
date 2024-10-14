@@ -120,7 +120,7 @@ void ReadData::set_stock_open(stringstream& ss){
     if (running_open == "#N/A" || running_open.empty()) {
 
         // Infomring user of the invalid data or error.
-        std::cerr << "Invalid data for open price: " << running_open << std::endl;
+             std::cerr << "Invalid data for open price: " << running_open << std::endl;
 
         // If so, push a dafualt float value.
         stock_open.push_back(0.0f);
