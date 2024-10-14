@@ -129,12 +129,6 @@ if (!glfwInit()) {
         ImGui::SetWindowPos(ImVec2(0, 0)); // Set position to (0, 0)
         ImGui::SetWindowSize(ImVec2(800, 600)); // Set size to window size
 
-
-
-        ImGui::SameLine();
-        ImGui::SetCursorPos(ImVec2(50, 50));
-        ImGui::Text("Mouse Position: (%.1f, %.1f)", ImGui::GetMousePos().x, ImGui::GetMousePos().y);
-
         // Display content based on the current screen
     if (currentScreen == 0) {
             // Main screen with stock list
