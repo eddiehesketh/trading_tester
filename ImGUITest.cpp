@@ -215,15 +215,49 @@ if (!glfwInit()) {
     ImGui::Text("%s", stockNames[selectedStockIndex]);
     ImGui::PopFont();
 
+    // Retrieve price data
+        const std::vector<float>& openPrices = display.get_open_prices();
+        const std::vector<float>& closePrices = display.get_close_prices();
+        const std::vector<float>& highPrices = display.get_stock_high();
+        const std::vector<float>& lowPrices = display.get_stock_low();
+        const std::vector<long long>& volume = display.get_volume();
+        const std::vector<std::string>& dates = display.get_dates();
+
+        // Show last 7 days' data
+        size_t numDays = 7;
+        size_t startIdx = openPrices.size() >= numDays ? openPrices.size() - numDays : 0;
+        ImGui::PushFont(largeRomanFont);
+        ImVec2 textSize2 = ImGui::CalcTextSize("Last 7 Days");
+        // Calculate position to center the text
+        ImVec2 centeredPos2((windowSize.x - textSize2.x) / 2.0f, (340));
+        ImGui::SetCursorPos(centeredPos2);
+        // Display the centered text
+        ImGui::Text("Last 7 Days");
+        ImGui::PopFont();
+        // Create the table
+        ImGui::SetCursorPos(ImVec2(80, 370)); // Adjust position as needed
+        if (ImGui::BeginTable("StockDataTable", 6, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg)) {
+            ImGui::TableSetupColumn("Date");
+            ImGui::TableSetupColumn("Open");
+            ImGui::TableSetupColumn("Close");
+            ImGui::TableSetupColumn("High");
+            ImGui::TableSetupColumn("Low");
+            ImGui::TableSetupColumn("Volume");
+            ImGui::TableHeadersRow();
+
+            for (size_t i = startIdx; i < openPrices.size(); ++i) {
+                ImGui::TableNextRow();
+                ImGui::TableSetColumnIndex(0); ImGui::Text("%s", dates[i].c_str());
+                ImGui::TableSetColumnIndex(1); ImGui::Text("%.2f", openPrices[i]);
+                ImGui::TableSetColumnIndex(2); ImGui::Text("%.2f", closePrices[i]);
+                ImGui::TableSetColumnIndex(3); ImGui::Text("%.2f", highPrices[i]);
+                ImGui::TableSetColumnIndex(4); ImGui::Text("%.2f", lowPrices[i]);
+                ImGui::TableSetColumnIndex(5); ImGui::Text("%lld", volume[i]);
+            }
+            ImGui::EndTable();
+        }
+
     
-
-        
-
-// Retrieve open prices for plotting
-    const std::vector<float>& openPrices = display.get_open_prices();
-    const std::vector<float>& closePrices = display.get_close_prices();
-    const std::vector<long long>& volume = display.get_volume();
-    const std::vector<std::string>& dates = display.get_dates();
 
 
     ImGui::SetCursorPos(ImVec2(100, 75));
