@@ -397,15 +397,42 @@ if (!filteredOpenPrices.empty()) {
         ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10); // Add some spacing between investments
     }
 
+
+        // Calculate Y position dynamically
+    float currentY = ImGui::GetCursorPosY(); // Get the current Y position
+
+    // Add some space before the buttons and summary
+    ImGui::SetCursorPosY(currentY + 20);
+
+
     ImGui::Separator();
     ImGui::Text("Total Portfolio Value: $%.2f", portfolio.get_portfolio_value());
     ImGui::Text("Bank Balance: $%.2f", bank);
+    ImGui::Separator();
 
-    // Add Reset Portfolio button
-    ImGui::SetCursorPos(ImVec2(320, 500));
+        // Button to export portfolio to a summary file
+    ImGui::SetCursorPosX(225);
+    if (ImGui::Button("Export Portfolio", ImVec2(150, 40))) {
+        portfolio.write_portfolio_summary();
+        ImGui::OpenPopup("ExportConfirmation");
+    }
+    ImGui::SameLine();
+    ImGui::SetCursorPosX(425);
     if (ImGui::Button("Reset Portfolio", ImVec2(150, 40))) {
          showConfirmResetPopup = true;
     }
+
+        // Confirmation popup
+        ImGui::Separator();
+    if (ImGui::BeginPopupModal("ExportConfirmation", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+        ImGui::Text("Portfolio summary exported to 'investment_summary.txt'.");
+        if (ImGui::Button("OK", ImVec2(120, 0))) {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+
+
 // Confirm Reset Popup Modal
     if (showConfirmResetPopup) {
         ImGui::OpenPopup("Confirm Reset");
