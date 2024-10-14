@@ -7,6 +7,7 @@
 #include "Display.h"
 #include "Dividend.h"
 #include "Momentum.h"
+#include "RiskAssesment.h"
 #include "SetDeposit.h"
 #include "MovingAverageCrossover.h"
 #include "Portfolio.h"
@@ -190,12 +191,13 @@ if (!glfwInit()) {
 
                     currentScreen = 1; // Switch to screen 2
                     }                    
-                    ImGui::SetCursorPos(ImVec2((700),(30)));
+
 
 
                 }
             }
-            if (ImGui::Button("Porfolio", ImVec2(100, 30))) {
+            ImGui::SetCursorPos(ImVec2((680),(30)));
+            if (ImGui::Button("Portfolio", ImVec2(100, 30))) {
                 currentScreen = 2; // Switch to screen 2
             }
 
@@ -203,6 +205,7 @@ if (!glfwInit()) {
         }
         else if (currentScreen == 1 && selectedStockIndex != -1) {
     if (selectedStockIndex >= 0 && selectedStockIndex < stockDisplays.size()) {
+
         // Stock-specific screen for selected stock
      const Display& display = *(stockDisplays[selectedStockIndex]);
     
@@ -233,7 +236,7 @@ if (!glfwInit()) {
 
     const char* timeRangeLabels[] = { "Max", "1 Year", "6 Month", "1 Month" };
     int currentRangeIndex = static_cast<int>(selectedRange);
-    if (ImGui::Combo("Time Range", &currentRangeIndex, timeRangeLabels, IM_ARRAYSIZE(timeRangeLabels))) {
+    if (ImGui::Combo(" ", &currentRangeIndex, timeRangeLabels, IM_ARRAYSIZE(timeRangeLabels))) {
             selectedRange = static_cast<TimeRange>(currentRangeIndex);
     }
 
@@ -336,8 +339,7 @@ if (!filteredOpenPrices.empty()) {
         ImGui::SetCursorPos(ImVec2((340),(530)));
         if (ImGui::Button("Investment",  ImVec2(100, 40))) {
         currentScreen = 3;  
-    }
-    
+    }    
 }       
         else if (currentScreen == 2) {
  ImGui::PushFont(titleFont);
@@ -358,11 +360,14 @@ if (!filteredOpenPrices.empty()) {
         ImGui::Text("  Final Capital: $%.2f", inv->get_final_capital());
         ImGui::Text("  Profit: $%.2f", inv->get_profits());
 
+        // Risk assessment for the investment
+        RiskAssesment riskAssessment(inv); // Create RiskAssesment object for the current investment
+        std::string riskRating = riskAssessment.get_risk_rating();
+        ImGui::Text("  Risk Rating: %s", riskRating.c_str());
 
         ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10); // Add some spacing between investments
     }
 
-    ImGui::Text("Total Portfolio Value: $%.2f", portfolio.get_portfolio_value());
 
     ImGui::SetCursorPos(ImVec2((5), (575)));
     if (ImGui::Button("Go Back")) {
@@ -370,40 +375,95 @@ if (!filteredOpenPrices.empty()) {
     }
 }   
         else if (currentScreen == 3) {
-            ImGui::PushFont(titleFont); 
-            ImGui::SetCursorPos(ImVec2(330, 50));
-            ImGui::Text("Investing"); 
-            ImGui::PopFont(); 
+    ImGui::PushFont(titleFont); 
+    ImGui::SetCursorPos(ImVec2(330, 30));
+    ImGui::Text("Investing"); 
+    ImGui::PopFont(); 
 
-            ImGui::SetCursorPos(ImVec2((30),(150)));
-            if (ImGui::Button("Dividend",  ImVec2(100, 40))) {
-            currentScreen = 4;  
-            investmentIndex = 0;
-            }
-            ImGui::SetCursorPos(ImVec2((30 + (windowSize.x / 4)),(150)));
-            if (ImGui::Button("Momentum",  ImVec2(100, 40))) {
-            currentScreen = 4;  
-            investmentIndex = 1;
-            }
-            ImGui::SetCursorPos(ImVec2((30 + (windowSize.x * 2 / 4)),(150)));
-            if (ImGui::Button("SetDeposit",  ImVec2(100, 40))) {
-            currentScreen = 4;  
-            investmentIndex = 2;
-            }
-            ImGui::SetCursorPos(ImVec2((30 + (windowSize.x * 3 / 4)),(150)));
-            if (ImGui::Button("MovingAverageCrossover",  ImVec2(100, 40))) {
-            currentScreen = 4;  
-            investmentIndex = 3;
-            }
+    // Create a padding style
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10, 10));
+    ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.95f, 0.95f, 0.95f, 1.0f)); // Light background for child windows
 
+    // Investment Option: Dividend
+    ImGui::SetCursorPos(ImVec2(30, 80));
+    ImGui::BeginChild("DividendChild", ImVec2(700, 90), true, ImGuiWindowFlags_NoScrollbar);
+    ImGui::SetCursorPosX(20);  // Add padding on the left
+    ImGui::SetCursorPosY(25);
+    if (ImGui::Button("Dividend", ImVec2(100, 40))) {
+        currentScreen = 4;  
+        investmentIndex = 0;
+    }
+    ImGui::SameLine();
+    ImGui::SetCursorPosX(140);
+    ImGui::TextWrapped("Provides steady returns by reinvesting dividends from selected stocks, suitable for low-risk, income-focused investors.");
+    ImGui::EndChild();
 
-            ImGui::SetCursorPos(ImVec2((5),(575)));
-            if (ImGui::Button("Go Back")) {
-                currentScreen = 1; 
-            }
+    // Investment Option: Momentum
+    ImGui::SetCursorPos(ImVec2(30, 190));
+    ImGui::BeginChild("MomentumChild", ImVec2(700, 90), true, ImGuiWindowFlags_NoScrollbar);
+    ImGui::SetCursorPosX(20); 
+    ImGui::SetCursorPosY(25);
+    if (ImGui::Button("Momentum", ImVec2(100, 40))) {
+        currentScreen = 4;  
+        investmentIndex = 1;
+    }
+    ImGui::SameLine();
+    ImGui::SetCursorPosX(140);
+    ImGui::TextWrapped("A high-risk strategy that seeks to profit from stocks showing strong upward trends in the short term.");
+    ImGui::EndChild();
 
-        }
+    // Investment Option: Set Deposit
+    ImGui::SetCursorPos(ImVec2(30, 300));
+    ImGui::BeginChild("SetDepositChild", ImVec2(700, 90), true, ImGuiWindowFlags_NoScrollbar);
+    ImGui::SetCursorPosX(20); 
+    ImGui::SetCursorPosY(25);
+    if (ImGui::Button("SetDeposit", ImVec2(100, 40))) {
+        currentScreen = 4;  
+        investmentIndex = 2;
+    }
+    ImGui::SameLine();
+    ImGui::SetCursorPosX(140);
+    ImGui::TextWrapped("A low to medium-risk investment where a fixed amount is deposited at regular intervals to accumulate over time.");
+    ImGui::EndChild();
+
+    // Investment Option: Moving Average Crossover
+    ImGui::SetCursorPos(ImVec2(30, 410));
+    ImGui::BeginChild("MovingAverageCrossoverChild", ImVec2(700, 90), true, ImGuiWindowFlags_NoScrollbar);
+    ImGui::SetCursorPosX(20); 
+    ImGui::SetCursorPosY(25);
+    if (ImGui::Button("MovingAverageCrossover", ImVec2(100, 40))) {
+        currentScreen = 4;  
+        investmentIndex = 3;
+    }
+    ImGui::SameLine();
+    ImGui::SetCursorPosX(140);
+    ImGui::TextWrapped("A technical, high-risk strategy that buys and sells based on short-term and long-term moving average crossovers to capture trends.");
+    ImGui::EndChild();
+
+    // Go Back Button
+    ImGui::SetCursorPos(ImVec2(5, 575));
+    if (ImGui::Button("Go Back")) {
+        currentScreen = 1; 
+    }
+
+    // Pop style variables and colors to return to defaults
+    ImGui::PopStyleColor();
+    ImGui::PopStyleVar();
+}
+
         else if (currentScreen == 4 && investmentIndex != -1) {
+
+
+            
+const char* payFreqOptions[] = { "Monthly", "Quarterly" };
+static int payFreqIndex = 0;
+static bool reinvestStatus = true;  // Static to persist across frames
+static float capitalInvestment = 0.0f;
+static int period = 1;
+static int secondPeriod = 1;
+float capitalProfit = finalCapital - capitalInvestment;
+static bool insufficientFunds = false;
+std::string availableStartDate;
 
             ImGui::PushFont(titleFont); 
             ImVec2 textSize = ImGui::CalcTextSize(investmentNames[investmentIndex]);
@@ -428,19 +488,18 @@ ImGui::Text("Enter Capital to Invest:");
 
 // Center the input box
 ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 130.0f));
-static float capitalInvestment = 0.0f;
 ImGui::SetNextItemWidth(150.0f);
 ImGui::InputFloat("##CapitalInput", &capitalInvestment, 0.0f, 0.0f, "%.2f", ImGuiInputTextFlags_AutoSelectAll);
 
+if (capitalInvestment > bank){
+    ImGui::SetCursorPos(ImVec2((windowSize.x - 125.0f) / 2.0f, 530.0f)); 
+    ImGui::Text("Insufficient Funds");
+    insufficientFunds = true;
+} else {
+    insufficientFunds = false;
+}
 
-const char* payFreqOptions[] = { "Monthly", "Quarterly" };
-static int payFreqIndex = 0;
-static bool reinvestStatus = true;  // Static to persist across frames
-static int period = 1;
-static int secondPeriod = 1;
-float capitalProfit = finalCapital - capitalInvestment;
-static bool insufficientFunds = false;
-std::string availableStartDate;
+
 
 
 if (investmentIndex == 0){
@@ -470,7 +529,7 @@ if (investmentIndex == 0){
 } else if (investmentIndex == 1 || investmentIndex == 3){
             // Period Selector (for Momentum)
         ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 240.0f));
-        ImGui::Text("Select Period:");
+        ImGui::Text("Select period:");
         ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 270.0f));
         ImGui::SetNextItemWidth(150.0f);
         ImGui::InputInt("##PeriodInput", &period);
@@ -547,6 +606,7 @@ std::string startDate = std::to_string(day) + "/" + std::to_string(month) + "/" 
 
 
 // Handle Invest button
+if (!insufficientFunds) {
 ImGui::SetCursorPos(ImVec2((windowSize.x - 100.0f) / 2.0f, 530.0f));
 if (ImGui::Button("Invest", ImVec2(100, 40))) {
 
@@ -606,7 +666,7 @@ if (investmentIndex == 0){
         showFinalCapitalPopup = true;
         ImGui::OpenPopup("Investment Result");
     }
-
+}
     
 
     // Display the popup modal with Final Capital
