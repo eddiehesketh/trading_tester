@@ -69,16 +69,16 @@ int main(){
     cout << "MOVING AVERAGE CROSSOVER TESTING: \n\n\n";
 
     // Calling moving average test constructor.
-    MovingAverageCrossoverTest test6;
+    MovingAverageCrossoverTest test7;
 
     // Running tests.
     test6.run_tests();
 
     // Tests for momentum.
-    cout << "Momentum TESTING: \n\n\n";
+    cout << "MOMENTUM TESTING: \n\n\n";
 
     // Calling momentum test constructor.
-    MomentumTest test7;
+    MomentumTest test8;
 
     // Running tests.
     test7.run_tests();
