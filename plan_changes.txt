@@ -1,0 +1,10 @@
+Changes to the final project from the original project plan:
+
+Compared to the original project plan, there were three minor changes made. These include removing the short- and long-term investment classes and changing the mean reversion strategy class to a momentum-based strategy class.
+
+Justification for changes:
+The short- and long-term investment classes were removed to improve the efficiency of polymorphism. Having two separate classes that inherited from the pure abstract class would have made building the portfolio more complex. Specifically, it would have been difficult to derive the investment strategy subclasses from pointers to the original investment base class. By removing these classes, we ensured that all investment types directly inherit from the investment class, which allows the portfolio to use a pointer to the parent class to hold child class objects more effectively.
+
+As for the switch from the mean reversion strategy to a momentum-based strategy, this change was made for simplicity. The mean reversion strategy involves complex algorithms that we felt were beyond the scope of the course. In contrast, the momentum strategy was easier to implement while still offering similar functionality. It also aligns with our original plan, which included two low-risk and two high-risk investment strategies that could be simulated.
+
+Aside from these changes, all other classes and functions remained the same, resulting in a user-friendly and interactive investment strategy testing program.
