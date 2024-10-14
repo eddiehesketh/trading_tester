@@ -16,7 +16,7 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
-
+#include <sstream>
 
 
 
@@ -171,7 +171,7 @@ if (!glfwInit()) {
                         } else {
                         ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 255, 0, 255)); // Red for negative change
                      }
-                        ImGui::Text("%s%%", dailyChangeStr.c_str());  // Display the second element, if available
+                        ImGui::Text("%s", dailyChangeStr.c_str());  // Display the second element, if available
                         ImGui::PopStyleColor();
                     } else {
                         ImGui::SetCursorPos(ImVec2((120 + 400 * j), (115 + 50 * i)));
@@ -203,26 +203,40 @@ if (!glfwInit()) {
     if (selectedStockIndex >= 0 && selectedStockIndex < stockDisplays.size()) {
 
         // Stock-specific screen for selected stock
-     const Display& display = *(stockDisplays[selectedStockIndex]);
-    
-    ImVec2 windowSize = ImGui::GetWindowSize();
-    // Calculate text width based on the selected font and stock name text
-    ImGui::PushFont(titleFont);
-    ImVec2 textSize = ImGui::CalcTextSize(stockNames[selectedStockIndex]);
-    // Calculate position to center the text
-    ImVec2 centeredPos((windowSize.x - textSize.x) / 2.0f, (50));
-    ImGui::SetCursorPos(centeredPos);
-    // Display the centered text
-    ImGui::Text("%s", stockNames[selectedStockIndex]);
-    ImGui::PopFont();
-
-    // Retrieve price data
+        const Display& display = *(stockDisplays[selectedStockIndex]);
+         // Retrieve price data
         const std::vector<float>& openPrices = display.get_open_prices();
         const std::vector<float>& closePrices = display.get_close_prices();
         const std::vector<float>& highPrices = display.get_stock_high();
         const std::vector<float>& lowPrices = display.get_stock_low();
         const std::vector<long long>& volume = display.get_volume();
         const std::vector<std::string>& dates = display.get_dates();
+
+    float currentClosePrice = closePrices.back();
+    ImVec2 windowSize = ImGui::GetWindowSize();
+
+
+
+    // Calculate text width based on the selected font and stock name text
+    ImGui::PushFont(titleFont);
+
+    // Calculate the size of the full text
+    ImVec2 textSize = ImGui::CalcTextSize(stockNames[selectedStockIndex]);
+    // Calculate position to center the text
+    ImGui::SetCursorPos(ImVec2((windowSize.x - textSize.x) / 2.0f, (40)));
+    // Display the centered text
+    ImGui::Text("%s", stockNames[selectedStockIndex]);
+        ImGui::SetCursorPos(ImVec2((600),(50)));
+    ImGui::PopFont();
+
+       ImGui::PushFont(largeRomanFont);
+    std::string fullText = std::string("Current price - $") + std::to_string(currentClosePrice);
+    ImVec2 floatSize = ImGui::CalcTextSize(fullText.c_str());
+    ImGui::SetCursorPos(ImVec2(((windowSize.x - floatSize.x) / 2.0f) + 20 , 65));
+    ImGui::Text("Current price - $%.2f", currentClosePrice);
+    ImGui::PopFont();
+
+
 
         // Find the minimum year in the dates
         earliestYear = 2025; // default latest year in your code
