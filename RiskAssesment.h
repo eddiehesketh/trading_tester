@@ -4,6 +4,11 @@
 #ifndef RISKASSESMENT_H
 #define RISKASSESMENT_H
 #include "Investment.h"
+#include "MovingAverageCrossover.h"
+#include "SetDeposit.h"
+#include "Momentum.h"
+#include "Dividend.h"
+#include "ReadData.h"
 
 
 // Risk assesment class.

@@ -1,8 +1,9 @@
-test: all_unit_testing.cpp ReadData.cpp SetDeposit.cpp Dividend.cpp Display.cpp Investment.cpp Portfolio.cpp
+test: all_unit_testing.cpp ReadData.cpp SetDeposit.cpp Dividend.cpp Portfolio.cpp Display.cpp Investment.cpp MovingAverageCrossover.cpp Momentum.cpp RiskAssesment.cpp
 	@echo "Compiling test program..."
-	@g++ -std=c++11 all_unit_testing.cpp ReadData.cpp SetDeposit.cpp Dividend.cpp Portfolio.cpp Display.cpp Investment.cpp -o test
+	@g++ -std=c++11 all_unit_testing.cpp ReadData.cpp SetDeposit.cpp Dividend.cpp Portfolio.cpp Display.cpp Investment.cpp MovingAverageCrossover.cpp Momentum.cpp RiskAssesment.cpp -o test
 	@echo "Running test..."
 	@./test
+
 
 run_program: ImGUITest.cpp Portfolio.cpp Display.cpp ReadData.cpp MovingAverageCrossover.cpp Momentum.cpp SetDeposit.cpp Investment.cpp Dividend.cpp libs/glad/src/glad.c \
 	imgui/imgui.cpp imgui/imgui_draw.cpp imgui/imgui_widgets.cpp imgui/imgui_tables.cpp \

@@ -7,6 +7,8 @@
 #include "DisplayTest.h"
 #include "Portfolio.h"
 #include "PortfolioTest.h"
+#include "RiskAssesment.h"
+#include "RiskAssesmentTest.h"
 
 #include <iostream>
 
@@ -54,6 +56,14 @@ int main(){
     PortfolioTest test5;
 
     test5.run_tests();
+
+    // Tests for risk assesment class.
+    cout << "\n\n\n RISK ASSESMENT TESTING \n\n\n";
+
+    RiskAssesmentTest test6;
+    test6.run_tests();
+
+
 
 
 
