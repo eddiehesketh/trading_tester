@@ -1,8 +1,8 @@
 // Set deposit unit testing.
 
 // Defining the class and including relevant libraries.
-#ifndef SETDEPOSIT_TEST
-#define SETDEPOSIT_TEST
+#ifndef SETDEPOSITTEST_H
+#define SETDEPOSITTEST_H
 #include "ReadData.h"
 #include "SetDeposit.h"
 #include "Investment.h"
