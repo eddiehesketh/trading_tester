@@ -1,12 +1,22 @@
+// Read data  unit testing class.
+
+
+// Defining the class and including he read data class.
 #ifndef READDATATEST_H
 #define READDATATEST_H
 #include "ReadData.h"
 
+
+// Using the standard namespace.
 using namespace std;
 
+
+// Read data test class.
 class ReadDataTest{
 
     public:
+
+        // Run tests function to run all of the tests at once.
         void run_tests(){
             test_name();
             test_dates();
@@ -18,6 +28,7 @@ class ReadDataTest{
 
         }
 
+        // Checking to see if the name initialisation is successful.
         void test_name(){
             ReadData r("coke.csv");
             
@@ -28,6 +39,7 @@ class ReadDataTest{
             }
         }
 
+        // Checking if the start date and end date from the dates vectors are correct.
         void test_dates(){
             ReadData c("bhp.csv");
 
@@ -38,6 +50,7 @@ class ReadDataTest{
             }
         }
 
+        // Checking to see if the open prices for the first and last indexes are correct.
         void test_open_prices(){
 
             ReadData p("pepsi.csv");
@@ -50,10 +63,11 @@ class ReadDataTest{
 
 
         }
-
+        
+        // Checking to see if all of the vector lengths are equal, otherwise functionality will be faulty.
         void test_vector_length(){
 
-
+            // Defining all stock files.
             vector<string> stock_files = {
                 "microsoft.csv", "apple.csv", "google.csv", "nvidia.csv", "tesla.csv",
                 "amazon.csv", "berkshire.csv", "adobe.csv", "costco.csv", "mastercard.csv",
@@ -62,6 +76,7 @@ class ReadDataTest{
             };
 
 
+            // Iterating over every single stock file, and checking if the vector lengths are the same.
             for (int i = 0; i < stock_files.size(); i++){
 
                 ReadData a(stock_files[i]);
@@ -83,6 +98,7 @@ class ReadDataTest{
             }
         }
 
+        // Testing if the high prices of the start and end index match what they are supposed to.
         void test_high_prices(){
 
             ReadData p("apple.csv");
@@ -96,6 +112,7 @@ class ReadDataTest{
 
         }
 
+        // Testing if the low prices of the start and end index match what they are supposed to.
         void test_low_prices(){
 
             ReadData p("netflix.csv");
@@ -109,6 +126,7 @@ class ReadDataTest{
 
         }
 
+        // Testing if the volumes of the start and end index match what they are supposed to.
         void test_volumes(){
 
 
