@@ -55,6 +55,7 @@ int investmentIndex = -1;
 static bool showFinalCapitalPopup = false;
 static float finalCapital = 0.0f;
 static bool showConfirmResetPopup = false;
+static int earliestYear;
 
 
 
@@ -222,6 +223,14 @@ if (!glfwInit()) {
         const std::vector<float>& lowPrices = display.get_stock_low();
         const std::vector<long long>& volume = display.get_volume();
         const std::vector<std::string>& dates = display.get_dates();
+
+        // Find the minimum year in the dates
+        earliestYear = 2025; // default latest year in your code
+        for (const auto& date : dates) {
+            int year = std::stoi(date.substr(date.size() - 4)); // Extract year from date string (assuming "dd/mm/yyyy" format)
+            earliestYear = std::min(earliestYear, year);
+        }
+
 
         // Show last 7 days' data
         size_t numDays = 7;
@@ -394,6 +403,16 @@ if (!filteredOpenPrices.empty()) {
         std::string riskRating = riskAssessment.get_risk_rating();
         ImGui::Text("  Risk Rating: %s", riskRating.c_str());
 
+
+        // Add a "Remove" button for this investment
+        ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 5); // Small space above the button
+        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 680); // Align button to the right
+        if (ImGui::Button(("Remove##" + std::to_string(i)).c_str(), ImVec2(100, 30))) {
+            bank -= inv->get_profits(); // Optionally, add back the capital to the bank
+            portfolio.remove_investment(i); // Remove investment at index i
+        }
+
+
         ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10); // Add some spacing between investments
     }
 
@@ -485,7 +504,7 @@ if (!filteredOpenPrices.empty()) {
     }
     ImGui::SameLine();
     ImGui::SetCursorPosX(140);
-    ImGui::TextWrapped("Provides steady returns by reinvesting dividends from selected stocks, suitable for low-risk, income-focused investors.");
+    ImGui::TextWrapped("Dividend provides steady returns by reinvesting dividends from selected stocks, suitable for low-risk, income-focused investors.");
     ImGui::EndChild();
 
     // Investment Option: Momentum
@@ -499,7 +518,7 @@ if (!filteredOpenPrices.empty()) {
     }
     ImGui::SameLine();
     ImGui::SetCursorPosX(140);
-    ImGui::TextWrapped("A high-risk strategy that seeks to profit from stocks showing strong upward trends in the short term.");
+    ImGui::TextWrapped("Momentum is a high-risk strategy that seeks to profit from stocks showing strong upward trends in the short term.");
     ImGui::EndChild();
 
     // Investment Option: Set Deposit
@@ -513,7 +532,7 @@ if (!filteredOpenPrices.empty()) {
     }
     ImGui::SameLine();
     ImGui::SetCursorPosX(140);
-    ImGui::TextWrapped("A low to medium-risk investment where a fixed amount is deposited at regular intervals to accumulate over time.");
+    ImGui::TextWrapped("Set Deposit is a low to medium-risk investment where a fixed amount is deposited at regular intervals to accumulate over time.");
     ImGui::EndChild();
 
     // Investment Option: Moving Average Crossover
@@ -521,13 +540,13 @@ if (!filteredOpenPrices.empty()) {
     ImGui::BeginChild("MovingAverageCrossoverChild", ImVec2(700, 90), true, ImGuiWindowFlags_NoScrollbar);
     ImGui::SetCursorPosX(20); 
     ImGui::SetCursorPosY(25);
-    if (ImGui::Button("MovingAverageCrossover", ImVec2(100, 40))) {
+    if (ImGui::Button("MAC", ImVec2(100, 40))) {
         currentScreen = 4;  
         investmentIndex = 3;
     }
     ImGui::SameLine();
     ImGui::SetCursorPosX(140);
-    ImGui::TextWrapped("A technical, high-risk strategy that buys and sells based on short-term and long-term moving average crossovers to capture trends.");
+    ImGui::TextWrapped("Moving Average Crossover (MAC), is a technical, high-risk strategy that buys and sells based on short-term and long-term moving average crossovers to capture trends.");
     ImGui::EndChild();
 
     // Go Back Button
@@ -543,6 +562,7 @@ if (!filteredOpenPrices.empty()) {
 
         else if (currentScreen == 4 && investmentIndex != -1) {
 
+            
 
             
 const char* payFreqOptions[] = { "Monthly", "Quarterly" };
@@ -678,7 +698,7 @@ ImGui::SameLine();
 // Year Picker
 ImGui::PushItemWidth(80);
 if (ImGui::BeginCombo("##Year", std::to_string(year).c_str())) {
-    for (int i = 1990; i <= 2025; ++i) {
+    for (int i = earliestYear; i <= 2025; ++i) {
         bool isSelected = (year == i);
         if (ImGui::Selectable(std::to_string(i).c_str(), isSelected)) {
             year = i;
