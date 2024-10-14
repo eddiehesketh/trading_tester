@@ -4,6 +4,7 @@
 #include <string>
 
 Momentum::Momentum(std::string _start_date, float initial_capital, std::string stock_info, int period):Investment(initial_capital, stock_info){
+    set_investment_type();
     this->period = period;
     this-> start_date_ = _start_date;
     this->moving_capital = capital;

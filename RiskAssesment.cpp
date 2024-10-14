@@ -1,6 +1,12 @@
 // Including relevant header files.
 #include "RiskAssesment.h"
 #include "Investment.h"
+#include "Investment.h"
+#include "SetDeposit.h"
+#include "Dividend.h"
+#include "MovingAverageCrossover.h"
+#include "Momentum.h"
+#include "ReadData.h"
 
 // Using the standard namespace.
 using namespace std;
