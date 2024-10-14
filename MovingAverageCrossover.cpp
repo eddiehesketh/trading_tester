@@ -5,7 +5,8 @@ MovingAverageCrossover::MovingAverageCrossover(std::string _start_date, float in
     : Investment(initial_capital, stock_info_){
     this->Period1 = period1;
     this->Period2 = period2;
-    this-> start_date_ = _start_date;
+    this->start_date_ = _start_date;
+    this->moving_capital = capital;
     shares = 0;
 
     large_period(period1, period2);
@@ -78,16 +79,16 @@ void MovingAverageCrossover::detect_crossover(){
                 isInvested = true;
 
                 // Check for purchase shares
-                int sharesToBuy = capital_to_shares(get_capital(), close_stock[index_val]);
+                int sharesToBuy = capital_to_shares(moving_capital, close_stock[index_val]);
                 if (sharesToBuy > 0){
                     double cost = shares_to_capital(sharesToBuy, close_stock[index_val]);
-                    if (cost > capital){
+                    if (cost > moving_capital){
                         std::cerr << "Not enough capital to buy shares." << std::endl;
                         isInvested = false;
                     } else {
                         // Buy shares
                         shares += sharesToBuy;
-                        capital -= cost;
+                        moving_capital -= cost;
                         std::cout << "Bought " << sharesToBuy << " shares." << std::endl;
                         sharesToBuy = 0;
                         cost = 0;
@@ -103,8 +104,8 @@ void MovingAverageCrossover::detect_crossover(){
                 // Sell shares
                 isInvested = false;
                 double earnings = shares_to_capital(shares, close_stock[index_val]);
-                capital += earnings;
-                std::cout << "Sold all shares. Capital: " << capital << std::endl;
+                moving_capital += earnings;
+                std::cout << "Sold all shares. Capital: " << moving_capital << std::endl;
                 shares = 0;
             }
 
@@ -117,23 +118,25 @@ void MovingAverageCrossover::detect_crossover(){
 
 void MovingAverageCrossover::investment_stratergy(){
     std::cout << "Investment strategy executed. Trading signals:\n";
-    std::cout << "Initial capital: " << get_capital() << std::endl;
+    std::cout << "Initial capital: " << capital << std::endl;
     
     // Runs dectection and finalisation of the strategy
     detect_crossover();
-    finalize_simulation();
+    finalise_simulation();
 }
 
-void MovingAverageCrossover::finalize_simulation(){
+void MovingAverageCrossover::finalise_simulation(){
     // Sells all remaining shares 
     if (isInvested && shares > 0){
         double lastClosePrice = stock_close.back();
-        double finalCapital = shares_to_capital(shares, lastClosePrice);
-        std::cout << "Converting remaining " << shares << " shares to capital at $" << lastClosePrice << " each." << std::endl;
-        std::cout << "Final capital: $" << finalCapital << std::endl;
-        capital += finalCapital;
+        double finalEarnings = shares_to_capital(shares, lastClosePrice);
+        std::cout << "Converting remaining " << shares << " shares to capital" << std::endl;
+        moving_capital += finalEarnings;
+        final_capital = moving_capital;
+        std::cout << "Final capital: $" << final_capital << std::endl;
         shares = 0;
     } else{
-        std::cout << "Final capital: $" << capital << std::endl;
+        final_capital = moving_capital;
+        std::cout << "Final capital: $" << final_capital << std::endl;
     }
 }
