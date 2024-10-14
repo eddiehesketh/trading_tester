@@ -33,7 +33,10 @@ ReadData::ReadData(string stock_info){
             set_stock_low(ss); // Setting low price.
             set_stock_volume(ss); // Setting dailty volume.
 
+            
+
     }
+
 
         // Closing stock data stream as it is no longer needed.
         stock_data.close();
@@ -85,6 +88,11 @@ void ReadData::set_stock_data(string stock_file_name){
 
 // Get stock data function returns stock data by reference.
 ifstream& ReadData::get_stock_data(){
+    if (!stock_data.is_open()) {
+    std::cerr << "Error: Failed to open file " << name << std::endl;
+} else {
+    std::cout << "File " << name << " opened successfully." << std::endl;
+}
     return this->stock_data; // Returns protected stock data.
 }
 
