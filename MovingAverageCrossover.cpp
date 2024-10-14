@@ -139,4 +139,6 @@ void MovingAverageCrossover::finalise_simulation(){
         final_capital = moving_capital;
         std::cout << "Final capital: $" << final_capital << std::endl;
     }
+    profits = final_capital - capital;
+    set_profits(profits);
 }

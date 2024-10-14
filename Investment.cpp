@@ -7,7 +7,7 @@ using namespace std;
 // Investment constructor, initialising all protected variables and passing the stock info into the read data class.
 Investment::Investment(float initial_capital, string stock_info_):capital(initial_capital), index(0), 
                                                                     final_capital(0), profits(0),widthdrawn_cash(0), period(0), momentum(0), 
-                                                                    Period1(0), Period2(0), shortPeriod(0), longPeriod(0), shares(0),
+                                                                    Period1(0), Period2(0), shortPeriod(0), longPeriod(0), shares(0), moving_capital(0), 
                                                                     ReadData(stock_info_){};
 
 // Default constructor, setting defualt values into the Investment constructor.
