@@ -19,7 +19,7 @@ class RiskAssesmentTest{
         }
 
         void test_momentum(){
-            Investment* test = new Momentum("20/1/2021", 500, "costco.csv", 50);
+            Investment* test = new Momentum("10/5/2023", 500, "test_csv_2.csv", 10);;
 
             RiskAssesment risk(test);
 
@@ -27,6 +27,7 @@ class RiskAssesmentTest{
                 std::cout << "Momentum risk rating test passed." << std::endl;
             } else {
                 std::cout << "Momentum risk rating test failed." << std::endl;
+                std::cout << risk.get_risk_rating() << std::endl;
             }
         }
 
@@ -39,6 +40,7 @@ class RiskAssesmentTest{
                 std::cout << "Moving average crossover risk rating test passed." << std::endl;
             } else {
                 std::cout << "Moving average crossover risk rating test failed." << std::endl;
+                std::cout << risk.get_risk_rating() << std::endl;
             }
         }
 
