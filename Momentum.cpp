@@ -5,6 +5,7 @@
 
 Momentum::Momentum(std::string _start_date, float initial_capital, std::string stock_info, int period):Investment(initial_capital, stock_info){
     set_investment_type();
+    set_pay_freq("Once off");
     this->period = period;
     this-> start_date_ = _start_date;
     this->moving_capital = capital;
@@ -18,7 +19,14 @@ Momentum::Momentum(std::string _start_date, float initial_capital, std::string s
 }
 
 bool Momentum::valid_pay_freq(std::string freq){
-    return true;
+    // Checks if the frequencey is once off.
+    if (freq == "Once off"){
+
+        // If so return true.
+        return true; 
+    }
+    // If not return false.
+    return false;
 }
 
 void Momentum::set_investment_type() {
