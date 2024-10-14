@@ -3,6 +3,8 @@
 #include "Investment.h"
 #include "Dividend.h"
 #include "DividendTest.h"
+#include "Display.h"
+#include "DisplayTest.h"
 
 #include <iostream>
 
@@ -30,6 +32,12 @@ int main(){
 
     test3.run_tests();
 
+
+    cout << "\n\n\n DISPLAY DATA TESTING: \n\n\n";
+
+    DisplayTest test4;
+
+    test4.run_tests();
 
 
 
