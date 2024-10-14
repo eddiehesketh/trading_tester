@@ -54,6 +54,7 @@ int selectedStockIndex = -1;
 int investmentIndex = -1;
 static bool showFinalCapitalPopup = false;
 static float finalCapital = 0.0f;
+static bool showConfirmResetPopup = false;
 
 
 
@@ -362,8 +363,42 @@ if (!filteredOpenPrices.empty()) {
         ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10); // Add some spacing between investments
     }
 
+    ImGui::Separator();
+    ImGui::Text("Total Portfolio Value: $%.2f", portfolio.get_portfolio_value());
+    ImGui::Text("Bank Balance: $%.2f", bank);
 
-    ImGui::SetCursorPos(ImVec2((5), (575)));
+    // Add Reset Portfolio button
+    ImGui::SetCursorPos(ImVec2(320, 500));
+    if (ImGui::Button("Reset Portfolio", ImVec2(150, 40))) {
+         showConfirmResetPopup = true;
+    }
+// Confirm Reset Popup Modal
+    if (showConfirmResetPopup) {
+        ImGui::OpenPopup("Confirm Reset");
+    }
+    if (ImGui::BeginPopupModal("Confirm Reset", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+        ImGui::Text("Are you sure you want to reset the portfolio?");
+        ImGui::Separator();
+
+        if (ImGui::Button("Yes", ImVec2(120, 0))) {
+            // Reset portfolio investments and bank balance
+            while (portfolio.get_count() > 0) {
+                portfolio.remove_investment(0); // Remove each investment one by one
+            }
+            bank = 100000.0f; // Reset bank to initial value
+
+            showConfirmResetPopup = false; // Close popup
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("No", ImVec2(120, 0))) {
+            showConfirmResetPopup = false; // Close popup without action
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+
+    ImGui::SetCursorPos(ImVec2((5), (30)));
     if (ImGui::Button("Go Back")) {
         currentScreen = 0;
     }
