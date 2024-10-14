@@ -115,8 +115,8 @@ double Investment::shares_to_capital(int shares, double closePrice){
     return shares * closePrice;
 }
 
-// Virutal finailizes simulation function which will be incorporated in later sub classes.
-void Investment::finalize_simulation(){};
+// Virutal finailises simulation function which will be incorporated in later sub classes.
+void Investment::finalise_simulation(){};
 
 // Virtual large period function which will be incorporated in later sub classes.
 void Investment::large_period(int period1, int period2){};

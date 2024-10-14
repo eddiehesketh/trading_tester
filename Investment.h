@@ -34,6 +34,7 @@ class Investment: public ReadData{
         int longPeriod;  // Longer of the two periods
 
         // Shares between Momentum and Moving Average Crossover
+        float moving_capital;
         int shares; // Number of shares owned.
         bool isInvested;  // Flag to check if the investment is active.
 
@@ -115,8 +116,8 @@ class Investment: public ReadData{
         // Shares to capital function to determine the captial based off a set number of shares.
         double shares_to_capital(int shares, double closePrice);
 
-        // Virtual finalize simulation function used to simulate high frequency stratergies.
-        virtual void finalize_simulation(); 
+        // Virtual finalise simulation function used to simulate high frequency stratergies.
+        virtual void finalise_simulation(); 
 
         // Virtual function used to determine the large period.
         virtual void large_period(int period1, int period2);
