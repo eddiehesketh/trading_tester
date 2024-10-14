@@ -4,6 +4,7 @@
 MovingAverageCrossover::MovingAverageCrossover(std::string _start_date, float initial_capital, std::string stock_info_, int period1, int period2)
     : Investment(initial_capital, stock_info_){
     set_investment_type();
+    set_pay_freq("Once off");
     this->Period1 = period1;
     this->Period2 = period2;
     this->start_date_ = _start_date;
@@ -19,7 +20,14 @@ MovingAverageCrossover::MovingAverageCrossover(std::string _start_date, float in
 }
 
 bool MovingAverageCrossover::valid_pay_freq(std::string freq){
-    return true;
+    // Checks if the frequencey is once off.
+    if (freq == "Once off"){
+
+        // If so return true.
+        return true; 
+    }
+    // If not return false.
+    return false;
 }
 
 void MovingAverageCrossover::set_investment_type(){

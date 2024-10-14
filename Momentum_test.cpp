@@ -10,7 +10,7 @@
 using namespace std;
 
 int main(){
-    Momentum s1("10/5/2023", 500, "test_csv_2.csv", 10);
+    Momentum s1("2/1/2020", 1000, "tesla.csv", 15);
     cout << "initial capital: $" << s1.get_capital() << endl;
     cout << "Final capital: $" << s1.get_final_capital() << endl;
     return 0;
