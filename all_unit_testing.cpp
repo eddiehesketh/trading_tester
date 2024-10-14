@@ -5,6 +5,8 @@
 #include "DividendTest.h"
 #include "Display.h"
 #include "DisplayTest.h"
+#include "Portfolio.h"
+#include "PortfolioTest.h"
 
 #include <iostream>
 
@@ -47,6 +49,11 @@ int main(){
      // Running tests.
     test4.run_tests();
 
+    // Tests for portfolio.
+    cout << "\n\n\n PORTFOLIO TESTING \n\n\n";
+    PortfolioTest test5;
+
+    test5.run_tests();
 
 
 
