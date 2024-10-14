@@ -41,6 +41,7 @@ class Investment: public ReadData{
 
         // Investment class contructor, which takes in an inital capital value and stock file title.
         Investment(float initial_capital, std::string stock_info_);
+        Investment(); // Default constructor.
 
         // Virtual destructor.
         virtual ~Investment() = default;
@@ -79,7 +80,7 @@ class Investment: public ReadData{
         virtual bool valid_pay_freq(std::string freq) = 0;
 
         // Setter function to set the reinvestment status.
-        void set_reinvest_status(bool stat);
+        void set_reivest_status(bool stat);
 
         // Setter function to set the pay frequency.
         void set_pay_freq(std::string freq);
@@ -130,7 +131,10 @@ class Investment: public ReadData{
         virtual int date_index(const std::vector<std::string>& dates, const std::string& _start_date);
 
         // getter function to return the reinvestment status.
-        bool get_reinvest_status();        
+        bool get_reinvest_status();       
+
+        // Getter function to return the start date.
+        std::string get_start_date(); 
 };
 
 #endif
