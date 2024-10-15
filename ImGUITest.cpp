@@ -41,7 +41,7 @@ const char *stockCodes[20] = {"MSFT", "AAPL","GOOG", "NVDA","TSLA", "AMZA", "BRK
 const char *stockFiles[20] = {"microsoft.csv", "apple.csv", "google.csv", "nvidia.csv", "tesla.csv", 
                              "amazon.csv", "berkshire.csv", "adobe.csv", "costco.csv", "mastercard.csv",
                              "coke.csv", "netflix.csv", "toyota.csv", "pepsi.csv", "mcdonalds.csv",
-                             "costco.csv", "caterpillar.csv", "disney.csv", "uber.csv", "bhp.csv"};
+                             "shell.csv", "caterpillar.csv", "disney.csv", "uber.csv", "bhp.csv"};
 
 const char *investmentNames[4] = {"Dividend", "Momentum", "Set Deposit", "Moving Average Crossover"};
 
@@ -56,8 +56,6 @@ static bool showFinalCapitalPopup = false;
 static float finalCapital = 0.0f;
 static bool showConfirmResetPopup = false;
 static int earliestYear;
-
-
 
 
 
@@ -184,7 +182,6 @@ if (!glfwInit()) {
                     if (ImGui::Button(buttonLabel.c_str(), ImVec2(100, 30))) {
                     selectedStockIndex = (i + 10*j);
                 std::cout << "Selected stock index: " << selectedStockIndex << std::endl;
-
                     currentScreen = 1; // Switch to screen 2
                     }                    
 
@@ -440,7 +437,7 @@ if (!filteredOpenPrices.empty()) {
 
 
     ImGui::Separator();
-    ImGui::Text("Total Portfolio Value: $%.2f", portfolio.get_portfolio_value());
+    ImGui::Text("Total Portfolio Profit: $%.2f", portfolio.get_portfolio_value());
     ImGui::Text("Bank Balance: $%.2f", bank);
     ImGui::Separator();
 
@@ -608,7 +605,7 @@ static Investment* newInvestment = nullptr;
                 ImGui::SetCursorPos(ImVec2(15,30));
                 ImGui::Text("%s", stockNames[selectedStockIndex]);
                 ImGui::PopFont();
-            
+
             // Styling for input box
         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10, 5));  // Add padding inside input box
         ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(240, 240, 255, 255));  // Light background color
