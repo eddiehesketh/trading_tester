@@ -57,7 +57,7 @@ void Investment::set_index(int _index){this->index = _index;}
 int Investment::get_index(){return this->index;}
 
 // Setter for the final capital.
-void Investment::set_final_capital(int _capital){this->final_capital = _capital;}
+void Investment::set_final_capital(float _capital){this->final_capital = _capital;}
 
 // Setter for the profits.
 void Investment::set_profits(float _profits){this->profits = _profits;}

@@ -114,7 +114,7 @@ void MovingAverageCrossover::detect_crossover(){
 
             // Check for buy signal: Short MA crosses above Long MA.
             if (!isInvested && (previousShortMA <= previousLongMA && shortMA > longMA && previousShortMA !=0)){
-                std::cout << "Buy signal on " << dates[index_val] << ": ShortMA " << shortMA << " crossed above LongMA " << longMA << ", Previous ShortMA " << previousShortMA << " Previous LongMA " << previousLongMA << std::endl;
+                // std::cout << "Buy signal on " << dates[index_val] << ": ShortMA " << shortMA << " crossed above LongMA " << longMA << ", Previous ShortMA " << previousShortMA << " Previous LongMA " << previousLongMA << std::endl;
                 isInvested = true; // Update investment status to true
 
                 // Check how many shares can be purchased with the available capital.
@@ -124,31 +124,31 @@ void MovingAverageCrossover::detect_crossover(){
 
                     // Check if there's enough capital to buy shares.
                     if (cost > moving_capital){
-                        std::cerr << "Not enough capital to buy shares." << std::endl;
+                        // std::cerr << "Not enough capital to buy shares." << std::endl;
                         isInvested = false; // Update investment status back to false
                     } else {
 
                         // Buy shares and update capital.
                         shares += sharesToBuy; // Increase shares owned
                         moving_capital -= cost; // Decrease available capital
-                        std::cout << "Bought " << sharesToBuy << " shares." << std::endl;
+                        // std::cout << "Bought " << sharesToBuy << " shares." << std::endl;
                         sharesToBuy = 0; // Reset sharesToBuy
                         cost = 0; // Reset cost
                     }
                 } else{
-                    std::cout << "No shares can be bought" << std::endl;
+                    // std::cout << "No shares can be bought" << std::endl;
                 }
             } 
 
             // Check for sell signal: Short MA crosses below Long MA.
             else if (isInvested && (previousShortMA >= previousLongMA && shortMA < longMA)){
-                std::cout << "Sell signal on " << dates[index_val] << ": ShortMA " << shortMA << " crossed below LongMA " << longMA << ", Previous ShortMA " << previousShortMA << " Previous LongMA " << previousLongMA << std::endl;
+                // std::cout << "Sell signal on " << dates[index_val] << ": ShortMA " << shortMA << " crossed below LongMA " << longMA << ", Previous ShortMA " << previousShortMA << " Previous LongMA " << previousLongMA << std::endl;
             
                 // Sell all shares owned.
                 isInvested = false; // Update investment status to false
                 double earnings = shares_to_capital(shares, close_stock[index_val]);
                 moving_capital += earnings; // Update capital with earnings
-                std::cout << "Sold all shares. Capital: " << moving_capital << std::endl;
+                // std::cout << "Sold all shares. Capital: " << moving_capital << std::endl;
                 shares = 0; // Reset shares owned
             }
 
@@ -161,8 +161,8 @@ void MovingAverageCrossover::detect_crossover(){
 
 // Implementing the overidden investment stratergy function.
 void MovingAverageCrossover::investment_stratergy(){
-    std::cout << "Investment strategy executed. Trading signals:\n";
-    std::cout << "Initial capital: " << capital << std::endl;
+    // std::cout << "Investment strategy executed. Trading signals:\n";
+    // std::cout << "Initial capital: " << capital << std::endl;
     
     // Runs dectection and finalisation of the strategy
     detect_crossover();
@@ -175,14 +175,14 @@ void MovingAverageCrossover::finalise_simulation(){
     if (isInvested && shares > 0){
         double lastClosePrice = stock_close.back(); // Get the last closing price
         double finalEarnings = shares_to_capital(shares, lastClosePrice); // Calculate earnings from remaining shares
-        std::cout << "Converting remaining " << shares << " shares to capital" << std::endl;
+        // std::cout << "Converting remaining " << shares << " shares to capital" << std::endl;
         moving_capital += finalEarnings; // Update capital with final earnings
         final_capital = moving_capital; // Set final capital to current capital
-        std::cout << "Final capital: $" << final_capital << std::endl;
+        // std::cout << "Final capital: $" << final_capital << std::endl;
         shares = 0; // Reset shares owned
     } else{
         final_capital = moving_capital; // Set final capital to current capital
-        std::cout << "Final capital: $" << final_capital << std::endl;
+        // std::cout << "Final capital: $" << final_capital << std::endl;
     }
     profits = final_capital - capital; // Calculate profits from the investment
     set_profits(profits); // Set the profits in the investment class

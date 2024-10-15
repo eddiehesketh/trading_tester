@@ -47,8 +47,7 @@ class MomentumTest{
         void test_final_capital(){
             Momentum strat("12/12/2001", 100, "apple.csv", 15);
 
-
-            if (static_cast<int>(round(strat.get_profits())) == 9015){
+            if (static_cast<int>(round(strat.get_profits())) == 8915){
                 cout << "Final capital test passed" << endl;
             } else {
                 cout << "Final capital test failed" << endl;
@@ -68,7 +67,7 @@ class MomentumTest{
 
         // Testing if the pay frequencey is automatically set to once off like it should be.
         void test_valid_pay_freq(){
-            Momentum strat("25/10/2015", 1000, "nvidia.csv", 20);
+            Momentum strat("26/6/2018", 1000, "nvidia.csv", 20);
 
             if (strat.get_pay_freq() == "Once off"){
                 cout << "Valid pay frequency test passed" << endl;

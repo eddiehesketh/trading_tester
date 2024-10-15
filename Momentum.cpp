@@ -94,7 +94,7 @@ void Momentum::detect_momentum(){
 
             // Check for buy signal: Momentum is non-negative and not already invested.
             if (!isInvested && (momentum >= 0)){
-                std::cout << "Buy signal on " << dates[index_val] << ": Momentum " << momentum << std::endl;
+                // std::cout << "Buy signal on " << dates[index_val] << ": Momentum " << momentum << std::endl;
                 isInvested = true; // Update investment status to true
 
                 // Check how many shares can be purchased with the available capital.
@@ -111,7 +111,7 @@ void Momentum::detect_momentum(){
                         // Buy shares and update capital.
                         shares += sharesToBuy; // Increase shares owned
                         moving_capital -= cost; // Decrease available capital
-                        std::cout << "Bought " << sharesToBuy << " shares." << std::endl;
+                        // std::cout << "Bought " << sharesToBuy << " shares." << std::endl;
                         sharesToBuy = 0; // Reset sharesToBuy
                         cost = 0; // Reset cost
                     }
@@ -122,13 +122,13 @@ void Momentum::detect_momentum(){
             
             // Check for sell signal: Momentum is negative and currently invested.
             else if (isInvested && momentum < 0){
-                std::cout << "Sell signal on " << dates[index_val] << ": Momentum " << momentum << std::endl;
+                // std::cout << "Sell signal on " << dates[index_val] << ": Momentum " << momentum << std::endl;
             
                 // Sell all shares owned.
                 isInvested = false; // Update investment status to false
                 double earnings = shares_to_capital(shares, close_stock[index_val]);
                 moving_capital += earnings; // Update capital with earnings
-                std::cout << "Sold all shares. Capital: " << moving_capital << std::endl;
+                // std::cout << "Sold all shares. Capital: " << moving_capital << std::endl;
                 shares = 0; // Reset shares owned
             }
         }
@@ -136,8 +136,8 @@ void Momentum::detect_momentum(){
 }
 
 void Momentum::investment_stratergy(){
-    std::cout << "Investment strategy executed. Trading signals:\n";
-    std::cout << "Initial capital: " << capital << std::endl;
+    // std::cout << "Investment strategy executed. Trading signals:\n";
+    // std::cout << "Initial capital: " << capital << std::endl;
 
     // Runs dectection and finalisation of the strategy
     detect_momentum();
@@ -150,14 +150,14 @@ void Momentum::finalise_simulation(){
     if (isInvested && shares > 0){
         double lastClosePrice = stock_close.back(); // Get the last closing price
         double finalEarnings = shares_to_capital(shares, lastClosePrice);
-        std::cout << "Converting remaining " << shares << " shares to capital at $" << lastClosePrice << " each." << std::endl;
+        // std::cout << "Converting remaining " << shares << " shares to capital at $" << lastClosePrice << " each." << std::endl;
         moving_capital += finalEarnings; // Update capital with final earnings
         final_capital = moving_capital; // Set final capital to current capital
-        std::cout << "Final capital: $" << final_capital << std::endl;
+        // std::cout << "Final capital: $" << final_capital << std::endl;
         shares = 0; // Reset shares owned
     } else{
         final_capital = moving_capital; // Set final capital to current capital
-        std::cout << "Final capital: $" << final_capital << std::endl;
+        // std::cout << "Final capital: $" << final_capital << std::endl;
     }
     profits = final_capital - capital; // Calculate profits from the investment
     set_profits(profits); // Set the profits in the investment class

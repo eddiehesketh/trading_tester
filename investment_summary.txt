@@ -1,19 +1,11 @@
 Investment portfolio summary
 
-Investment 1: Deposit
-    Company name: Apple
-    Start date: 2/1/2020
-    Initial capital: $1000
-    Final capital: $2658
-    Profits: $1658.66
+Investment 1: Dividend
+    Company name: Netflix
+    Start date: 1/2/2024
+    Initial capital: $500
+    Final capital: $572.101
+    Profits: $72.1008
 
 
-Investment 2: Dividend
-    Company name: Microsoft
-    Start date: 2/1/2020
-    Initial capital: $1000
-    Final capital: $2928
-    Profits: $1928
-
-
-Total portfolio value: $5586
+Total portfolio value: $572.101

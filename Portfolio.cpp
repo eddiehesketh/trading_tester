@@ -21,7 +21,7 @@ Portfolio::Portfolio(): portfolio_value(0.0), capacity(6), count(0){
 void Portfolio::add_investment(Investment* _investment){
 
     // Checks if the count is less than six.
-    if (get_count() < 6){
+    if (get_count() < get_capacity()){
 
         // Sets the index at count to the new investment pointer.
         investments[count] = _investment;
@@ -32,10 +32,10 @@ void Portfolio::add_investment(Investment* _investment){
         // Sets new portfolio value.
         set_portfolio_value();
 
-    } else {
+    } else if (get_count() == get_capacity()){ // Checking if the size of the investments array needs to be increased.
 
-        // Inform user that investments are full.
-        cout << "Investments full" << endl;
+        // Calling increase size function to make room for new investments.
+        increase_size(_investment);
     }
 
 }
@@ -141,6 +141,52 @@ void Portfolio::write_portfolio_summary(){
 
 }
 
+// Setter function for capacity.
+void Portfolio::set_capacity(int new_capacity){this->capacity = new_capacity;}
+
+// Getter function for the capacity.
+int Portfolio::get_capacity(){return this->capacity;}
+
+// Increase size function to double the size of the investment pointers array.
+void Portfolio::increase_size(Investment* p){
+
+    // Checks if count is equal to capacity.
+    if (get_count() == get_capacity()){
+
+        // Storing the origional count for later use.
+        int original_count = get_capacity();
+
+        // Doubling the size of the capacity.
+        set_capacity(2 * get_capacity());
+
+        // Creating a new investments pointer array double the size of the original.
+        Investment** double_size = new Investment*[get_capacity()];
+
+        // Loop iterating til the origional count, moving all of the original ivestments into the investment array with double the capacity.
+        for (int i = 0; i < original_count; i++){
+
+            // Moving each individual element into new array.
+            double_size[i] = this->investments[i];
+        }
+
+        // Deleting the original investments double pointer.
+        delete[] this->investments;
+
+        // Setting the investments double pointer to the newly formed array, double the size.
+        this->investments = double_size;
+
+        // Adding the new investment now that the capacity has increased.
+        investments[get_count()] = p;
+
+        // Increasing the count by 1;
+        set_count(get_count() + 1);
+
+        // Setting the new portfolio value.
+        set_portfolio_value();
+
+    }
+}
+
 // Get Investment function
 Investment* Portfolio::get_investment(int index) {
     if (index >= 0 && index < count) {
@@ -148,3 +194,5 @@ Investment* Portfolio::get_investment(int index) {
     }
     return nullptr;  // Return null if index is out of bounds
 }
+
+

@@ -63,7 +63,7 @@ class Investment: public ReadData{
         void set_index(int _index);
 
         // Setter function to set the final capital.
-        void set_final_capital(int _capital);
+        void set_final_capital(float _capital);
 
         // Getter function to return the final capital.
         float get_final_capital();
