@@ -37,7 +37,7 @@ class MovingAverageCrossoverTest{
             
             MovingAverageCrossover strat("2/1/2020", 10000, "microsoft.csv", 10, 20);
 
-            if (strat.get_capital() == 1000){
+            if (strat.get_capital() == 10000){
                 cout << "Initial capital test passed" << endl;
             } else {
                 cout << "Initial capital test failed" << endl;
@@ -48,7 +48,7 @@ class MovingAverageCrossoverTest{
         void test_final_capital(){
             MovingAverageCrossover strat("12/12/2001", 2000, "apple.csv", 10, 40);
             
-            if (static_cast<int>(round(strat.get_profits())) == 217875){
+            if (static_cast<int>(round(strat.get_final_capital())) == 217875){
                 cout << "Final capital test passed" << endl;
             } else {
                 cout << "Final capital test failed" << endl;
@@ -67,7 +67,7 @@ class MovingAverageCrossoverTest{
         }
 
         void test_valid_pay_freq(){
-            MovingAverageCrossover strat("25/10/2015", 500, "nvidia.csv", 10, 20);
+            MovingAverageCrossover strat("14/12/2015", 500, "nvidia.csv", 10, 20);
 
             if (strat.get_pay_freq() == "Once off"){
                 cout << "Valid pay frequency test passed" << endl;
