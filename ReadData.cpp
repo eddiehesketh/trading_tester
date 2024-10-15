@@ -91,7 +91,7 @@ ifstream& ReadData::get_stock_data(){
     if (!stock_data.is_open()) {
     std::cerr << "Error: Failed to open file " << name << std::endl;
 } else {
-    std::cout << "File " << name << " opened successfully." << std::endl;
+    // std::cout << "File " << name << " opened successfully." << std::endl;
 }
     return this->stock_data; // Returns protected stock data.
 }

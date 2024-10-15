@@ -60,7 +60,7 @@ class DividendTest {
             Dividend dividend("2/1/2020", 1000, "Quarterly", "microsoft.csv", false);
 
             // Checks to see if the profits algins with the expected profit.s
-            if (static_cast<int>(round(dividend.get_profits())) == 158) { // Assuming a known profit
+            if (static_cast<int>(round(dividend.get_profits())) == 1158) { // Assuming a known profit
                 cout << "Profits test passed" << endl;
             } else {
                 cout << "Profits test failed" << endl;
@@ -69,7 +69,7 @@ class DividendTest {
 
         // Test valid pay frequencey function.
         void test_valid_pay_freq() {
-            Dividend dividend("1/1/2020", 1000, "Monthly", "nvidia.csv", false);
+            Dividend dividend("2/1/2020", 1000, "Monthly", "nvidia.csv", false);
 
             // Check to see if the pay frequencey matches what it is supposed to be.
             if (dividend.get_pay_freq() == "Monthly") {

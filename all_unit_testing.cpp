@@ -72,7 +72,7 @@ int main(){
     MovingAverageCrossoverTest test7;
 
     // Running tests.
-    test6.run_tests();
+    test7.run_tests();
 
     // Tests for momentum.
     cout << "MOMENTUM TESTING: \n\n\n";

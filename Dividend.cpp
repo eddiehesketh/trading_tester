@@ -28,7 +28,7 @@ Dividend::Dividend(string start_date_, float initial_capital, string pay_freq_, 
         }
     }
 
-    std::cout << "In Dividend constructor, get_dates().size() = " << get_dates().size() << std::endl;
+    // std::cout << "In Dividend constructor, get_dates().size() = " << get_dates().size() << std::endl;
 
 
 }
@@ -146,8 +146,6 @@ bool Dividend::valid_start_date(string start) {
         std::cerr << "Error: get_dates() is empty in valid_start_date for stock " << name << std::endl;
         return false;
     }
-
-    std::cout << "Validating start date: " << start << std::endl;
 
     string current_date = get_dates().back(); // Safe now because we checked if it's empty
     int index = 0;
