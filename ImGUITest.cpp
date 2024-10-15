@@ -731,7 +731,7 @@ ImGui::SameLine();
 // Year Picker
 ImGui::PushItemWidth(80);
 if (ImGui::BeginCombo("##Year", std::to_string(year).c_str())) {
-    for (int i = earliestYear+1; i <= 2025; ++i) {
+    for (int i = earliestYear+1; i <= 2024; ++i) {
         bool isSelected = (year == i);
         if (ImGui::Selectable(std::to_string(i).c_str(), isSelected)) {
             year = i;
