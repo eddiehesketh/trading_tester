@@ -630,14 +630,14 @@ ImGui::InputFloat("##CapitalInput", &capitalInvestment, 0.0f, 0.0f, "%.2f", ImGu
 
 if (capitalInvestment > bank){
     ImGui::SetCursorPos(ImVec2((windowSize.x - 125.0f) / 2.0f, 530.0f)); 
-    ImGui::Text("Insufficient Funds");
+    ImGui::Text("Insufficient funds");
     insufficientFunds = true;
 } else {
     insufficientFunds = false;
 }
 if(capitalInvestment < 0){
-    ImGui::SetCursorPos(ImVec2((windowSize.x - 125.0f) / 2.0f, 530.0f)); 
-    ImGui::Text("Invalid Input");
+    ImGui::SetCursorPos(ImVec2((windowSize.x - 200.0f) / 2.0f, 530.0f)); 
+    ImGui::Text("Invalid input, please try again");
     invalidInput = true;
 } else {
     invalidInput = false;
