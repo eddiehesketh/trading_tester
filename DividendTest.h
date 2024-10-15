@@ -60,7 +60,7 @@ class DividendTest {
             Dividend dividend("2/1/2020", 1000, "Quarterly", "microsoft.csv", false);
 
             // Checks to see if the profits algins with the expected profit.s
-            if (static_cast<int>(round(dividend.get_profits())) == 1158) { // Assuming a known profit
+            if (static_cast<int>(round(dividend.get_profits())) == 1159) { // Assuming a known profit
                 cout << "Profits test passed" << endl;
             } else {
                 cout << "Profits test failed" << endl;

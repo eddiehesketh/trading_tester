@@ -4,7 +4,7 @@ Investment 1: Deposit
     Company name: Apple
     Start date: 2/1/2020
     Initial capital: $1000
-    Final capital: $2658
+    Final capital: $2658.66
     Profits: $1658.66
 
 
@@ -12,8 +12,8 @@ Investment 2: Dividend
     Company name: Microsoft
     Start date: 2/1/2020
     Initial capital: $1000
-    Final capital: $2928
-    Profits: $1928
+    Final capital: $2929
+    Profits: $1929
 
 
-Total portfolio value: $5586
+Total portfolio value: $5587.65
