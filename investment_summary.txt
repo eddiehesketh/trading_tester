@@ -1,43 +1,19 @@
 Investment portfolio summary
 
-Investment 1: Moving Average Crossover
-    Company name: Coca-Cola
-    Start date: 2/1/2024
-    Initial capital: $0
-    Final capital: $0
-    Profits: $0
+Investment 1: Deposit
+    Company name: Apple
+    Start date: 2/1/2020
+    Initial capital: $1000
+    Final capital: $2658
+    Profits: $1658.66
 
 
-Investment 2: Moving Average Crossover
-    Company name: Adobe
-    Start date: 2/1/2024
-    Initial capital: $10
-    Final capital: $10
-    Profits: $0
-
-
-Investment 3: Momentum
+Investment 2: Dividend
     Company name: Microsoft
-    Start date: 2/1/2024
-    Initial capital: $0
-    Final capital: $0
-    Profits: $0
+    Start date: 2/1/2020
+    Initial capital: $1000
+    Final capital: $2928
+    Profits: $1928
 
 
-Investment 4: Dividend
-    Company name: Nvidia
-    Start date: 2/1/2024
-    Initial capital: $0
-    Final capital: $0
-    Profits: $0
-
-
-Investment 5: Momentum
-    Company name: Nvidia
-    Start date: 2/1/2024
-    Initial capital: $0
-    Final capital: $0
-    Profits: $0
-
-
-Total portfolio value: $10
+Total portfolio value: $5586

@@ -9,6 +9,8 @@
 #include "PortfolioTest.h"
 #include "RiskAssesment.h"
 #include "RiskAssesmentTest.h"
+#include "MovingAverageCrossoverTest.h"
+#include "MomentumTest.h"
 
 #include <iostream>
 
@@ -63,9 +65,23 @@ int main(){
     RiskAssesmentTest test6;
     test6.run_tests();
 
+    // Tests for moving average crossover.
+    cout << "MOVING AVERAGE CROSSOVER TESTING: \n\n\n";
 
+    // Calling moving average test constructor.
+    MovingAverageCrossoverTest test7;
 
+    // Running tests.
+    test6.run_tests();
 
+    // Tests for momentum.
+    cout << "MOMENTUM TESTING: \n\n\n";
+
+    // Calling momentum test constructor.
+    MomentumTest test8;
+
+    // Running tests.
+    test7.run_tests();
 
     return 0;
 

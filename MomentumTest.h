@@ -1,8 +1,6 @@
 // Momentum unit testing.
-
-// Defining the class and including relevant libraries.
-#ifndef SETDEPOSITTEST_H
-#define SETDEPOSITTEST_H
+#ifndef MOMENTUMTEST_H
+#define MOMENTUMTEST_H
 #include "ReadData.h"
 #include "SetDeposit.h"
 #include "Investment.h"
@@ -11,6 +9,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <cmath>
 
 // Using standard namespace.
 using namespace std;
@@ -35,9 +34,9 @@ class MomentumTest{
         // Testing if the intial capital is correctly set.
         void test_initial_capital(){
             
-            Momentum strat("2/1/2020", "microsoft.csv", 1000);
+            Momentum strat("2/1/2020", 10000, "microsoft.csv", 10);
 
-            if (deposit.get_capital() == 1000){
+            if (strat.get_capital() == 10000){
                 cout << "Initial capital test passed" << endl;
             } else {
                 cout << "Initial capital test failed" << endl;
@@ -46,10 +45,10 @@ class MomentumTest{
 
         // Testing if the final capital matches that of what it is expected to.
         void test_final_capital(){
-            SetDeposit deposit("12/12/1980", "apple.csv", 1);
+            Momentum strat("12/12/2001", 100, "apple.csv", 15);
 
 
-            if (static_cast<int>(round(deposit.get_profits())) == 1514){
+            if (static_cast<int>(round(strat.get_profits())) == 9015){
                 cout << "Final capital test passed" << endl;
             } else {
                 cout << "Final capital test failed" << endl;
@@ -58,9 +57,9 @@ class MomentumTest{
 
         // Testing if the profits match what it is expected to.
         void test_profits(){
-            SetDeposit deposit("2/1/2020", "tesla.csv", 1000);
+            Momentum strat("2/1/2020", 1000, "tesla.csv", 15);
 
-            if (static_cast<int>(round(deposit.get_profits())) == 5221){
+            if (static_cast<int>(round(strat.get_profits())) == 9030){
                 cout << "Profits test passed" << endl;
             } else {
                 cout << "Profits test failed" << endl;
@@ -69,9 +68,9 @@ class MomentumTest{
 
         // Testing if the pay frequencey is automatically set to once off like it should be.
         void test_valid_pay_freq(){
-            SetDeposit deposit("25/10/2015", "nvidia.csv", 1000);
+            Momentum strat("25/10/2015", 1000, "nvidia.csv", 20);
 
-            if (deposit.get_pay_freq() == "Once off"){
+            if (strat.get_pay_freq() == "Once off"){
                 cout << "Valid pay frequency test passed" << endl;
             } else {
                 cout << "Valid pay frequency test failed" << endl;
@@ -80,9 +79,9 @@ class MomentumTest{
 
         // Ensuring the investment type is set to deposit.
         void test_investment_type(){
-            SetDeposit deposit("2/1/2020", "google.csv", 1000);
+            Momentum strat("2/1/2020", 10000, "google.csv", 10);
 
-            if (deposit.get_investment_type() == "Deposit"){
+            if (strat.get_investment_type() == "Momentum"){
                 cout << "Investment type test passed" << endl;
             } else {
                 cout << "Investment type test failed" << endl;
