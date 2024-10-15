@@ -3,6 +3,7 @@ test: all_unit_testing.cpp ReadData.cpp SetDeposit.cpp Dividend.cpp Portfolio.cp
 	@g++ -std=c++11 all_unit_testing.cpp ReadData.cpp SetDeposit.cpp Dividend.cpp Portfolio.cpp Display.cpp Investment.cpp MovingAverageCrossover.cpp Momentum.cpp RiskAssesment.cpp -o test
 	@echo "running test:"
 	@./test
+	@rm test
 
 
 run_program: GUIHandling.cpp Portfolio.cpp Display.cpp ReadData.cpp MovingAverageCrossover.cpp RiskAssesment.cpp Momentum.cpp SetDeposit.cpp Investment.cpp Dividend.cpp libs/glad/src/glad.c \
