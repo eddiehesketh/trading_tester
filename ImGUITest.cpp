@@ -753,7 +753,6 @@ if (!insufficientFunds && !invalidInput) {
 ImGui::SetCursorPos(ImVec2((windowSize.x - 100.0f) / 2.0f, 530.0f));
 if (ImGui::Button("Invest", ImVec2(100, 40))) {
 
-            delete newInvestment; // Clear any existing instance
             newInvestment = nullptr;    
 
             std::cout<<startDate<<std::endl;
