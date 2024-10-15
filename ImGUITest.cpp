@@ -41,7 +41,7 @@ const char *stockCodes[20] = {"MSFT", "AAPL","GOOG", "NVDA","TSLA", "AMZA", "BRK
 const char *stockFiles[20] = {"microsoft.csv", "apple.csv", "google.csv", "nvidia.csv", "tesla.csv", 
                              "amazon.csv", "berkshire.csv", "adobe.csv", "costco.csv", "mastercard.csv",
                              "coke.csv", "netflix.csv", "toyota.csv", "pepsi.csv", "mcdonalds.csv",
-                             "shell.csv", "caterpillar.csv", "disney.csv", "uber.csv", "bhp.csv"};
+                             "costco.csv", "caterpillar.csv", "disney.csv", "uber.csv", "bhp.csv"};
 
 const char *investmentNames[4] = {"Dividend", "Momentum", "Set Deposit", "Moving Average Crossover"};
 
@@ -226,7 +226,6 @@ if (!glfwInit()) {
     ImGui::SetCursorPos(ImVec2((windowSize.x - textSize.x) / 2.0f, (40)));
     // Display the centered text
     ImGui::Text("%s", stockNames[selectedStockIndex]);
-        ImGui::SetCursorPos(ImVec2((600),(50)));
     ImGui::PopFont();
 
        ImGui::PushFont(largeRomanFont);
@@ -250,22 +249,22 @@ if (!glfwInit()) {
         size_t numDays = 7;
         size_t startIdx = openPrices.size() >= numDays ? openPrices.size() - numDays : 0;
         ImGui::PushFont(largeRomanFont);
-        ImVec2 textSize2 = ImGui::CalcTextSize("Last 7 Days");
+        ImVec2 textSize2 = ImGui::CalcTextSize("Data Over The Last 7 Days");
         // Calculate position to center the text
         ImVec2 centeredPos2((windowSize.x - textSize2.x) / 2.0f, (340));
         ImGui::SetCursorPos(centeredPos2);
         // Display the centered text
-        ImGui::Text("Last 7 Days");
+        ImGui::Text("Data Over The Last 7 Days");
         ImGui::PopFont();
         // Create the table
         ImGui::SetCursorPos(ImVec2(80, 370)); // Adjust position as needed
         if (ImGui::BeginTable("StockDataTable", 6, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg)) {
             ImGui::TableSetupColumn("Date");
-            ImGui::TableSetupColumn("Open");
-            ImGui::TableSetupColumn("Close");
-            ImGui::TableSetupColumn("High");
-            ImGui::TableSetupColumn("Low");
-            ImGui::TableSetupColumn("Volume");
+            ImGui::TableSetupColumn("Open ($)");
+            ImGui::TableSetupColumn("Close ($)");
+            ImGui::TableSetupColumn("High ($)");
+            ImGui::TableSetupColumn("Low ($)");
+            ImGui::TableSetupColumn("Volume ($)");
             ImGui::TableHeadersRow();
 
             for (size_t i = startIdx; i < openPrices.size(); ++i) {
@@ -399,6 +398,8 @@ if (!filteredOpenPrices.empty()) {
     ImGui::Text("Portfolio");
     ImGui::PopFont();
 
+
+
     // Display each investment in the portfolio
     for (int i = 0; i < portfolio.get_count(); ++i) {
         Investment* inv = portfolio.get_investment(i);
@@ -503,6 +504,16 @@ if (!filteredOpenPrices.empty()) {
     ImGui::Text("Investing"); 
     ImGui::PopFont(); 
 
+    ImGui::SetCursorPos(ImVec2((5),(575)));
+     if (ImGui::Button("Go Back")) {
+        currentScreen = 1; 
+    }
+
+    ImGui::PushFont(titleFont);
+    ImGui::SetCursorPos(ImVec2(15,30));
+    ImGui::Text("%s", stockNames[selectedStockIndex]);
+    ImGui::PopFont();
+
     // Create a padding style
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10, 10));
     ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.95f, 0.95f, 0.95f, 1.0f)); // Light background for child windows
@@ -563,11 +574,6 @@ if (!filteredOpenPrices.empty()) {
     ImGui::TextWrapped("Moving Average Crossover (MAC), is a technical, high-risk strategy that buys and sells based on short-term and long-term moving average crossovers to capture trends.");
     ImGui::EndChild();
 
-    // Go Back Button
-    ImGui::SetCursorPos(ImVec2(5, 575));
-    if (ImGui::Button("Go Back")) {
-        currentScreen = 1; 
-    }
 
     // Pop style variables and colors to return to defaults
     ImGui::PopStyleColor();
@@ -587,7 +593,9 @@ static int period = 1;
 static int secondPeriod = 1;
 float capitalProfit = finalCapital - capitalInvestment;
 static bool insufficientFunds = false;
+static bool invalidInput = false;
 std::string availableStartDate;
+static Investment* newInvestment = nullptr;
 
             ImGui::PushFont(titleFont); 
             ImVec2 textSize = ImGui::CalcTextSize(investmentNames[investmentIndex]);
@@ -595,6 +603,11 @@ std::string availableStartDate;
             ImGui::SetCursorPos(centeredPos);
             ImGui::Text("%s", investmentNames[investmentIndex]); 
             ImGui::PopFont(); 
+
+                ImGui::PushFont(titleFont);
+                ImGui::SetCursorPos(ImVec2(15,30));
+                ImGui::Text("%s", stockNames[selectedStockIndex]);
+                ImGui::PopFont();
             
             // Styling for input box
         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10, 5));  // Add padding inside input box
@@ -622,7 +635,13 @@ if (capitalInvestment > bank){
 } else {
     insufficientFunds = false;
 }
-
+if(capitalInvestment < 0){
+    ImGui::SetCursorPos(ImVec2((windowSize.x - 125.0f) / 2.0f, 530.0f)); 
+    ImGui::Text("Invalid Input");
+    invalidInput = true;
+} else {
+    invalidInput = false;
+}
 
 
 
@@ -712,7 +731,7 @@ ImGui::SameLine();
 // Year Picker
 ImGui::PushItemWidth(80);
 if (ImGui::BeginCombo("##Year", std::to_string(year).c_str())) {
-    for (int i = earliestYear; i <= 2025; ++i) {
+    for (int i = earliestYear+1; i <= 2025; ++i) {
         bool isSelected = (year == i);
         if (ImGui::Selectable(std::to_string(i).c_str(), isSelected)) {
             year = i;
@@ -730,11 +749,12 @@ std::string startDate = std::to_string(day) + "/" + std::to_string(month) + "/" 
 
 
 // Handle Invest button
-if (!insufficientFunds) {
+if (!insufficientFunds && !invalidInput) {
 ImGui::SetCursorPos(ImVec2((windowSize.x - 100.0f) / 2.0f, 530.0f));
 if (ImGui::Button("Invest", ImVec2(100, 40))) {
 
-            Investment* newInvestment = nullptr;
+            delete newInvestment; // Clear any existing instance
+            newInvestment = nullptr;    
 
             std::cout<<startDate<<std::endl;
             // Create Dividend instance with user input
@@ -786,7 +806,6 @@ if (investmentIndex == 0){
             }
 }
         finalCapital = newInvestment->get_final_capital();
-        portfolio.add_investment(newInvestment);  // Add investment to portfolio
         showFinalCapitalPopup = true;
         ImGui::OpenPopup("Investment Result");
     }
@@ -800,7 +819,8 @@ if (investmentIndex == 0){
             ImGui::Text("Final Capital: $%.2f", finalCapital);
             ImGui::Text("Total Profit: $%.2f", capitalProfit);
 
-            if (ImGui::Button("ok")) {
+            if(ImGui::Button("Add to Portfolio")) {
+                portfolio.add_investment(newInvestment);  // Add investment to portfolio
                 showFinalCapitalPopup = false;
                 ImGui::CloseCurrentPopup();
                 currentScreen = 0;
@@ -813,6 +833,19 @@ if (investmentIndex == 0){
                 secondPeriod = 0.0f;
                 capitalInvestment = 0.0f;
                 bank = bank + capitalProfit;
+            }
+
+            if (ImGui::Button("Try another Investment")) {
+                showFinalCapitalPopup = false;
+                ImGui::CloseCurrentPopup();
+                currentScreen = 3;
+                investmentIndex = -1;
+                day = 1;
+                month = 1;
+                year = 2024;
+                period = 0.0f;
+                secondPeriod = 0.0f;
+                capitalInvestment = 0.0f;
             }
             ImGui::EndPopup();
         } else {
