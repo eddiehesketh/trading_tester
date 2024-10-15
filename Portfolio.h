@@ -53,6 +53,16 @@ class Portfolio{
         // Getter to return the investment.
         Investment* get_investment(int index);
 
+        // Increase size function to double the size of the investment pointers array.
+        void increase_size(Investment* p);
+
+
+        // Getter for capacity.
+        int get_capacity();
+
+        // Setter for capacity.
+        void set_capacity(int new_capacity);
+
 
         // Destructor.
         ~Portfolio();

@@ -37,11 +37,12 @@ int main(){
     cout << "current worth of fourth investment: " << p4->get_final_capital() << endl;
     cout << "current worth of fith investment: " << p5->get_final_capital() << endl;
     cout << "current worth of sixth investment: " << p6->get_final_capital() << endl;
+    cout << "current worth of sixth investment: " << p7->get_final_capital() << endl;
     cout << "current portfolio value with all investments: " << p.get_portfolio_value() << endl;
 
     cout << "\n\n\n\n";
 
-    p.remove_investment(1);
+    // p.remove_investment(1);
 
     cout << "Current number of investments: " << p.get_count() << endl;
     cout << "current portfolio value with all investments: " << p.get_portfolio_value() << endl;
