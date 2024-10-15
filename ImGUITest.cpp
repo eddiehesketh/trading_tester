@@ -590,6 +590,8 @@ static int period = 1;
 static int secondPeriod = 1;
 float capitalProfit = finalCapital - capitalInvestment;
 static bool insufficientFunds = false;
+static bool invalidPeriod1 = false;
+static bool invalidPeriod2 = false;
 static bool invalidInput = false;
 std::string availableStartDate;
 static Investment* newInvestment = nullptr;
@@ -666,21 +668,55 @@ if (investmentIndex == 0){
     ImGui::Text("Reinvest Dividends:");
     ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 340.0f));
     ImGui::Checkbox("##ReinvestStatus", &reinvestStatus);
-} else if (investmentIndex == 1 || investmentIndex == 3){
+} else if (investmentIndex == 1){
             // Period Selector (for Momentum)
-        ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 240.0f));
-        ImGui::Text("Select period:");
+        ImGui::SetCursorPos(ImVec2((windowSize.x - 160.0f) / 2.0f, 240.0f));
+        ImGui::Text("Select Momentum Period:");
         ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 270.0f));
         ImGui::SetNextItemWidth(150.0f);
         ImGui::InputInt("##PeriodInput", &period);
+
+        if(period < 0){
+        ImGui::SetCursorPos(ImVec2((windowSize.x - 200.0f) / 2.0f, 550.0f)); 
+        ImGui::Text("Invalid period, please try again");
+        invalidPeriod1 = true;
+    } else {
+        invalidPeriod1 = false;
+    }
 }
 if (investmentIndex == 3) {
-                // Period Selector (for Momentum)
-        ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 310.0f));
-        ImGui::Text("Select Period:");
+       
+            // Period Selector (for MAC)
+        ImGui::SetCursorPos(ImVec2((windowSize.x - 190.0f) / 2.0f, 240.0f));
+        ImGui::Text("Select Moving Average Period 1:");
+        ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 270.0f));
+        ImGui::SetNextItemWidth(150.0f);
+        ImGui::InputInt("##PeriodInput", &period);
+
+        if(period < 0){
+        ImGui::SetCursorPos(ImVec2((windowSize.x - 200.0f) / 2.0f, 550.0f)); 
+        ImGui::Text("Invalid period, please try again");
+        invalidPeriod1 = true;
+    } else {
+        invalidPeriod1 = false;
+    }
+
+        ImGui::SetCursorPos(ImVec2((windowSize.x - 190.0f) / 2.0f, 310.0f));
+        ImGui::Text("Select Moving Average Period 2:");
         ImGui::SetCursorPos(ImVec2((windowSize.x - 150.0f) / 2.0f, 340.0f));
         ImGui::SetNextItemWidth(150.0f);
         ImGui::InputInt("##secondPeriodInput", &secondPeriod);
+        if(secondPeriod < 0){
+        ImGui::SetCursorPos(ImVec2((windowSize.x - 200.0f) / 2.0f, 570.0f)); 
+        ImGui::Text("Invalid period, please try again");
+        invalidPeriod2 = true;
+    } else {
+        invalidPeriod2 = false;
+    }
+
+
+
+
 }
 
 
@@ -746,7 +782,7 @@ std::string startDate = std::to_string(day) + "/" + std::to_string(month) + "/" 
 
 
 // Handle Invest button
-if (!insufficientFunds && !invalidInput) {
+if (!insufficientFunds && !invalidInput && !invalidPeriod1 && !invalidPeriod2) {
 ImGui::SetCursorPos(ImVec2((windowSize.x - 100.0f) / 2.0f, 530.0f));
 if (ImGui::Button("Invest", ImVec2(100, 40))) {
 
@@ -863,6 +899,12 @@ ImGui::PopStyleVar(3);
             ImGui::SetCursorPos(ImVec2((5),(575)));
             if (ImGui::Button("Go Back")) {
                 currentScreen = 3; 
+                day = 1;
+                month = 1;
+                year = 2024;
+                period = 0.0f;
+                secondPeriod = 0.0f;
+                capitalInvestment = 0.0f;
             }
 
         }
