@@ -9,7 +9,7 @@ using namespace std;
 // Set Deposit constuctor, taking in a start data, stock info, and capital amount.
 SetDeposit::SetDeposit(string _start_date, string stock_info, int capital): Investment(capital, stock_info){
 
-    // Setting the investment type fromn the constructor.
+    // Setting the investment type from the constructor.
     set_investment_type();
 
     // Setting the pay frequency to once off.
