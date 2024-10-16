@@ -593,6 +593,8 @@ static bool insufficientFunds = false;
 static bool invalidPeriod1 = false;
 static bool invalidPeriod2 = false;
 static bool invalidInput = false;
+static bool invalidDate = false;
+static bool recentDate = false;
 std::string availableStartDate;
 static Investment* newInvestment = nullptr;
 
@@ -775,6 +777,24 @@ if (ImGui::BeginCombo("##Year", std::to_string(year).c_str())) {
 }
 ImGui::PopItemWidth();
 
+
+if (((month == 4 || month == 6 || month == 9 || month == 11) && (day > 30)) || ((month == 2) && (day > 28))){
+    ImGui::SetCursorPos(ImVec2((windowSize.x - 200.0f) / 2.0f, 490.0f)); 
+    ImGui::Text("Invalid date, please try again");
+    invalidDate = true;
+} else {
+    invalidDate = false;
+}
+
+if (((year == 2024) && (month > 6)) || ((month == 6) && (day > 10))){
+    ImGui::SetCursorPos(ImVec2((windowSize.x - 200.0f) / 2.0f, 490.0f)); 
+    ImGui::Text("Date is too recent");
+    recentDate = true;
+} else {
+    recentDate = false;
+
+}
+
 std::string startDate = std::to_string(day) + "/" + std::to_string(month) + "/" + std::to_string(year);
 
 
@@ -782,7 +802,7 @@ std::string startDate = std::to_string(day) + "/" + std::to_string(month) + "/" 
 
 
 // Handle Invest button
-if (!insufficientFunds && !invalidInput && !invalidPeriod1 && !invalidPeriod2) {
+if (!insufficientFunds && !invalidInput && !invalidPeriod1 && !invalidPeriod2 && !invalidDate && !recentDate) {
 ImGui::SetCursorPos(ImVec2((windowSize.x - 100.0f) / 2.0f, 530.0f));
 if (ImGui::Button("Invest", ImVec2(100, 40))) {
 

@@ -1,0 +1,11 @@
+Investment portfolio summary
+
+Investment 1: Dividend
+    Company name: Microsoft
+    Start date: 2/1/1987
+    Initial capital: $25000
+    Final capital: $1.3816e+08
+    Profits: $1.38135e+08
+
+
+Total portfolio value: $1.3816e+08
