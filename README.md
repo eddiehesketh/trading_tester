@@ -5,11 +5,12 @@ The Investment Strategy Simulator is a comprehensive C++ platform designed to si
 Features:
 
 1. Investment Strategy Simulation
-	•	Supports four strategies:
-  	•	Set Deposit Strategy: Fixed periodic deposits for consistent investment growth.
-  	•	Dividend Payments: Simulates reinvestment of dividends to enhance portfolio performance.
-  	•	Moving Average Crossover Strategy: Leverages short- and long-term averages to identify trade signals.
-  	•	Momentum-Based Strategy: Analyzes price trends to capture market momentum.
+
+The simulator supports four customizable strategies:
+	•	Set Deposit Strategy: Allows fixed periodic deposits to grow the portfolio steadily.
+	•	Dividend Payments: Reinvests dividends automatically to enhance returns.
+	•	Moving Average Crossover Strategy: Utilizes short- and long-term moving averages to identify optimal trade signals.
+	•	Momentum-Based Strategy: Analyzes price trends to capture momentum and maximize returns.
 
 2. Object-Oriented Design
 	•	Implemented using core principles of OOP:
